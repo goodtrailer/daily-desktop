@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Authors>goodtrailer</Authors>
+    <Product>DailyDesktop.Core</Product>
+    <PackageId>goodtrailer.DailyDesktop.Core</PackageId>
+    <RepositoryUrl>https://github.com/goodtrailer/daily-desktop</RepositoryUrl>
+    <Copyright>Copyright (c) 2021 Alden Wu</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/goodtrailer/daily-desktop</PackageProjectUrl>
+    <PackageTags>daily desktop wallpaper background</PackageTags>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <FileVersion>0.0.0.0</FileVersion>
+    <Version>0.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TaskScheduler" Version="2.9.1" />
+  </ItemGroup>
+
+</Project>
