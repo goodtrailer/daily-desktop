@@ -11,7 +11,7 @@ namespace DailyDesktop.Core.Providers.MTG
 
         public string Key => "MTG";
         public string DisplayName => "Magic: The Gathering";
-        public string Description => "Grabs new weekly Magic: The Gathering wallpaper from the official Wizards of the Coast website and sets it as the desktop wallpaper.";
+        public string Description => $"Grabs new weekly Magic: The Gathering wallpaper from the official Wizards of the Coast website and sets it as the desktop wallpaper.\r\n{WALLPAPER_PAGE}";
 
         public string GetImageUri()
         {

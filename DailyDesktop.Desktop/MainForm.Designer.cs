@@ -119,8 +119,8 @@ namespace DailyDesktop.Desktop
             this.providerComboBox.Name = "providerComboBox";
             this.providerComboBox.Size = new System.Drawing.Size(332, 23);
             this.providerComboBox.TabIndex = 2;
-            this.providerComboBox.SelectedIndexChanged += new System.EventHandler(this.providerComboBox_SelectedIndexChanged);
             this.providerComboBox.DropDown += new System.EventHandler(this.providerComboBox_DropDown);
+            this.providerComboBox.SelectedIndexChanged += new System.EventHandler(this.providerComboBox_SelectedIndexChanged);
             // 
             // okButton
             // 
