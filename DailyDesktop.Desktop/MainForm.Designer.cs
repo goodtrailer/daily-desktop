@@ -29,6 +29,7 @@ namespace DailyDesktop.Desktop
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.providerGroupBox = new System.Windows.Forms.GroupBox();
             this.descriptionGroupBox = new System.Windows.Forms.GroupBox();
@@ -61,7 +62,7 @@ namespace DailyDesktop.Desktop
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 54.6798F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.3202F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(846, 647);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(350, 423);
             this.tableLayoutPanel.TabIndex = 1;
             this.tableLayoutPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel_Paint);
             // 
@@ -74,7 +75,7 @@ namespace DailyDesktop.Desktop
             this.providerGroupBox.Controls.Add(this.providerComboBox);
             this.providerGroupBox.Location = new System.Drawing.Point(3, 3);
             this.providerGroupBox.Name = "providerGroupBox";
-            this.providerGroupBox.Size = new System.Drawing.Size(840, 330);
+            this.providerGroupBox.Size = new System.Drawing.Size(344, 208);
             this.providerGroupBox.TabIndex = 0;
             this.providerGroupBox.TabStop = false;
             this.providerGroupBox.Text = "Provider";
@@ -88,7 +89,7 @@ namespace DailyDesktop.Desktop
             this.descriptionGroupBox.Controls.Add(this.providerDescriptionBox);
             this.descriptionGroupBox.Location = new System.Drawing.Point(6, 51);
             this.descriptionGroupBox.Name = "descriptionGroupBox";
-            this.descriptionGroupBox.Size = new System.Drawing.Size(828, 273);
+            this.descriptionGroupBox.Size = new System.Drawing.Size(332, 151);
             this.descriptionGroupBox.TabIndex = 2;
             this.descriptionGroupBox.TabStop = false;
             this.descriptionGroupBox.Text = "Description";
@@ -107,7 +108,7 @@ namespace DailyDesktop.Desktop
             this.providerDescriptionBox.PlaceholderText = "No description.";
             this.providerDescriptionBox.ReadOnly = true;
             this.providerDescriptionBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.providerDescriptionBox.Size = new System.Drawing.Size(816, 245);
+            this.providerDescriptionBox.Size = new System.Drawing.Size(320, 123);
             this.providerDescriptionBox.TabIndex = 1;
             this.providerDescriptionBox.TabStop = false;
             this.providerDescriptionBox.TextChanged += new System.EventHandler(this.providerDescriptionBox_TextChanged);
@@ -119,14 +120,14 @@ namespace DailyDesktop.Desktop
             this.providerComboBox.FormattingEnabled = true;
             this.providerComboBox.Location = new System.Drawing.Point(6, 22);
             this.providerComboBox.Name = "providerComboBox";
-            this.providerComboBox.Size = new System.Drawing.Size(828, 23);
+            this.providerComboBox.Size = new System.Drawing.Size(332, 23);
             this.providerComboBox.TabIndex = 2;
             this.providerComboBox.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // okButton
             // 
             this.okButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.okButton.Location = new System.Drawing.Point(768, 619);
+            this.okButton.Location = new System.Drawing.Point(272, 395);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 0;
@@ -140,9 +141,9 @@ namespace DailyDesktop.Desktop
             | System.Windows.Forms.AnchorStyles.Right)));
             this.optionsGroupBox.Controls.Add(this.updateTimeLabel);
             this.optionsGroupBox.Controls.Add(this.updateTimePicker);
-            this.optionsGroupBox.Location = new System.Drawing.Point(3, 339);
+            this.optionsGroupBox.Location = new System.Drawing.Point(3, 217);
             this.optionsGroupBox.Name = "optionsGroupBox";
-            this.optionsGroupBox.Size = new System.Drawing.Size(840, 273);
+            this.optionsGroupBox.Size = new System.Drawing.Size(344, 171);
             this.optionsGroupBox.TabIndex = 2;
             this.optionsGroupBox.TabStop = false;
             this.optionsGroupBox.Text = "Options";
@@ -172,12 +173,12 @@ namespace DailyDesktop.Desktop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(864, 665);
+            this.ClientSize = new System.Drawing.Size(368, 441);
             this.Controls.Add(this.tableLayoutPanel);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(384, 480);
             this.Name = "MainForm";
-            this.ShowIcon = false;
             this.Text = "Daily Desktop";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.tableLayoutPanel.ResumeLayout(false);
