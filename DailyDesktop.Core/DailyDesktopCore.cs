@@ -2,14 +2,18 @@
 using Microsoft.Win32.TaskScheduler;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace DailyDesktop.Core
 {
     public class DailyDesktopCore
     {
-        //------------------------------------------------------------VARIABLES
+        //---------------------------------------------------------------VARIABLES
 
-        private const string TASK_NAME = "Daily Desktop";
+        private const string TASK_NAME_PREFIX = "Daily Desktop";
+        private const string TASK_EXECUTABLE = "DailyDesktop.Task.exe";
         private const string DEFAULT_UPDATE_TIME = "12:00 AM";
 
         private readonly ProviderStore store;
@@ -18,7 +22,7 @@ namespace DailyDesktop.Core
         private IProvider currentProvider;
         private DateTime updateTime;
 
-        //-----------------------------------------------------------PROPERTIES
+        //--------------------------------------------------------------PROPERTIES
 
         public IProvider CurrentProvider
         {
@@ -73,17 +77,36 @@ namespace DailyDesktop.Core
             }
         }
 
-        //--------------------------------------------------------------METHODS
+        private ExecAction execAction
+        {
+            get
+            {
+                return task.Definition.Actions.Find(action =>
+                {
+                    bool isExec = action.ActionType == TaskActionType.Execute;
+                    return isExec;
+                }) as ExecAction;
+            }
+        }
+
+        //-----------------------------------------------------------------METHODS
 
         public DailyDesktopCore()
         {
             store = new ProviderStore();
-            task = TaskService.Instance.FindTask(TASK_NAME);
+
+            string userId = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            string userName = userId.Split('\\').Last();
+            string taskName = $"{TASK_NAME_PREFIX}_{userName}";
+
+            task = TaskService.Instance.FindTask(taskName);
+
+            string taskExecutablePath = getTaskExecutablePath();
 
             if (task == null)
             {
                 TaskDefinition taskDefinition = TaskService.Instance.NewTask();
-                taskDefinition.RegistrationInfo.Description = currentProvider.Description;
+                taskDefinition.RegistrationInfo.Description = string.Empty;
                 taskDefinition.Settings.StartWhenAvailable = true;
 
                 DailyTrigger newDailyTrigger = new DailyTrigger
@@ -93,20 +116,35 @@ namespace DailyDesktop.Core
                 };
                 LogonTrigger newLogonTrigger = new LogonTrigger
                 {
-                    UserId = System.Security.Principal.WindowsIdentity.GetCurrent().Name,
+                    UserId = userId,
                 };
                 taskDefinition.Triggers.Add(newDailyTrigger);
                 taskDefinition.Triggers.Add(newLogonTrigger);
 
-                task = TaskService.Instance.RootFolder.RegisterTaskDefinition(TASK_NAME, taskDefinition);
+                ExecAction newExecAction = new ExecAction
+                {
+                    Path = taskExecutablePath,
+                    Arguments = string.Empty,
+                };
+                taskDefinition.Actions.Add(newExecAction);
+
+                task = TaskService.Instance.RootFolder.RegisterTaskDefinition(taskName, taskDefinition);
+                currentProvider = null;
             }
             else
             {
-                string key = task.Definition.Data;
-                store.Providers.TryGetValue(key, out currentProvider);
+                string key = execAction.Arguments;
 
-                updateTime = dailyTrigger.StartBoundary;
+                if (key != null && store.Providers.ContainsKey(key))
+                    store.Providers.TryGetValue(key, out currentProvider);
+                else
+                    currentProvider = null;
+
+                execAction.Path = taskExecutablePath;
+                task.RegisterChanges();
             }
+
+            updateTime = dailyTrigger.StartBoundary;
         }
 
         public void UpdateWallpaper()
@@ -116,13 +154,25 @@ namespace DailyDesktop.Core
 
         private void updateTask()
         {
-            task.Definition.Data = currentProvider.Key;
             dailyTrigger.StartBoundary = updateTime;
+            execAction.Arguments = currentProvider?.Key ?? string.Empty;
+            task.RegisterChanges();
         }
 
         private void deleteTask()
         {
             TaskService.Instance.RootFolder.DeleteTask(task.Name, false);
+        }
+
+        private string getTaskExecutablePath()
+        {
+            string baseDir = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase)).LocalPath;
+
+            string[] paths = Directory.GetFiles(baseDir, TASK_EXECUTABLE, SearchOption.AllDirectories);
+            if (paths.Length < 1)
+                throw new IOException($"Did not find task executable {TASK_EXECUTABLE}.");
+
+            return paths[0];
         }
     }
 }

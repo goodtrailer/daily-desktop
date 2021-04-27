@@ -4,6 +4,8 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>Resources\DailyDesktopIcon.ico</ApplicationIcon>
+    <AssemblyName>DailyDesktop.Desktop</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

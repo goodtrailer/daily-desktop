@@ -13,7 +13,7 @@ namespace DailyDesktop.Core.Providers.MTG
         public string DisplayName => "Magic: The Gathering";
         public string Description => "Grabs new weekly Magic: The Gathering wallpaper from the official Wizards of the Coast website and sets it as the desktop wallpaper.";
 
-        public string GetImageURL()
+        public string GetImageUri()
         {
             string htmlSource = string.Empty;
             using (WebClient client = new WebClient())
@@ -24,9 +24,9 @@ namespace DailyDesktop.Core.Providers.MTG
             int textIndex = htmlSource.IndexOf(TAG_TEXT, System.StringComparison.CurrentCultureIgnoreCase);
             int endIndex = htmlSource.LastIndexOf(IMAGE_SUFFIX, textIndex, System.StringComparison.CurrentCultureIgnoreCase) + IMAGE_SUFFIX.Length;
             int startIndex = htmlSource.LastIndexOf(IMAGE_PREFIX, endIndex, System.StringComparison.CurrentCultureIgnoreCase);
-            string imageLink = htmlSource.Substring(startIndex, endIndex - startIndex);
+            string imageUri = htmlSource.Substring(startIndex, endIndex - startIndex);
 
-            return imageLink;
+            return imageUri;
         }
     }
 }

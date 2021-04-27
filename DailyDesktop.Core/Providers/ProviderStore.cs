@@ -24,8 +24,19 @@ namespace DailyDesktop.Core.Providers
 
             string baseDir = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase)).LocalPath;
             string providersDir = Path.Combine(baseDir, PROVIDERS_DIR);
+            string[] paths;
 
-            string[] paths = Directory.GetFiles(providersDir, $"{PROVIDERS_ASSEMBLY_PREFIX}.*.dll", SearchOption.AllDirectories);
+            try
+            {
+                Directory.CreateDirectory(providersDir);
+                paths = Directory.GetFiles(providersDir, $"{PROVIDERS_ASSEMBLY_PREFIX}.*.dll", SearchOption.AllDirectories);
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine(e.StackTrace);
+                paths = new string[0];
+            }
+
             foreach (string path in paths)
             {
                 try
@@ -33,7 +44,7 @@ namespace DailyDesktop.Core.Providers
                     IProvider provider = instantiateProviderFromAssembly(path);
                     Providers.Add(provider.Key, provider);
                 }
-                catch (Exception e)
+                catch (ProviderException e)
                 {
                     Console.WriteLine(e.StackTrace);
                 }
@@ -53,8 +64,11 @@ namespace DailyDesktop.Core.Providers
             });
 
             IProvider provider = Activator.CreateInstance(providerType) as IProvider;
+
             if (provider == null)
-                throw new Exception("Failed to instantiate an IProvider from the assembly.");
+                throw new ProviderException("Failed to instantiate an IProvider from the assembly.");
+            if (provider.Key.Any(Char.IsWhiteSpace))
+                throw new ProviderException("IProvider.Key contains whitespace.");
 
             return provider;
         }

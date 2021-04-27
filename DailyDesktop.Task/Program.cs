@@ -13,7 +13,7 @@ namespace DailyDesktop.Task
         public static void Main(string[] args)
         {
             if (args.Length < 1)
-                throw new Exception("No IProvider.Key passed.");
+                throw new ProviderException("No IProvider.Key passed.");
 
             ProviderStore store = new ProviderStore();
             IProvider provider = store.Providers[args[0]];
@@ -28,10 +28,10 @@ namespace DailyDesktop.Task
         {
             string path = Path.Combine(Path.GetTempPath(), IMAGE_FILENAME);
 
-            string url = provider.GetImageURL();
+            string uri = provider.GetImageUri();
             using (WebClient client = new WebClient())
             {
-                client.DownloadFile(url, path);
+                client.DownloadFile(uri, path);
             }
 
             // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa#parameters

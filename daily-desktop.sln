@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core.Providers
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Task", "DailyDesktop.Task\DailyDesktop.Task.csproj", "{7CB913BA-772C-4610-89FE-311AACE62717}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyDesktop.Desktop", "DailyDesktop.Desktop\DailyDesktop.Desktop.csproj", "{768F9329-40C4-4F48-A508-3E28D668B452}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Desktop", "DailyDesktop.Desktop\DailyDesktop.Desktop.csproj", "{768F9329-40C4-4F48-A508-3E28D668B452}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

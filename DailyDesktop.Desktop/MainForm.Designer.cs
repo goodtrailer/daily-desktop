@@ -64,7 +64,6 @@ namespace DailyDesktop.Desktop
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
             this.tableLayoutPanel.Size = new System.Drawing.Size(350, 423);
             this.tableLayoutPanel.TabIndex = 1;
-            this.tableLayoutPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel_Paint);
             // 
             // providerGroupBox
             // 
@@ -79,7 +78,6 @@ namespace DailyDesktop.Desktop
             this.providerGroupBox.TabIndex = 0;
             this.providerGroupBox.TabStop = false;
             this.providerGroupBox.Text = "Provider";
-            this.providerGroupBox.Enter += new System.EventHandler(this.providerGroupBox_Enter);
             // 
             // descriptionGroupBox
             // 
@@ -111,7 +109,6 @@ namespace DailyDesktop.Desktop
             this.providerDescriptionBox.Size = new System.Drawing.Size(320, 123);
             this.providerDescriptionBox.TabIndex = 1;
             this.providerDescriptionBox.TabStop = false;
-            this.providerDescriptionBox.TextChanged += new System.EventHandler(this.providerDescriptionBox_TextChanged);
             // 
             // providerComboBox
             // 
@@ -122,7 +119,8 @@ namespace DailyDesktop.Desktop
             this.providerComboBox.Name = "providerComboBox";
             this.providerComboBox.Size = new System.Drawing.Size(332, 23);
             this.providerComboBox.TabIndex = 2;
-            this.providerComboBox.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.providerComboBox.SelectedIndexChanged += new System.EventHandler(this.providerComboBox_SelectedIndexChanged);
+            this.providerComboBox.DropDown += new System.EventHandler(this.providerComboBox_DropDown);
             // 
             // okButton
             // 
@@ -133,6 +131,7 @@ namespace DailyDesktop.Desktop
             this.okButton.TabIndex = 0;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // optionsGroupBox
             // 
