@@ -66,5 +66,10 @@ namespace DailyDesktop.Desktop
         {
             core.UpdateWallpaper();
         }
+
+        private void providersDirectoryButton_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", core.ProvidersDirectory);
+        }
     }
 }

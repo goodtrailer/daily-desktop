@@ -40,6 +40,7 @@ namespace DailyDesktop.Desktop
             this.updateWallpaperButton = new System.Windows.Forms.Button();
             this.updateTimeLabel = new System.Windows.Forms.Label();
             this.updateTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.providersDirectoryButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             this.providerGroupBox.SuspendLayout();
             this.descriptionGroupBox.SuspendLayout();
@@ -133,6 +134,7 @@ namespace DailyDesktop.Desktop
             this.optionsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionsGroupBox.Controls.Add(this.providersDirectoryButton);
             this.optionsGroupBox.Controls.Add(this.updateWallpaperButton);
             this.optionsGroupBox.Controls.Add(this.updateTimeLabel);
             this.optionsGroupBox.Controls.Add(this.updateTimePicker);
@@ -176,6 +178,18 @@ namespace DailyDesktop.Desktop
             this.updateTimePicker.Value = new System.DateTime(2021, 4, 26, 0, 0, 0, 0);
             this.updateTimePicker.ValueChanged += new System.EventHandler(this.updateTimePicker_ValueChanged);
             // 
+            // providersDirectoryButton
+            // 
+            this.providersDirectoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.providersDirectoryButton.Location = new System.Drawing.Point(6, 74);
+            this.providersDirectoryButton.Name = "providersDirectoryButton";
+            this.providersDirectoryButton.Size = new System.Drawing.Size(332, 23);
+            this.providersDirectoryButton.TabIndex = 9;
+            this.providersDirectoryButton.Text = "Open providers folder";
+            this.providersDirectoryButton.UseVisualStyleBackColor = true;
+            this.providersDirectoryButton.Click += new System.EventHandler(this.providersDirectoryButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -208,6 +222,7 @@ namespace DailyDesktop.Desktop
         private System.Windows.Forms.DateTimePicker updateTimePicker;
         private System.Windows.Forms.Button updateWallpaperButton;
         private System.Windows.Forms.Label providerDescriptionLabel;
+        private System.Windows.Forms.Button providersDirectoryButton;
     }
 }
 

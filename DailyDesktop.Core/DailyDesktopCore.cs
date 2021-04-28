@@ -24,6 +24,8 @@ namespace DailyDesktop.Core
 
         //--------------------------------------------------------------PROPERTIES
 
+        public string ProvidersDirectory => store.ProvidersDirectory;
+
         public IProvider CurrentProvider
         {
             get => currentProvider;
