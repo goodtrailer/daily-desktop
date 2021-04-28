@@ -1,6 +1,4 @@
-<img src="assets/logo.svg" alt="Daily Desktop" width="300" height="300">
-
-# Daily Desktop
+<img src="assets/banner.png" alt="Daily Desktop" height="300">
 
 [![Version](https://img.shields.io/github/v/release/goodtrailer/daily-desktop.svg?color=green&style=flat-square)](https://github.com/goodtrailer/daily-desktop/releases/latest)
 [![CodeFactor](https://www.codefactor.io/repository/github/goodtrailer/daily-desktop/badge/main?style=flat-square)](https://www.codefactor.io/repository/github/goodtrailer/daily-desktop/overview/main)
