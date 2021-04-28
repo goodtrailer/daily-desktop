@@ -37,10 +37,11 @@ namespace DailyDesktop.Desktop
             this.providerComboBox = new System.Windows.Forms.ComboBox();
             this.okButton = new System.Windows.Forms.Button();
             this.optionsGroupBox = new System.Windows.Forms.GroupBox();
+            this.enabledCheckBox = new System.Windows.Forms.CheckBox();
+            this.providersDirectoryButton = new System.Windows.Forms.Button();
             this.updateWallpaperButton = new System.Windows.Forms.Button();
             this.updateTimeLabel = new System.Windows.Forms.Label();
             this.updateTimePicker = new System.Windows.Forms.DateTimePicker();
-            this.providersDirectoryButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             this.providerGroupBox.SuspendLayout();
             this.descriptionGroupBox.SuspendLayout();
@@ -134,6 +135,7 @@ namespace DailyDesktop.Desktop
             this.optionsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionsGroupBox.Controls.Add(this.enabledCheckBox);
             this.optionsGroupBox.Controls.Add(this.providersDirectoryButton);
             this.optionsGroupBox.Controls.Add(this.updateWallpaperButton);
             this.optionsGroupBox.Controls.Add(this.updateTimeLabel);
@@ -145,11 +147,35 @@ namespace DailyDesktop.Desktop
             this.optionsGroupBox.TabStop = false;
             this.optionsGroupBox.Text = "Options";
             // 
+            // enabledCheckBox
+            // 
+            this.enabledCheckBox.AutoSize = true;
+            this.enabledCheckBox.Location = new System.Drawing.Point(6, 44);
+            this.enabledCheckBox.Name = "enabledCheckBox";
+            this.enabledCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.enabledCheckBox.Size = new System.Drawing.Size(68, 19);
+            this.enabledCheckBox.TabIndex = 10;
+            this.enabledCheckBox.Text = "Enabled";
+            this.enabledCheckBox.UseVisualStyleBackColor = false;
+            this.enabledCheckBox.CheckedChanged += new System.EventHandler(this.enabledCheckBox_CheckedChanged);
+            // 
+            // providersDirectoryButton
+            // 
+            this.providersDirectoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.providersDirectoryButton.Location = new System.Drawing.Point(6, 99);
+            this.providersDirectoryButton.Name = "providersDirectoryButton";
+            this.providersDirectoryButton.Size = new System.Drawing.Size(332, 23);
+            this.providersDirectoryButton.TabIndex = 9;
+            this.providersDirectoryButton.Text = "Open providers folder";
+            this.providersDirectoryButton.UseVisualStyleBackColor = true;
+            this.providersDirectoryButton.Click += new System.EventHandler(this.providersDirectoryButton_Click);
+            // 
             // updateWallpaperButton
             // 
             this.updateWallpaperButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.updateWallpaperButton.Location = new System.Drawing.Point(6, 44);
+            this.updateWallpaperButton.Location = new System.Drawing.Point(6, 69);
             this.updateWallpaperButton.Name = "updateWallpaperButton";
             this.updateWallpaperButton.Size = new System.Drawing.Size(332, 23);
             this.updateWallpaperButton.TabIndex = 8;
@@ -170,25 +196,13 @@ namespace DailyDesktop.Desktop
             // 
             this.updateTimePicker.CustomFormat = "h:mm tt";
             this.updateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.updateTimePicker.Location = new System.Drawing.Point(86, 15);
+            this.updateTimePicker.Location = new System.Drawing.Point(87, 15);
             this.updateTimePicker.Name = "updateTimePicker";
             this.updateTimePicker.ShowUpDown = true;
             this.updateTimePicker.Size = new System.Drawing.Size(92, 23);
             this.updateTimePicker.TabIndex = 1;
             this.updateTimePicker.Value = new System.DateTime(2021, 4, 26, 0, 0, 0, 0);
             this.updateTimePicker.ValueChanged += new System.EventHandler(this.updateTimePicker_ValueChanged);
-            // 
-            // providersDirectoryButton
-            // 
-            this.providersDirectoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.providersDirectoryButton.Location = new System.Drawing.Point(6, 74);
-            this.providersDirectoryButton.Name = "providersDirectoryButton";
-            this.providersDirectoryButton.Size = new System.Drawing.Size(332, 23);
-            this.providersDirectoryButton.TabIndex = 9;
-            this.providersDirectoryButton.Text = "Open providers folder";
-            this.providersDirectoryButton.UseVisualStyleBackColor = true;
-            this.providersDirectoryButton.Click += new System.EventHandler(this.providersDirectoryButton_Click);
             // 
             // MainForm
             // 
@@ -223,6 +237,7 @@ namespace DailyDesktop.Desktop
         private System.Windows.Forms.Button updateWallpaperButton;
         private System.Windows.Forms.Label providerDescriptionLabel;
         private System.Windows.Forms.Button providersDirectoryButton;
+        private System.Windows.Forms.CheckBox enabledCheckBox;
     }
 }
 

@@ -19,12 +19,23 @@ namespace DailyDesktop.Core
         private readonly ProviderStore store;
         private readonly Task task;
 
+        private bool enabled;
         private IProvider currentProvider;
         private DateTime updateTime;
 
         //--------------------------------------------------------------PROPERTIES
 
         public string ProvidersDirectory => store.ProvidersDirectory;
+
+        public bool Enabled
+        {
+            get => enabled;
+            set
+            {
+                enabled = value;
+                updateTask();
+            }
+        }
 
         public IProvider CurrentProvider
         {
@@ -147,6 +158,7 @@ namespace DailyDesktop.Core
             }
 
             updateTime = dailyTrigger.StartBoundary;
+            enabled = dailyTrigger.Enabled;
         }
 
         public void UpdateWallpaper()
@@ -158,6 +170,8 @@ namespace DailyDesktop.Core
         {
             dailyTrigger.StartBoundary = updateTime;
             execAction.Arguments = currentProvider?.Key ?? string.Empty;
+            dailyTrigger.Enabled = enabled;
+            logonTrigger.Enabled = enabled;
             task.RegisterChanges();
         }
 

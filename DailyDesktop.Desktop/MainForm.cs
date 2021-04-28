@@ -23,6 +23,7 @@ namespace DailyDesktop.Desktop
             providerComboBox.SelectedItem = core.CurrentProvider;
             providerComboBox.SelectedText = core.CurrentProvider?.DisplayName;
             providerDescriptionLabel.Text = core.CurrentProvider?.Description ?? NULL_DESCRIPTION;
+            enabledCheckBox.Checked = core.Enabled;
         }
 
         private void providerComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -70,6 +71,11 @@ namespace DailyDesktop.Desktop
         private void providersDirectoryButton_Click(object sender, EventArgs e)
         {
             Process.Start("explorer.exe", core.ProvidersDirectory);
+        }
+
+        private void enabledCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            core.Enabled = enabledCheckBox.Checked;
         }
     }
 }
