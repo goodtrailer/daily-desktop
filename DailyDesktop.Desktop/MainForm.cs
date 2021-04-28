@@ -70,7 +70,12 @@ namespace DailyDesktop.Desktop
 
         private void providersDirectoryButton_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", core.ProvidersDirectory);
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = core.ProvidersDirectory,
+                UseShellExecute = true,
+            };
+            Process.Start(psi);
         }
 
         private void enabledCheckBox_CheckedChanged(object sender, EventArgs e)
