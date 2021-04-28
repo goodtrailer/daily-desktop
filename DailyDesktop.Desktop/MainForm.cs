@@ -19,11 +19,13 @@ namespace DailyDesktop.Desktop
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            updateTimePicker.Value = core.UpdateTime;
             providerComboBox.SelectedItem = core.CurrentProvider;
             providerComboBox.SelectedText = core.CurrentProvider?.DisplayName;
-            enabledCheckBox.Checked = core.Enabled;
             updateProviderInfo();
+            
+            enabledCheckBox.Checked = core.Enabled;
+            updateTimePicker.Value = core.UpdateTime;
+            updateBlurStrengthToolTip();
         }
 
         private void providerComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -87,6 +89,17 @@ namespace DailyDesktop.Desktop
         private void okButton_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void blurStrengthTrackBar_Scroll(object sender, EventArgs e)
+        {
+            updateBlurStrengthToolTip();
+        }
+
+        private void updateBlurStrengthToolTip()
+        {
+            string strength = (blurStrengthTrackBar.Value / 100f).ToString("0.00");
+            mainToolTip.SetToolTip(blurStrengthTrackBar, strength);
         }
     }
 }

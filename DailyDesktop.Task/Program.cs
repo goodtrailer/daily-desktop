@@ -35,6 +35,7 @@ namespace DailyDesktop.Task
             }
 
             // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa#parameters
+            // SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE
             SystemParametersInfo(0x14, 0, path, 0x1 | 0x2);
         }
     }

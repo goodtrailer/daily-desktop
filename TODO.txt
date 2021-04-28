@@ -1,4 +1,3 @@
 TODO
-- Source URIs
-- Fit/fill/stretch/smart-fit
+- Blurred-fit
 - More providers
