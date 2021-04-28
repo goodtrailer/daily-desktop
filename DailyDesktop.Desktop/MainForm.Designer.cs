@@ -33,10 +33,11 @@ namespace DailyDesktop.Desktop
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.providerGroupBox = new System.Windows.Forms.GroupBox();
             this.descriptionGroupBox = new System.Windows.Forms.GroupBox();
-            this.providerDescriptionBox = new System.Windows.Forms.TextBox();
+            this.providerDescriptionLabel = new System.Windows.Forms.Label();
             this.providerComboBox = new System.Windows.Forms.ComboBox();
             this.okButton = new System.Windows.Forms.Button();
             this.optionsGroupBox = new System.Windows.Forms.GroupBox();
+            this.updateWallpaperButton = new System.Windows.Forms.Button();
             this.updateTimeLabel = new System.Windows.Forms.Label();
             this.updateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.tableLayoutPanel.SuspendLayout();
@@ -84,7 +85,7 @@ namespace DailyDesktop.Desktop
             this.descriptionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.descriptionGroupBox.Controls.Add(this.providerDescriptionBox);
+            this.descriptionGroupBox.Controls.Add(this.providerDescriptionLabel);
             this.descriptionGroupBox.Location = new System.Drawing.Point(6, 51);
             this.descriptionGroupBox.Name = "descriptionGroupBox";
             this.descriptionGroupBox.Size = new System.Drawing.Size(332, 151);
@@ -92,23 +93,17 @@ namespace DailyDesktop.Desktop
             this.descriptionGroupBox.TabStop = false;
             this.descriptionGroupBox.Text = "Description";
             // 
-            // providerDescriptionBox
+            // providerDescriptionLabel
             // 
-            this.providerDescriptionBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.providerDescriptionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.providerDescriptionBox.BackColor = System.Drawing.SystemColors.Menu;
-            this.providerDescriptionBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.providerDescriptionBox.Cursor = System.Windows.Forms.Cursors.Default;
-            this.providerDescriptionBox.Location = new System.Drawing.Point(6, 22);
-            this.providerDescriptionBox.Multiline = true;
-            this.providerDescriptionBox.Name = "providerDescriptionBox";
-            this.providerDescriptionBox.PlaceholderText = "No description.";
-            this.providerDescriptionBox.ReadOnly = true;
-            this.providerDescriptionBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.providerDescriptionBox.Size = new System.Drawing.Size(320, 123);
-            this.providerDescriptionBox.TabIndex = 1;
-            this.providerDescriptionBox.TabStop = false;
+            this.providerDescriptionLabel.AutoEllipsis = true;
+            this.providerDescriptionLabel.Location = new System.Drawing.Point(6, 22);
+            this.providerDescriptionLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.providerDescriptionLabel.Name = "providerDescriptionLabel";
+            this.providerDescriptionLabel.Size = new System.Drawing.Size(320, 123);
+            this.providerDescriptionLabel.TabIndex = 0;
             // 
             // providerComboBox
             // 
@@ -118,7 +113,7 @@ namespace DailyDesktop.Desktop
             this.providerComboBox.Location = new System.Drawing.Point(6, 22);
             this.providerComboBox.Name = "providerComboBox";
             this.providerComboBox.Size = new System.Drawing.Size(332, 23);
-            this.providerComboBox.TabIndex = 2;
+            this.providerComboBox.TabIndex = 0;
             this.providerComboBox.DropDown += new System.EventHandler(this.providerComboBox_DropDown);
             this.providerComboBox.SelectedIndexChanged += new System.EventHandler(this.providerComboBox_SelectedIndexChanged);
             // 
@@ -128,7 +123,7 @@ namespace DailyDesktop.Desktop
             this.okButton.Location = new System.Drawing.Point(272, 395);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 0;
+            this.okButton.TabIndex = 10;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
@@ -138,6 +133,7 @@ namespace DailyDesktop.Desktop
             this.optionsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionsGroupBox.Controls.Add(this.updateWallpaperButton);
             this.optionsGroupBox.Controls.Add(this.updateTimeLabel);
             this.optionsGroupBox.Controls.Add(this.updateTimePicker);
             this.optionsGroupBox.Location = new System.Drawing.Point(3, 217);
@@ -147,14 +143,26 @@ namespace DailyDesktop.Desktop
             this.optionsGroupBox.TabStop = false;
             this.optionsGroupBox.Text = "Options";
             // 
+            // updateWallpaperButton
+            // 
+            this.updateWallpaperButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.updateWallpaperButton.Location = new System.Drawing.Point(6, 44);
+            this.updateWallpaperButton.Name = "updateWallpaperButton";
+            this.updateWallpaperButton.Size = new System.Drawing.Size(332, 23);
+            this.updateWallpaperButton.TabIndex = 8;
+            this.updateWallpaperButton.Text = "Update desktop background";
+            this.updateWallpaperButton.UseVisualStyleBackColor = true;
+            this.updateWallpaperButton.Click += new System.EventHandler(this.updateWallpaperButton_Click);
+            // 
             // updateTimeLabel
             // 
             this.updateTimeLabel.AutoSize = true;
             this.updateTimeLabel.Location = new System.Drawing.Point(6, 19);
             this.updateTimeLabel.Name = "updateTimeLabel";
-            this.updateTimeLabel.Size = new System.Drawing.Size(74, 15);
+            this.updateTimeLabel.Size = new System.Drawing.Size(75, 15);
             this.updateTimeLabel.TabIndex = 1;
-            this.updateTimeLabel.Text = "Update Time";
+            this.updateTimeLabel.Text = "Update time:";
             // 
             // updateTimePicker
             // 
@@ -183,7 +191,6 @@ namespace DailyDesktop.Desktop
             this.tableLayoutPanel.ResumeLayout(false);
             this.providerGroupBox.ResumeLayout(false);
             this.descriptionGroupBox.ResumeLayout(false);
-            this.descriptionGroupBox.PerformLayout();
             this.optionsGroupBox.ResumeLayout(false);
             this.optionsGroupBox.PerformLayout();
             this.ResumeLayout(false);
@@ -194,12 +201,13 @@ namespace DailyDesktop.Desktop
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.GroupBox providerGroupBox;
-        private System.Windows.Forms.TextBox providerDescriptionBox;
         private System.Windows.Forms.ComboBox providerComboBox;
         private System.Windows.Forms.GroupBox optionsGroupBox;
         private System.Windows.Forms.GroupBox descriptionGroupBox;
         private System.Windows.Forms.Label updateTimeLabel;
         private System.Windows.Forms.DateTimePicker updateTimePicker;
+        private System.Windows.Forms.Button updateWallpaperButton;
+        private System.Windows.Forms.Label providerDescriptionLabel;
     }
 }
 

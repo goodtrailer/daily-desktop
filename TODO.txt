@@ -1,0 +1,6 @@
+TODO
+- Open providers folder button
+- Update wallpaper button
+- Enabled/disabled checkbox
+- Fit/fill/stretch/smart-fit
+- More providers
