@@ -18,6 +18,11 @@
         string Description { get; }
 
         /// <summary>
+        /// The source URI that the images are coming from. Usually, this is the website the images are hosted on.
+        /// </summary>
+        string SourceUri { get; }
+
+        /// <summary>
         /// Gets the image URI to download from and set as the desktop wallpaper.
         /// </summary>
         /// <returns>The image URI to download from.</returns>

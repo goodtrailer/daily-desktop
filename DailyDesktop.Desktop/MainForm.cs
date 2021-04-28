@@ -22,15 +22,21 @@ namespace DailyDesktop.Desktop
             updateTimePicker.Value = core.UpdateTime;
             providerComboBox.SelectedItem = core.CurrentProvider;
             providerComboBox.SelectedText = core.CurrentProvider?.DisplayName;
-            providerDescriptionLabel.Text = core.CurrentProvider?.Description ?? NULL_DESCRIPTION;
             enabledCheckBox.Checked = core.Enabled;
+            updateProviderInfo();
         }
 
         private void providerComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ProviderComboboxItem item = providerComboBox.SelectedItem as ProviderComboboxItem;
             core.CurrentProvider = item.Provider;
-            providerDescriptionLabel.Text = core.CurrentProvider.Description ?? NULL_DESCRIPTION;
+            updateProviderInfo();
+        }
+
+        private void updateProviderInfo()
+        {
+            providerDescriptionLabel.Text = core.CurrentProvider?.Description ?? NULL_DESCRIPTION;
+            providerSourceLinkLabel.Text = core.CurrentProvider?.SourceUri;
         }
 
         private void providerComboBox_DropDown(object sender, EventArgs e)
@@ -43,24 +49,24 @@ namespace DailyDesktop.Desktop
             }
         }
 
+        private void providerSourceLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = providerSourceLinkLabel.Text,
+                UseShellExecute = true,
+            };
+            Process.Start(psi);
+        }
+
         private void updateTimePicker_ValueChanged(object sender, EventArgs e)
         {
             core.UpdateTime = updateTimePicker.Value;
         }
 
-        private void okButton_Click(object sender, EventArgs e)
+        private void enabledCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            Application.Exit();
-        }
-
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            ProcessStartInfo psi = new ProcessStartInfo
-            {
-                FileName = "https://magic.wizards.com/en/articles/media/wallpapers",
-                UseShellExecute = true,
-            };
-            Process.Start(psi);
+            core.Enabled = enabledCheckBox.Checked;
         }
 
         private void updateWallpaperButton_Click(object sender, EventArgs e)
@@ -78,9 +84,9 @@ namespace DailyDesktop.Desktop
             Process.Start(psi);
         }
 
-        private void enabledCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void okButton_Click(object sender, EventArgs e)
         {
-            core.Enabled = enabledCheckBox.Checked;
+            Application.Exit();
         }
     }
 }

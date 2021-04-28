@@ -50,6 +50,10 @@ namespace DailyDesktop.Core.Providers
                 {
                     Console.WriteLine(e.StackTrace);
                 }
+                catch (ReflectionTypeLoadException e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                }
             }
         }
 
