@@ -1,6 +1,4 @@
 TODO
-- Open providers folder button
-- Update wallpaper button
-- Enabled/disabled checkbox
+- Source URIs
 - Fit/fill/stretch/smart-fit
 - More providers
