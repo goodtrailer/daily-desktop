@@ -22,3 +22,7 @@ This program is based on [a previous C# program I wrote](https://github.com/good
 * DeviantArt
 * National Geographic
 * Unsplash
+
+## Third-Party Libraries
+* **[MIT]** [mdymel/superfastblur](https://github.com/mdymel/superfastblur) used @ [/DailyDesktop.Task/](/DailyDesktop.Task/)
+
