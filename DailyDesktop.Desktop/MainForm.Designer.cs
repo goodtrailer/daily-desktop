@@ -233,10 +233,9 @@ namespace DailyDesktop.Desktop
             this.blurredFitCheckBox.Size = new System.Drawing.Size(114, 19);
             this.blurredFitCheckBox.TabIndex = 4;
             this.blurredFitCheckBox.Text = "Blurred-fit mode";
-            this.mainToolTip.SetToolTip(this.blurredFitCheckBox, "Sizes wallpaper to fit the display resolution like Windows\r\nwallpaper Fit mode, b" +
-        "ut the background is an enlarged\r\nand blurred portion of the picture instead of " +
-        "a solid color.");
+            this.mainToolTip.SetToolTip(this.blurredFitCheckBox, resources.GetString("blurredFitCheckBox.ToolTip"));
             this.blurredFitCheckBox.UseVisualStyleBackColor = true;
+            this.blurredFitCheckBox.CheckedChanged += new System.EventHandler(this.blurredFitCheckBox_CheckedChanged);
             // 
             // updateTimePicker
             // 
@@ -260,8 +259,8 @@ namespace DailyDesktop.Desktop
             this.enabledCheckBox.Size = new System.Drawing.Size(68, 19);
             this.enabledCheckBox.TabIndex = 2;
             this.enabledCheckBox.Text = "Enabled";
-            this.mainToolTip.SetToolTip(this.enabledCheckBox, "Whether automatic desktop background update triggers should be enabled or disable" +
-        "d.");
+            this.mainToolTip.SetToolTip(this.enabledCheckBox, "Whether automatic desktop wallpaper update triggers should be enabled or disabled" +
+        ".");
             this.enabledCheckBox.UseVisualStyleBackColor = false;
             this.enabledCheckBox.CheckedChanged += new System.EventHandler(this.enabledCheckBox_CheckedChanged);
             // 
@@ -273,7 +272,7 @@ namespace DailyDesktop.Desktop
             this.updateTimeLabel.Size = new System.Drawing.Size(72, 15);
             this.updateTimeLabel.TabIndex = 1;
             this.updateTimeLabel.Text = "Update time";
-            this.mainToolTip.SetToolTip(this.updateTimeLabel, "When in the day to trigger an automatic desktop background update. If the time is" +
+            this.mainToolTip.SetToolTip(this.updateTimeLabel, "When in the day to trigger an automatic desktop wallpaper update.\r\nIf the time is" +
         " missed, then it will trigger on next logon.");
             // 
             // providersDirectoryButton
@@ -296,7 +295,7 @@ namespace DailyDesktop.Desktop
             this.updateWallpaperButton.Name = "updateWallpaperButton";
             this.updateWallpaperButton.Size = new System.Drawing.Size(338, 23);
             this.updateWallpaperButton.TabIndex = 6;
-            this.updateWallpaperButton.Text = "Update desktop background";
+            this.updateWallpaperButton.Text = "Update desktop wallpaper";
             this.updateWallpaperButton.UseVisualStyleBackColor = true;
             this.updateWallpaperButton.Click += new System.EventHandler(this.updateWallpaperButton_Click);
             // 
@@ -357,7 +356,6 @@ namespace DailyDesktop.Desktop
         private System.Windows.Forms.Panel optionsPanel;
         private System.Windows.Forms.Label providerDescriptionLabel;
         private System.Windows.Forms.CheckBox blurredFitCheckBox;
-        private System.Windows.Forms.CheckBox blurredFitCheckBox1;
         private System.Windows.Forms.Label blurStrengthLabel;
         private System.Windows.Forms.TrackBar blurStrengthTrackBar;
         private System.Windows.Forms.ToolTip mainToolTip;

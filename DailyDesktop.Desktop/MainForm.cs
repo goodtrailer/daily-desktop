@@ -28,6 +28,10 @@ namespace DailyDesktop.Desktop
 
             enabledCheckBox.Checked = core.Enabled;
             updateTimePicker.Value = core.UpdateTime;
+            updateTimePicker.Enabled = enabledCheckBox.Checked;
+            blurredFitCheckBox.Checked = core.DoBlurredFit;
+            blurStrengthTrackBar.Value = core.BlurStrength;
+            blurStrengthTrackBar.Enabled = blurredFitCheckBox.Checked;
             updateBlurStrengthToolTip();
         }
 
@@ -72,6 +76,7 @@ namespace DailyDesktop.Desktop
         private void enabledCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             core.Enabled = enabledCheckBox.Checked;
+            updateTimePicker.Enabled = enabledCheckBox.Checked;
         }
 
         private void updateWallpaperButton_Click(object sender, EventArgs e)
@@ -96,6 +101,7 @@ namespace DailyDesktop.Desktop
 
         private void blurStrengthTrackBar_Scroll(object sender, EventArgs e)
         {
+            core.BlurStrength = blurStrengthTrackBar.Value;
             updateBlurStrengthToolTip();
         }
 
@@ -103,6 +109,12 @@ namespace DailyDesktop.Desktop
         {
             string strength = (blurStrengthTrackBar.Value / 100f).ToString("0.00");
             mainToolTip.SetToolTip(blurStrengthTrackBar, strength);
+        }
+
+        private void blurredFitCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            core.DoBlurredFit = blurredFitCheckBox.Checked;
+            blurStrengthTrackBar.Enabled = blurredFitCheckBox.Checked;
         }
     }
 }

@@ -18,11 +18,14 @@ namespace DailyDesktop.Core
         private const string TASK_NAME_PREFIX = "Daily Desktop";
         private const string TASK_EXECUTABLE = "DailyDesktop.Task.exe";
         private const string DEFAULT_UPDATE_TIME = "12:00 AM";
+        private const int DEFAULT_BLUR_STRENGTH = 40;
 
         private readonly ProviderStore store;
         private readonly Task task;
 
         private bool enabled;
+        private bool doBlurredFit;
+        private int blurStrength;
         private IProvider currentProvider;
         private DateTime updateTime;
 
@@ -36,6 +39,26 @@ namespace DailyDesktop.Core
             set
             {
                 enabled = value;
+                updateTask();
+            }
+        }
+
+        public bool DoBlurredFit
+        {
+            get => doBlurredFit;
+            set
+            {
+                doBlurredFit = value;
+                updateTask();
+            }
+        }
+
+        public int BlurStrength
+        {
+            get => blurStrength;
+            set
+            {
+                blurStrength = value;
                 updateTask();
             }
         }
@@ -105,6 +128,17 @@ namespace DailyDesktop.Core
             }
         }
 
+        private string[] execArguments
+        {
+            get => execAction.Arguments?.Split(" ");
+            set
+            {
+                execAction.Arguments = string.Join(" ", value);
+            }
+        }
+
+        private int execArgumentsCount => execArguments?.Length ?? 0;
+
         //-----------------------------------------------------------------METHODS
 
         public DailyDesktopCore()
@@ -144,24 +178,34 @@ namespace DailyDesktop.Core
                 };
                 taskDefinition.Actions.Add(newExecAction);
 
+#if (!DEBUG)
+                taskDefinition.Settings.Hidden = true;
+#endif
+
                 task = TaskService.Instance.RootFolder.RegisterTaskDefinition(taskName, taskDefinition);
-                currentProvider = null;
             }
             else
             {
-                string key = execAction.Arguments;
+                string key = (execArgumentsCount < 1) ? null : execArguments[0];
 
                 if (key != null && store.Providers.ContainsKey(key))
                     store.Providers.TryGetValue(key, out currentProvider);
-                else
-                    currentProvider = null;
 
                 execAction.Path = taskExecutablePath;
                 task.RegisterChanges();
             }
 
-            updateTime = dailyTrigger.StartBoundary;
             enabled = dailyTrigger.Enabled;
+            updateTime = dailyTrigger.StartBoundary;
+
+            if (execArgumentsCount >= 2 && int.TryParse(execArguments[1], out blurStrength))
+            {
+                doBlurredFit = true;
+            } else
+            {
+                doBlurredFit = false;
+                blurStrength = DEFAULT_BLUR_STRENGTH;
+            }
         }
 
         public void UpdateWallpaper()
@@ -172,7 +216,9 @@ namespace DailyDesktop.Core
         private void updateTask()
         {
             dailyTrigger.StartBoundary = updateTime;
-            execAction.Arguments = currentProvider?.Key ?? string.Empty;
+            string key = currentProvider?.Key ?? string.Empty;
+            string blur = doBlurredFit ? blurStrength.ToString() : string.Empty;
+            execArguments = new string[] { key, blur };
             dailyTrigger.Enabled = enabled;
             logonTrigger.Enabled = enabled;
             task.RegisterChanges();
