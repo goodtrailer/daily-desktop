@@ -1,7 +1,7 @@
 {
-  "profiles": {
-    "DailyDesktop.Task": {
-      "commandName": "Project"
+    "profiles": {
+        "DailyDesktop.Task": {
+            "commandName": "Project"
+        }
     }
-  }
 }
