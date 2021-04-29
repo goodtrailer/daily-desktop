@@ -142,8 +142,6 @@ namespace DailyDesktop.Core
 
         private int execArgumentsCount => execArguments?.Length ?? 0;
 
-
-
         //-----------------------------------------------------------------METHODS
 
         public DailyDesktopCore()
