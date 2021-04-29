@@ -1,10 +1,13 @@
-﻿using DailyDesktop.Core.Providers;
-using Microsoft.Win32.TaskScheduler;
+﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
+// See the LICENSE file in the repository root for full licence text.
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using DailyDesktop.Core.Providers;
+using Microsoft.Win32.TaskScheduler;
 
 namespace DailyDesktop.Core
 {

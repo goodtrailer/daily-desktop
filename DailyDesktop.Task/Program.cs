@@ -1,12 +1,14 @@
-﻿using DailyDesktop.Core.Providers;
-using SuperfastBlur;
-using System;
+﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
+// See the LICENSE file in the repository root for full licence text.
+
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using DailyDesktop.Core.Providers;
+using SuperfastBlur;
 
 namespace DailyDesktop.Task
 {
@@ -63,7 +65,7 @@ namespace DailyDesktop.Task
             using (Bitmap image = new Bitmap(imagePath))
                 copy = new Bitmap(image);
 
-            float imageAspectRatio = (float) copy.Width / copy.Height;
+            float imageAspectRatio = (float)copy.Width / copy.Height;
 
             Rectangle backgroundRect = new Rectangle();
             Rectangle fillRect = new Rectangle();
