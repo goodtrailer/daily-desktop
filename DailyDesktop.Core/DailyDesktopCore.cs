@@ -21,7 +21,10 @@ namespace DailyDesktop.Core
         private const int DEFAULT_BLUR_STRENGTH = 40;
 
         private readonly ProviderStore store;
-        private readonly Task task;
+        private readonly string userId;
+        private readonly string userName;
+        private readonly string taskName;
+        private Task task;
 
         private bool enabled;
         private bool doBlurredFit;
@@ -139,78 +142,77 @@ namespace DailyDesktop.Core
 
         private int execArgumentsCount => execArguments?.Length ?? 0;
 
+
+
         //-----------------------------------------------------------------METHODS
 
         public DailyDesktopCore()
         {
             store = new ProviderStore();
 
-            string userId = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-            string userName = userId.Split('\\').Last();
-            string taskName = $"{TASK_NAME_PREFIX}_{userName}";
+            userId = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            userName = userId.Split('\\').Last();
+            taskName = $"{TASK_NAME_PREFIX}_{userName}";
 
             task = TaskService.Instance.FindTask(taskName);
-
-            string taskExecutablePath = getTaskExecutablePath();
-
             if (task == null)
-            {
-                TaskDefinition taskDefinition = TaskService.Instance.NewTask();
-                taskDefinition.RegistrationInfo.Description = string.Empty;
-                taskDefinition.Settings.StartWhenAvailable = true;
+                CreateDefaultTask();
 
-                DailyTrigger newDailyTrigger = new DailyTrigger
-                {
-                    DaysInterval = 1,
-                    StartBoundary = DateTime.Parse(DEFAULT_UPDATE_TIME),
-                };
-                LogonTrigger newLogonTrigger = new LogonTrigger
-                {
-                    UserId = userId,
-                };
-                taskDefinition.Triggers.Add(newDailyTrigger);
-                taskDefinition.Triggers.Add(newLogonTrigger);
+            loadValuesFromTask();
+            execAction.Path = getTaskExecutablePath();
+            task.RegisterChanges();
+        }
 
-                ExecAction newExecAction = new ExecAction
-                {
-                    Path = taskExecutablePath,
-                    Arguments = string.Empty,
-                };
-                taskDefinition.Actions.Add(newExecAction);
-
+        public void CreateDefaultTask()
+        {
+            TaskDefinition taskDefinition = TaskService.Instance.NewTask();
+            taskDefinition.RegistrationInfo.Description = string.Empty;
+            taskDefinition.Settings.StartWhenAvailable = true;
 #if (!DEBUG)
-                taskDefinition.Settings.Hidden = true;
+            taskDefinition.Settings.Hidden = true;
 #endif
 
-                task = TaskService.Instance.RootFolder.RegisterTaskDefinition(taskName, taskDefinition);
-            }
-            else
+            DailyTrigger newDailyTrigger = new DailyTrigger
             {
-                string key = (execArgumentsCount < 1) ? null : execArguments[0];
-
-                if (key != null && store.Providers.ContainsKey(key))
-                    store.Providers.TryGetValue(key, out currentProvider);
-
-                execAction.Path = taskExecutablePath;
-                task.RegisterChanges();
-            }
-
-            enabled = dailyTrigger.Enabled;
-            updateTime = dailyTrigger.StartBoundary;
-
-            if (execArgumentsCount >= 2 && int.TryParse(execArguments[1], out blurStrength))
+                DaysInterval = 1,
+                StartBoundary = DateTime.Parse(DEFAULT_UPDATE_TIME),
+            };
+            LogonTrigger newLogonTrigger = new LogonTrigger
             {
-                doBlurredFit = true;
-            } else
+                UserId = userId,
+            };
+            taskDefinition.Triggers.Add(newDailyTrigger);
+            taskDefinition.Triggers.Add(newLogonTrigger);
+
+            ExecAction newExecAction = new ExecAction
             {
-                doBlurredFit = false;
-                blurStrength = DEFAULT_BLUR_STRENGTH;
-            }
+                Path = getTaskExecutablePath(),
+                Arguments = string.Empty,
+            };
+            taskDefinition.Actions.Add(newExecAction);
+
+            task = TaskService.Instance.RootFolder.RegisterTaskDefinition(taskName, taskDefinition);
+        }
+
+        public void DeleteTask()
+        {
+            TaskService.Instance.RootFolder.DeleteTask(task.Name, false);
         }
 
         public void UpdateWallpaper()
         {
             task.Run();
+        }
+
+        private void loadValuesFromTask()
+        {
+            if (execArgumentsCount >= 1 && store.Providers.ContainsKey(execArguments[0]))
+                store.Providers.TryGetValue(execArguments[0], out currentProvider);
+
+            enabled = dailyTrigger.Enabled;
+            blurStrength = DEFAULT_BLUR_STRENGTH;
+            doBlurredFit = execArgumentsCount >= 2 && int.TryParse(execArguments[1], out blurStrength);
+            updateTime = dailyTrigger.StartBoundary;
         }
 
         private void updateTask()
@@ -222,11 +224,6 @@ namespace DailyDesktop.Core
             dailyTrigger.Enabled = enabled;
             logonTrigger.Enabled = enabled;
             task.RegisterChanges();
-        }
-
-        private void deleteTask()
-        {
-            TaskService.Instance.RootFolder.DeleteTask(task.Name, false);
         }
 
         private string getTaskExecutablePath()

@@ -1,3 +1,4 @@
 TODO
-- Blurred-fit
+- Uninstall
+- Install
 - More providers
