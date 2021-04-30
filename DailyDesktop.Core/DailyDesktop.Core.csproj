@@ -14,8 +14,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/goodtrailer/daily-desktop</PackageProjectUrl>
     <PackageTags>daily desktop wallpaper background</PackageTags>
-    <Version>0.0.0</Version>
+    <Version>2021.429.1</Version>
     <PackageIcon>icon.png</PackageIcon>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
