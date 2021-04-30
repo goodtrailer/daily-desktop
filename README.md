@@ -35,8 +35,8 @@ Then, implement the [IProvider](/DailyDesktop.Core/Providers/IProvider.cs) inter
 Daily Desktop has an optional "blurred-fit" mode that fits the entire image within the wallpaper, then fills in the background with a blurred and enlarged version of the image itself, instead of using a solid color like Windows does. This is useful if a provider's source contains images that are of a vastly different aspect ratio than your primary display.
 
 *Image credit:* [真夏に花が咲く](https://www.pixiv.net/en/artworks/88058753)*, illustrated by* [流感中](https://www.pixiv.net/en/users/2712686)
-| Original | Blurred-fit (strength: 0.40) |
-| -------- | --------------------------------- |
+| Original | Blurred-fit: 0.40 |
+| -------- | ----------------- |
 | ![Original](assets/comparison-original.png) | ![Blurred-Fit](assets/comparison-blurredfit.png) |
 
 | Windows 10 Fill | Windows 10 Fit |
