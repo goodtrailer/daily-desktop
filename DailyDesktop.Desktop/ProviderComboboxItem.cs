@@ -5,7 +5,7 @@ using DailyDesktop.Core.Providers;
 
 namespace DailyDesktop.Desktop
 {
-    public class ProviderComboboxItem
+    internal class ProviderComboboxItem
     {
         public IProvider Provider;
 

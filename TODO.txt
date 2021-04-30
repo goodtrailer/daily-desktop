@@ -1,4 +1,3 @@
 TODO
-- Uninstall
-- Install
 - More providers
+- Install

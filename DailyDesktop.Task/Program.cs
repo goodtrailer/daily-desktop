@@ -12,12 +12,12 @@ using SuperfastBlur;
 
 namespace DailyDesktop.Task
 {
-    public class Program
+    internal class Program
     {
         private const string IMAGE_FILENAME = "Daily Desktop Wallpaper";
         private const double MAX_BLUR_FRACTION = 0.025;
 
-        public static void Main(string[] args)
+        private static void Main(string[] args)
         {
             if (args.Length < 1)
                 throw new ProviderException("No IProvider.Key passed.");
