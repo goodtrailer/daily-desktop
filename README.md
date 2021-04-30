@@ -11,6 +11,13 @@ Modular Windows desktop wallpaper updater that works daily at a set time. Wallpa
 
 This program is based on [a previous C# program I wrote](https://github.com/goodtrailer/MTG-Wallpaper-OTW) that only worked specifically for Magic: The Gathering, and was not remotely user-friendly. The original idea is based off of KDE Plasma's daily wallpaper addon/plugin where options included [Bing](https://www.bing.com), [Wikimedia Commons](https://commons.wikimedia.org/wiki/Commons:Picture_of_the_day), and [National Geographic](https://www.nationalgeographic.com/photo-of-the-day).
 
+## Developing a Provider Module
+To develop your own Daily Desktop provider modules, use the [NuGet package](https://www.nuget.org/packages/goodtrailer.DailyDesktop.Core/):
+* PackageManager: `Install-Package goodtrailer.DailyDesktop.Core`
+* dotnet: `dotnet add package goodtrailer.DailyDesktop.Core`
+
+Then, implement the [IProvider](/DailyDesktop.Core/Providers/IProvider.cs) interface in a public class in the namespace `DailyDesktop.Core.Providers`. For examples, check these [providers I already implemented](#implemented).
+
 ## Providers
 #### Implemented
 * Magic: The Gathering @ [/DailyDesktop.Core.Providers.MTG/](/DailyDesktop.Core.Providers.MTG/)
