@@ -1,5 +1,6 @@
 TODO
-- Comments to DailyDesktop.Core
-- %APPDATA% instead of Program Files
-- Add tip about increased computation time for blurred-fit
+x Comments to DailyDesktop.Core
+x %APPDATA% instead of Program Files
+x Banner image and EULA to installer
+x Add tip about increased computation time for blurred-fit
 - More providers
