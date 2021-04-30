@@ -17,7 +17,7 @@ To develop your own Daily Desktop provider modules, use the [NuGet package](http
 * PackageManager: `Install-Package goodtrailer.DailyDesktop.Core`
 * dotnet: `dotnet add package goodtrailer.DailyDesktop.Core`
 
-Then, implement the [IProvider](/DailyDesktop.Core/Providers/IProvider.cs) interface in a public class in the namespace `DailyDesktop.Core.Providers`. For examples, check these [providers I already implemented](#implemented).
+Then, implement the [IProvider](/DailyDesktop.Core/Providers/IProvider.cs) interface in a *public* class. For examples, check these [providers I already implemented](#implemented).
 
 ## Providers
 #### Implemented

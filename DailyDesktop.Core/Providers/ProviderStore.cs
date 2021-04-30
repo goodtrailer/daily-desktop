@@ -9,23 +9,50 @@ using System.Reflection;
 
 namespace DailyDesktop.Core.Providers
 {
+    /// <summary>
+    /// Scans, loads, and instantiates <see cref="IProvider"/> implementations
+    /// from DLL modules placed in <see cref="ProvidersDirectory"/> and stores
+    /// them in a <see cref="Dictionary{TKey, TValue}"/>. <br />
+    /// <br />
+    /// TKey is <see cref="string"/>.<br />
+    /// TValue is <see cref="IProvider"/>.
+    /// </summary>
     public class ProviderStore
     {
         private const string PROVIDERS_DIR = "providers";
-        private const string PROVIDERS_ASSEMBLY_PREFIX = "DailyDesktop.Core.Providers";
+        private const string PROVIDERS_SEARCH_PATTERN = "*.dll";
 
+        /// <summary>
+        /// Dictionary of <see cref="IProvider"/>s loaded from DLL modules found
+        /// in <see cref="ProvidersDirectory"/>.
+        /// </summary>
         public readonly Dictionary<string, IProvider> Providers;
+
+        /// <summary>
+        /// The providers directory where <see cref="IProvider"/> DLL modules
+        /// are scanned from.
+        /// </summary>
         public readonly string ProvidersDirectory;
 
+        /// <summary>
+        /// Constructs a <see cref="ProviderStore"/> and immediately calls
+        /// <see cref="Scan"/>.
+        /// </summary>
         public ProviderStore()
         {
-            string baseDir = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase)).LocalPath;
-            ProvidersDirectory = Path.Combine(baseDir, PROVIDERS_DIR);
+            string appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            ProvidersDirectory = Path.Combine(appDataDir, "Daily Desktop", PROVIDERS_DIR);
             Providers = new Dictionary<string, IProvider>();
 
             Scan();
         }
 
+        /// <summary>
+        /// Scans <see cref="ProvidersDirectory"/> for any <see cref="IProvider"/>
+        /// DLL modules and loads them into <see cref="Providers"/>. Any
+        /// <see cref="IProvider"/>s previously contained in
+        /// <see cref="Providers"/> will be cleared.
+        /// </summary>
         public void Scan()
         {
             Providers.Clear();
@@ -34,7 +61,7 @@ namespace DailyDesktop.Core.Providers
             try
             {
                 Directory.CreateDirectory(ProvidersDirectory);
-                paths = Directory.GetFiles(ProvidersDirectory, $"{PROVIDERS_ASSEMBLY_PREFIX}.*.dll", SearchOption.AllDirectories);
+                paths = Directory.GetFiles(ProvidersDirectory, PROVIDERS_SEARCH_PATTERN, SearchOption.AllDirectories);
             }
             catch (IOException e)
             {

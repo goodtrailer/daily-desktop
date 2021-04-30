@@ -11,6 +11,12 @@ using Microsoft.Win32.TaskScheduler;
 
 namespace DailyDesktop.Core
 {
+    /// <summary>
+    /// Core of Daily Desktop that handles the wallpaper update <see cref="Task"/>
+    /// using Windows Task Scheduler. Also handles <see cref="IProvider"/> DLL
+    /// module scanning, though <see cref="ProviderStore"/> is fully functional as
+    /// a standalone class.
+    /// </summary>
     public class DailyDesktopCore
     {
         //---------------------------------------------------------------VARIABLES
@@ -34,8 +40,16 @@ namespace DailyDesktop.Core
 
         //--------------------------------------------------------------PROPERTIES
 
+        /// <summary>
+        /// Gets the providers directory where <see cref="IProvider"/> DLL modules
+        /// are scanned from.
+        /// </summary>
         public string ProvidersDirectory => store.ProvidersDirectory;
 
+        /// <summary>
+        /// Gets or sets whether wallpaper update <see cref="Task"/> triggers are
+        /// enabled or disabled.
+        /// </summary>
         public bool Enabled
         {
             get => enabled;
@@ -46,6 +60,9 @@ namespace DailyDesktop.Core
             }
         }
 
+        /// <summary>
+        /// Gets or sets whether or not to apply blurred-fit to wallpaper images.
+        /// </summary>
         public bool DoBlurredFit
         {
             get => doBlurredFit;
@@ -56,6 +73,10 @@ namespace DailyDesktop.Core
             }
         }
 
+        /// <summary>
+        /// Gets or sets the blur strength for wallpaper images. Only applies if
+        /// <see cref="DoBlurredFit"/> is set to <c>true</c>.
+        /// </summary>
         public int BlurStrength
         {
             get => blurStrength;
@@ -66,6 +87,10 @@ namespace DailyDesktop.Core
             }
         }
 
+        /// <summary>
+        /// Gets or sets the current <see cref="IProvider"/> to fetch wallpaper
+        /// image URIs from.
+        /// </summary>
         public IProvider CurrentProvider
         {
             get => currentProvider;
@@ -76,6 +101,10 @@ namespace DailyDesktop.Core
             }
         }
 
+        /// <summary>
+        /// Gets or sets the time at which the daily wallpaper update trigger
+        /// executes. Only applies if <see cref="Enabled"/> is set to <c>true</c>.
+        /// </summary>
         public DateTime UpdateTime
         {
             get => updateTime;
@@ -86,6 +115,10 @@ namespace DailyDesktop.Core
             }
         }
 
+        /// <summary>
+        /// Gets a freshly scanned <see cref="IProvider"/> collection loaded from
+        /// DLL modules placed in <see cref="ProvidersDirectory"/>.
+        /// </summary>
         public ICollection<IProvider> Providers
         {
             get
@@ -144,6 +177,14 @@ namespace DailyDesktop.Core
 
         //-----------------------------------------------------------------METHODS
 
+        /// <summary>
+        /// Constructs a <see cref="DailyDesktopCore"/> and attempts to find the
+        /// wallpaper update <see cref="Task"/>. If no registered
+        /// <see cref="Task"/> is found, then it calls
+        /// <see cref="CreateDefaultTask"/>. Data is loaded from the task into
+        /// corresponding members, and the task executable path is updated to the
+        /// current directory.
+        /// </summary>
         public DailyDesktopCore()
         {
             store = new ProviderStore();
@@ -161,6 +202,10 @@ namespace DailyDesktop.Core
             task.RegisterChanges();
         }
 
+        /// <summary>
+        /// Creates a <see cref="Task"/> using default values. If one has already
+        /// been created, the new <see cref="Task"/> overrides the existing one.
+        /// </summary>
         public void CreateDefaultTask()
         {
             TaskDefinition taskDefinition = TaskService.Instance.NewTask();
@@ -192,11 +237,20 @@ namespace DailyDesktop.Core
             task = TaskService.Instance.RootFolder.RegisterTaskDefinition(taskName, taskDefinition);
         }
 
+        /// <summary>
+        /// Deletes the wallpaper update <see cref="Task"/>. Doing so invalidates
+        /// many member properties until <see cref="CreateDefaultTask"/> is called
+        /// again.
+        /// </summary>
         public void DeleteTask()
         {
             TaskService.Instance.RootFolder.DeleteTask(task.Name, false);
         }
 
+        /// <summary>
+        /// Manually triggers the wallpaper update <see cref="Task"/>, updating
+        /// the desktop wallpaper using <see cref="CurrentProvider"/>.
+        /// </summary>
         public void UpdateWallpaper()
         {
             task.Run();

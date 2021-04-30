@@ -3,6 +3,11 @@
 
 namespace DailyDesktop.Core.Providers
 {
+    /// <summary>
+    /// Interface for providing desktop wallpaper image URIs and some extra
+    /// useful information to display to the user. Should be compiled into DLL
+    /// modules and loaded by a <see cref="ProviderStore"/>.
+    /// </summary>
     public interface IProvider
     {
         /// <summary>

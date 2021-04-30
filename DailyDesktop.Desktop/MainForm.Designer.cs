@@ -222,7 +222,8 @@ namespace DailyDesktop.Desktop
             this.blurStrengthLabel.Size = new System.Drawing.Size(142, 15);
             this.blurStrengthLabel.TabIndex = 8;
             this.blurStrengthLabel.Text = "Background blur strength";
-            this.mainToolTip.SetToolTip(this.blurStrengthLabel, "Background blur strength. Only applicable if blurred-fit mode is turned on.");
+            this.mainToolTip.SetToolTip(this.blurStrengthLabel, "Background blur strength. Only applicable if blurred-fit\r\nmode is turned on. High" +
+        "er blur strengths do not require\r\nextra computation time.");
             // 
             // blurredFitCheckBox
             // 
@@ -272,8 +273,8 @@ namespace DailyDesktop.Desktop
             this.updateTimeLabel.Size = new System.Drawing.Size(72, 15);
             this.updateTimeLabel.TabIndex = 1;
             this.updateTimeLabel.Text = "Update time";
-            this.mainToolTip.SetToolTip(this.updateTimeLabel, "When in the day to trigger an automatic desktop wallpaper update.\r\nIf the time is" +
-        " missed, then it will trigger on next logon.");
+            this.mainToolTip.SetToolTip(this.updateTimeLabel, "When in the day to trigger an automatic desktop\r\nwallpaper update.\r\nIf the time i" +
+        "s missed, then it will trigger on next logon.");
             // 
             // providersDirectoryButton
             // 

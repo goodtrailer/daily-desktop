@@ -1,3 +1,5 @@
 TODO
+- Comments to DailyDesktop.Core
+- %APPDATA% instead of Program Files
+- Add tip about increased computation time for blurred-fit
 - More providers
-- Install
