@@ -1,3 +1,5 @@
 TODO
+- image credits in interface
 - store a history of images
 - image suffix in interface
+- shrink images if they are >25mb
