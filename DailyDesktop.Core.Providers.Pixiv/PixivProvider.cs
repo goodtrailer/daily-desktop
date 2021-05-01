@@ -48,7 +48,9 @@ namespace DailyDesktop.Core.Providers.Pixiv
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            // Download illustration from image URI and return its local path
+            // Download illustration from image URI and return its local path,
+            // which is necessary because pixiv blocks requests if the Referer
+            // header attribute isn't set to pixiv.net
 
             string imageLocalUri = Path.Combine(Path.GetTempPath(), IMAGE_DOWNLOAD_NAME);
             using (WebClient client = new WebClient())

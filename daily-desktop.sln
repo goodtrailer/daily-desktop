@@ -18,6 +18,8 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DailyDesktop.Setup", "Daily
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyDesktop.Core.Providers.Pixiv", "DailyDesktop.Core.Providers.Pixiv\DailyDesktop.Core.Providers.Pixiv.csproj", "{3E827370-7B8B-4F1E-82CF-B374CCEA6744}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyDesktop.Core.Providers.Unsplash", "DailyDesktop.Core.Providers.Unsplash\DailyDesktop.Core.Providers.Unsplash.csproj", "{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{3E827370-7B8B-4F1E-82CF-B374CCEA6744}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E827370-7B8B-4F1E-82CF-B374CCEA6744}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E827370-7B8B-4F1E-82CF-B374CCEA6744}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
