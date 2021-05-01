@@ -270,8 +270,8 @@ namespace DailyDesktop.Core
         private void updateTask()
         {
             dailyTrigger.StartBoundary = updateTime;
-            string key = currentProvider?.Key ?? string.Empty;
-            string blur = doBlurredFit ? blurStrength.ToString() : string.Empty;
+            string key = currentProvider?.Key;
+            string blur = (doBlurredFit && !string.IsNullOrWhiteSpace(key)) ? blurStrength.ToString() : string.Empty;
             execArguments = new string[] { key, blur };
             dailyTrigger.Enabled = enabled;
             logonTrigger.Enabled = enabled;

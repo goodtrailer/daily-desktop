@@ -1,4 +1,4 @@
-# Pixiv
+# pixiv
 #### *DailyDesktop.Core.Providers.Pixiv @ PIXIV*
 
 Fetches the illustration ranked #1 on the pixiv Overall Daily Rankings for the previous day.<br /> 

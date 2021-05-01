@@ -38,7 +38,7 @@ namespace DailyDesktop.Desktop
         private void providerComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ProviderComboboxItem item = providerComboBox.SelectedItem as ProviderComboboxItem;
-            core.CurrentProvider = item.Provider;
+            core.CurrentProvider = item?.Provider;
             updateProviderInfo();
         }
 
