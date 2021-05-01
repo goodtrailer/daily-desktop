@@ -33,7 +33,7 @@ namespace DailyDesktop.Core.Providers.Pixiv
             Match imageIdMatch = Regex.Match(rankingHtml, IMAGE_ID_PATTERN);
             string imageId = imageIdMatch.Value;
             if (string.IsNullOrWhiteSpace(imageId))
-                throw new Exception("Didn't find an image ID.");
+                throw new ProviderException("Didn't find an image ID.");
 
             // Search for image URI of illustration on image's actual page
 
@@ -46,7 +46,7 @@ namespace DailyDesktop.Core.Providers.Pixiv
             Match imageUriMatch = Regex.Match(imageHtml, IMAGE_URI_PATTERN);
             string imageUri = imageUriMatch.Value;
             if (string.IsNullOrWhiteSpace(imageUri))
-                throw new Exception("Didn't find an image URI.");
+                throw new ProviderException("Didn't find an image URI.");
 
             // Download illustration from image URI and return its local path
 
