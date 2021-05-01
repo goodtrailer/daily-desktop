@@ -22,9 +22,9 @@ Then, implement the [IProvider](/DailyDesktop.Core/Providers/IProvider.cs) inter
 ## Providers
 #### Implemented
 * Magic: The Gathering @ [/DailyDesktop.Core.Providers.MTG/](/DailyDesktop.Core.Providers.MTG/)
+* Pixiv @ [/DailyDesktop.Core.Providers.Pixiv](/DailyDesktop.Core.Providers.Pixiv/)
 
 #### Planned
-* Pixiv
 * Bing
 * Wikimedia Commons
 * DeviantArt
