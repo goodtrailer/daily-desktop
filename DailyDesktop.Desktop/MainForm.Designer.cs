@@ -32,13 +32,15 @@ namespace DailyDesktop.Desktop
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.bottomPanel = new System.Windows.Forms.Panel();
+            this.stateLabel = new System.Windows.Forms.Label();
+            this.okButton = new System.Windows.Forms.Button();
             this.providerGroupBox = new System.Windows.Forms.GroupBox();
             this.descriptionGroupBox = new System.Windows.Forms.GroupBox();
             this.descriptionTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.providerDescriptionLabel = new System.Windows.Forms.Label();
             this.providerSourceLinkLabel = new System.Windows.Forms.LinkLabel();
             this.providerComboBox = new System.Windows.Forms.ComboBox();
-            this.okButton = new System.Windows.Forms.Button();
             this.optionsGroupBox = new System.Windows.Forms.GroupBox();
             this.optionsPanel = new System.Windows.Forms.Panel();
             this.blurStrengthTrackBar = new System.Windows.Forms.TrackBar();
@@ -51,7 +53,9 @@ namespace DailyDesktop.Desktop
             this.updateWallpaperButton = new System.Windows.Forms.Button();
             this.bannerPicture = new System.Windows.Forms.PictureBox();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.stateBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.mainTableLayout.SuspendLayout();
+            this.bottomPanel.SuspendLayout();
             this.providerGroupBox.SuspendLayout();
             this.descriptionGroupBox.SuspendLayout();
             this.descriptionTableLayout.SuspendLayout();
@@ -69,8 +73,8 @@ namespace DailyDesktop.Desktop
             this.mainTableLayout.AutoScroll = true;
             this.mainTableLayout.ColumnCount = 1;
             this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.mainTableLayout.Controls.Add(this.bottomPanel, 0, 2);
             this.mainTableLayout.Controls.Add(this.providerGroupBox, 0, 0);
-            this.mainTableLayout.Controls.Add(this.okButton, 0, 2);
             this.mainTableLayout.Controls.Add(this.optionsGroupBox, 0, 1);
             this.mainTableLayout.Location = new System.Drawing.Point(9, 178);
             this.mainTableLayout.Margin = new System.Windows.Forms.Padding(0);
@@ -82,6 +86,39 @@ namespace DailyDesktop.Desktop
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.mainTableLayout.Size = new System.Drawing.Size(356, 484);
             this.mainTableLayout.TabIndex = 1;
+            // 
+            // bottomPanel
+            // 
+            this.bottomPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.bottomPanel.Controls.Add(this.stateLabel);
+            this.bottomPanel.Controls.Add(this.okButton);
+            this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bottomPanel.Location = new System.Drawing.Point(0, 452);
+            this.bottomPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.bottomPanel.Name = "bottomPanel";
+            this.bottomPanel.Size = new System.Drawing.Size(356, 32);
+            this.bottomPanel.TabIndex = 3;
+            // 
+            // stateLabel
+            // 
+            this.stateLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.stateLabel.AutoSize = true;
+            this.stateLabel.Location = new System.Drawing.Point(3, 8);
+            this.stateLabel.Name = "stateLabel";
+            this.stateLabel.Size = new System.Drawing.Size(26, 15);
+            this.stateLabel.TabIndex = 9;
+            this.stateLabel.Text = "Idle";
+            // 
+            // okButton
+            // 
+            this.okButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.okButton.Location = new System.Drawing.Point(278, 4);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(75, 23);
+            this.okButton.TabIndex = 8;
+            this.okButton.Text = "OK";
+            this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // providerGroupBox
             // 
@@ -159,17 +196,6 @@ namespace DailyDesktop.Desktop
             this.providerComboBox.TabIndex = 0;
             this.providerComboBox.DropDown += new System.EventHandler(this.providerComboBox_DropDown);
             this.providerComboBox.SelectedIndexChanged += new System.EventHandler(this.providerComboBox_SelectedIndexChanged);
-            // 
-            // okButton
-            // 
-            this.okButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.okButton.Location = new System.Drawing.Point(278, 456);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 8;
-            this.okButton.Text = "OK";
-            this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // optionsGroupBox
             // 
@@ -312,6 +338,13 @@ namespace DailyDesktop.Desktop
             this.bannerPicture.TabIndex = 2;
             this.bannerPicture.TabStop = false;
             // 
+            // stateBackgroundWorker
+            // 
+            this.stateBackgroundWorker.WorkerReportsProgress = true;
+            this.stateBackgroundWorker.WorkerSupportsCancellation = true;
+            this.stateBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.stateBackgroundWorker_DoWork);
+            this.stateBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.stateBackgroundWorker_ProgressChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -326,7 +359,10 @@ namespace DailyDesktop.Desktop
             this.ShowIcon = false;
             this.Text = "Daily Desktop";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.mainTableLayout.ResumeLayout(false);
+            this.bottomPanel.ResumeLayout(false);
+            this.bottomPanel.PerformLayout();
             this.providerGroupBox.ResumeLayout(false);
             this.descriptionGroupBox.ResumeLayout(false);
             this.descriptionTableLayout.ResumeLayout(false);
@@ -360,6 +396,9 @@ namespace DailyDesktop.Desktop
         private System.Windows.Forms.Label blurStrengthLabel;
         private System.Windows.Forms.TrackBar blurStrengthTrackBar;
         private System.Windows.Forms.ToolTip mainToolTip;
+        private System.Windows.Forms.Panel bottomPanel;
+        private System.Windows.Forms.Label stateLabel;
+        private System.ComponentModel.BackgroundWorker stateBackgroundWorker;
     }
 }
 

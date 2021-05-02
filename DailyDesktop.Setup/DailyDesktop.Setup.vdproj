@@ -390,7 +390,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Daily Desktop"
         "ProductCode" = "8:{6539A11B-9950-4035-AFC6-4432BD2A34ED}"
-        "PackageCode" = "8:{245A9CAA-E211-4A0D-A7D4-66D926449864}"
+        "PackageCode" = "8:{12012C3F-AF3D-4A7A-B8C5-C68D72E4B112}"
         "UpgradeCode" = "8:{5F7693AE-18CC-4CFE-91E5-59EBC922E904}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"

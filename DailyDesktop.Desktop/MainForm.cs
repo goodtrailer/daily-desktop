@@ -2,10 +2,12 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
 using DailyDesktop.Core;
 using DailyDesktop.Core.Providers;
+using Microsoft.Win32.TaskScheduler;
 
 namespace DailyDesktop.Desktop
 {
@@ -27,12 +29,21 @@ namespace DailyDesktop.Desktop
             updateProviderInfo();
 
             enabledCheckBox.Checked = core.Enabled;
+            
             updateTimePicker.Value = core.UpdateTime;
             updateTimePicker.Enabled = enabledCheckBox.Checked;
+
             blurredFitCheckBox.Checked = core.DoBlurredFit;
             blurStrengthTrackBar.Value = core.BlurStrength;
             blurStrengthTrackBar.Enabled = blurredFitCheckBox.Checked;
             updateBlurStrengthToolTip();
+
+            stateBackgroundWorker.RunWorkerAsync();
+        }
+
+        private void MainForm_FormClosing(object sender, EventArgs e)
+        {
+            stateBackgroundWorker.CancelAsync();
         }
 
         private void providerComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -115,6 +126,20 @@ namespace DailyDesktop.Desktop
         {
             core.DoBlurredFit = blurredFitCheckBox.Checked;
             blurStrengthTrackBar.Enabled = blurredFitCheckBox.Checked;
+        }
+
+        private void stateBackgroundWorker_DoWork(object sender, EventArgs e)
+        {
+            while (!stateBackgroundWorker.CancellationPending)
+            {
+                stateBackgroundWorker.ReportProgress((int)core.TaskState);
+            }
+        }
+
+        private void stateBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            TaskState state = (TaskState)e.ProgressPercentage;
+            stateLabel.Text = state.ToString();
         }
     }
 }
