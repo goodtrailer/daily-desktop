@@ -1,5 +1,11 @@
 TODO
-- image credits in interface
-- store a history of images
-- image suffix in interface
-- shrink images if they are >25mb
+
+Immediately
+- more providers !!!
+- convert MTGProvider to using regex
+
+Eventually (these are uber important but mannnnnn mid-covid junior year of high school is rough)
+- image crediting in IProvider
+- pass back uri, description, author, title in a struct and cache it so that they are always synced
+- scrolling description
+- last updated label

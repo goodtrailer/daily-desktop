@@ -132,7 +132,7 @@ namespace DailyDesktop.Core
         /// Gets the state of the desktop wallpaper update task.
         /// </summary>
         public TaskState TaskState => task.State;
-        
+
         private DailyTrigger dailyTrigger
         {
             get

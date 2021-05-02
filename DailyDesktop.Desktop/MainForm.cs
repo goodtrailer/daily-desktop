@@ -29,7 +29,7 @@ namespace DailyDesktop.Desktop
             updateProviderInfo();
 
             enabledCheckBox.Checked = core.Enabled;
-            
+
             updateTimePicker.Value = core.UpdateTime;
             updateTimePicker.Enabled = enabledCheckBox.Checked;
 
