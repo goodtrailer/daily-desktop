@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -17,6 +18,7 @@ namespace DailyDesktop.Task
         private const string IMAGE_FILENAME = "Daily Desktop Wallpaper";
         private const double MAX_BLUR_FRACTION = 0.025;
 
+        // args: key, blur strength
         private static void Main(string[] args)
         {
             if (args.Length < 1)
@@ -35,14 +37,18 @@ namespace DailyDesktop.Task
             if (doBlurredFit)
                 applyBlurredFit(imagePath, blurStrength);
 
+            string jpgPath = convertToJpeg(imagePath);
+
             // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa#parameters
             // SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE
-            SystemParametersInfo(0x14, 0, imagePath, 0x1 | 0x2);
+            SystemParametersInfo(0x14, 0, jpgPath, 0x1 | 0x2);
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        // Can do a bunch of cool stuff, including setting the desktop wallpaper
         private static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
 
+        // Downloads a wallpaper image from a provider and returns its path
         private static string downloadWallpaper(IProvider provider)
         {
             string imagePath = Path.Combine(Path.GetTempPath(), IMAGE_FILENAME);
@@ -56,6 +62,7 @@ namespace DailyDesktop.Task
             return imagePath;
         }
 
+        // Applies blurred-fit to an image, overriding it
         private static void applyBlurredFit(string imagePath, int blurStrength)
         {
             Rectangle screenRect = Screen.PrimaryScreen.Bounds;
@@ -112,6 +119,21 @@ namespace DailyDesktop.Task
 
                 blurred.Save(imagePath);
             }
+        }
+
+        // Creates a new JPEG from an image and returns its path
+        private static string convertToJpeg(string imagePath, long quality = 100L)
+        {
+            Bitmap image = new Bitmap(imagePath);
+
+            ImageCodecInfo jpgEncoder = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == ImageFormat.Jpeg.Guid);
+            EncoderParameters parameters = new EncoderParameters(1);
+            parameters.Param[0] = new EncoderParameter(Encoder.Compression, quality);
+
+            string jpgPath = imagePath + ".jpg";
+            image.Save(jpgPath, jpgEncoder, parameters);
+
+            return jpgPath;
         }
     }
 }
