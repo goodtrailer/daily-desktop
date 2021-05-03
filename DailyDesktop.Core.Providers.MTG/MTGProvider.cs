@@ -2,14 +2,13 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace DailyDesktop.Core.Providers.MTG
 {
     public class MTGProvider : IProvider
     {
-        private const string TAG_TEXT = ">1920x1080</a>";
-        private const string IMAGE_SUFFIX = ".jpg";
-        private const string IMAGE_PREFIX = "https://media.magic.wizards.com/images/wallpaper/";
+        private const string IMAGE_URI_PATTERN = "(?<=(<a(.*?)href=\"))(.*?)(?=(\">1920x1080</a>))";
 
         public string Key => "MTG";
         public string DisplayName => "Magic: The Gathering";
@@ -18,16 +17,16 @@ namespace DailyDesktop.Core.Providers.MTG
 
         public string GetImageUri()
         {
-            string htmlSource = string.Empty;
+            string pageHtml = string.Empty;
             using (WebClient client = new WebClient())
             {
-                htmlSource = client.DownloadString(SourceUri);
+                pageHtml = client.DownloadString(SourceUri);
             }
 
-            int textIndex = htmlSource.IndexOf(TAG_TEXT, System.StringComparison.CurrentCultureIgnoreCase);
-            int endIndex = htmlSource.LastIndexOf(IMAGE_SUFFIX, textIndex, System.StringComparison.CurrentCultureIgnoreCase) + IMAGE_SUFFIX.Length;
-            int startIndex = htmlSource.LastIndexOf(IMAGE_PREFIX, endIndex, System.StringComparison.CurrentCultureIgnoreCase);
-            string imageUri = htmlSource.Substring(startIndex, endIndex - startIndex);
+            Match imageUriMatch = Regex.Match(pageHtml, IMAGE_URI_PATTERN);
+            string imageUri = imageUriMatch.Value;
+            if (string.IsNullOrWhiteSpace(imageUri))
+                throw new ProviderException("Didn't find an image URI.");
 
             return imageUri;
         }
