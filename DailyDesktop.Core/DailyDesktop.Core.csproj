@@ -14,12 +14,12 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/goodtrailer/daily-desktop</PackageProjectUrl>
     <PackageTags>daily desktop wallpaper background</PackageTags>
-    <Version>2021.430.0</Version>
+    <Version>2021.503.0</Version>
     <PackageIcon>icon.png</PackageIcon>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyVersion>2021.430.0.0</AssemblyVersion>
-    <FileVersion>2021.430.0.0</FileVersion>
+    <AssemblyVersion>2021.503.0.0</AssemblyVersion>
+    <FileVersion>2021.503.0.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
