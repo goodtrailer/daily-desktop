@@ -2,7 +2,7 @@
   "profiles": {
     "DailyDesktop.Task": {
       "commandName": "Project",
-      "commandLineArgs": "PIXIV"
+      "commandLineArgs": "DEVIANT 40"
     }
   }
 }

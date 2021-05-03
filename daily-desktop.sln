@@ -22,7 +22,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core.Providers
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core.Providers.WikimediaCommons", "DailyDesktop.Core.Providers.WikimediaCommons\DailyDesktop.Core.Providers.WikimediaCommons.csproj", "{170B34DD-A803-4CED-B1A6-7487AB61F473}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyDesktop.Core.Providers.Bing", "DailyDesktop.Core.Providers.Bing\DailyDesktop.Core.Providers.Bing.csproj", "{53B8F7F5-D7BB-4935-80F2-9D603CC32608}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core.Providers.Bing", "DailyDesktop.Core.Providers.Bing\DailyDesktop.Core.Providers.Bing.csproj", "{53B8F7F5-D7BB-4935-80F2-9D603CC32608}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyDesktop.Core.Providers.DeviantArt", "DailyDesktop.Core.Providers.DeviantArt\DailyDesktop.Core.Providers.DeviantArt.csproj", "{92DAF9D3-3F37-4DB1-8FC9-C9B60E961652}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +66,10 @@ Global
 		{53B8F7F5-D7BB-4935-80F2-9D603CC32608}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53B8F7F5-D7BB-4935-80F2-9D603CC32608}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53B8F7F5-D7BB-4935-80F2-9D603CC32608}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92DAF9D3-3F37-4DB1-8FC9-C9B60E961652}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92DAF9D3-3F37-4DB1-8FC9-C9B60E961652}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92DAF9D3-3F37-4DB1-8FC9-C9B60E961652}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92DAF9D3-3F37-4DB1-8FC9-C9B60E961652}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
