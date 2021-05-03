@@ -2,7 +2,7 @@
   "profiles": {
     "DailyDesktop.Task": {
       "commandName": "Project",
-      "commandLineArgs": "DEVIANT 40"
+      "commandLineArgs": "R/EARTHPORN"
     }
   }
 }

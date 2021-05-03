@@ -25,11 +25,11 @@ Then, implement the [IProvider](/DailyDesktop.Core/Providers/IProvider.cs) inter
 * DeviantArt @ [/DailyDesktop.Core.Providers.DeviantArt/](/DailyDesktop.Core.Providers.DeviantArt/)
 * Magic: The Gathering @ [/DailyDesktop.Core.Providers.MTG/](/DailyDesktop.Core.Providers.MTG/)
 * Pixiv @ [/DailyDesktop.Core.Providers.Pixiv/](/DailyDesktop.Core.Providers.Pixiv/)
+* r/EarthPorn (SFW) @ [/DailyDesktop.Core.Providers.RedditEarthPorn/](/DailyDesktop.Core.Providers.RedditEarthPorn/)
 * Unsplash @ [/DailyDesktop.Core.Providers.Unsplash/](/DailyDesktop.Core.Providers.Unsplash/)
 * Wikimedia Commons @ [/DailyDesktop.Core.Providers.WikimediaCommons/](/DailyDesktop.Core.Providers.WikimediaCommons/)
 
 #### Planned
-* r/EarthPorn (SFW)
 * National Geographic
     * *I lied. Writing a provider wouldn't be very hard, but on their website Nat Geo make it pretty blatantly clear they don't want people downloading these images. It's a shame, but it's understandable.*
 
