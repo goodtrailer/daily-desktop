@@ -356,10 +356,9 @@ namespace DailyDesktop.Desktop
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(390, 600);
             this.Name = "MainForm";
-            this.ShowIcon = false;
             this.Text = "Daily Desktop";
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.mainTableLayout.ResumeLayout(false);
             this.bottomPanel.ResumeLayout(false);
             this.bottomPanel.PerformLayout();
