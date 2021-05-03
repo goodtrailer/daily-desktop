@@ -33,6 +33,9 @@ Then, implement the [IProvider](/DailyDesktop.Core/Providers/IProvider.cs) inter
 * National Geographic
     * *I lied. Writing a provider wouldn't be very hard, but on their website Nat Geo make it pretty blatantly clear they don't want people downloading these images. It's a shame, but it's understandable.*
 
+## Image Crediting
+Unfortunately at this moment, there is no system in place for providers to provide information about the original illustrator/author of the work. However, such a system is planned, though it will require a lot of work (i.e. locally caching wallpaper metadata).
+
 ## Blurred-fit Mode
 Daily Desktop has an optional "blurred-fit" mode that fits the entire image within the wallpaper, then fills in the background with a blurred and enlarged version of the image itself, instead of using a solid color like Windows does. This is useful if a provider's source contains images that are of a vastly different aspect ratio than your primary display.
 
