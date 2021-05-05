@@ -20,6 +20,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyVersion>2021.503.0.0</AssemblyVersion>
     <FileVersion>2021.503.0.0</FileVersion>
+    <Description>Modular Windows desktop wallpaper updater that works daily at a set time. Wallpapers are provided by IProvider classes that are implemented in DLL modules.</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

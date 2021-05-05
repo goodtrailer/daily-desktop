@@ -1,11 +1,9 @@
 TODO
-
-Immediately
-- more providers !!!
-- convert MTGProvider to using regex
-
-Eventually (these are uber important but mannnnnn mid-covid junior year of high school is rough)
 - image crediting in IProvider
-- pass back uri, description, author, title in a struct and cache it so that they are always synced
+- IProvider constructor or factory that takes in a DLL path
+- ProviderStore empty constructor that does not autoscan, then constructor that takes in path and autoscans
+- ProviderStore.Scan(directory)
+- ProviderStore no longer uses dict?
+- pass back image uri, page uri, description, author, title in a struct and cache it so that they are always synced
 - scrolling description
 - last updated label
