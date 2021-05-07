@@ -149,8 +149,8 @@ namespace DailyDesktop.Core
             }
             set
             {
-                currentProvider = value.Provider;
-                settings.DllPath = value.DllPath;
+                currentProvider = value?.Provider;
+                settings.DllPath = value?.DllPath;
                 SaveSettings();
                 if (AutoCreateTask)
                     CreateTask();
