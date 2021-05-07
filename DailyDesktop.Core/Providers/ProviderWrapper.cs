@@ -3,15 +3,17 @@
 
 using DailyDesktop.Core.Providers;
 
-namespace DailyDesktop.Desktop
+namespace DailyDesktop.Core.Providers
 {
-    internal class ProviderComboboxItem
+    public class ProviderWrapper
     {
-        public IProvider Provider;
+        public readonly IProvider Provider;
+        public readonly string DllPath;
 
-        public ProviderComboboxItem(IProvider provider)
+        public ProviderWrapper(string dllPath, IProvider provider)
         {
-            this.Provider = provider;
+            Provider = provider;
+            DllPath = dllPath;
         }
 
         public override string ToString()

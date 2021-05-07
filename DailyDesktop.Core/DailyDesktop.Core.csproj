@@ -35,6 +35,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="6.0.0-preview.1.21102.12" />
     <PackageReference Include="TaskScheduler" Version="2.9.1" />
   </ItemGroup>
 

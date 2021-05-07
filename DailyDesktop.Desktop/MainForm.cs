@@ -4,6 +4,9 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 using System.Windows.Forms;
 using DailyDesktop.Core;
 using DailyDesktop.Core.Providers;
@@ -13,29 +16,56 @@ namespace DailyDesktop.Desktop
 {
     public partial class MainForm : Form
     {
+        private const string APP_DATA_DIR = "Daily Desktop";
+        private const string TASK_NAME_PREFIX = "Daily Desktop";
         private const string NULL_DESCRIPTION = "No description.";
+        private const string PROVIDERS_DIR = "providers";
+        private const string SERIALIZE_JSON_DIR = "";
 
-        private DailyDesktopCore core = new DailyDesktopCore();
+        private DailyDesktopCore core;
+        private WallpaperInfo wallpaper;
+        private TaskState previousState;
 
         public MainForm()
         {
+            string appDataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), APP_DATA_DIR);
+            string providersDir = Path.Combine(appDataDir, PROVIDERS_DIR);
+            string serializeJsonDir = Path.Combine(appDataDir, SERIALIZE_JSON_DIR);
+
+            string userId = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            string userName = userId.Split('\\').Last();
+            string taskName = $"{TASK_NAME_PREFIX}_{userName}";
+
+            core = new DailyDesktopCore(providersDir, serializeJsonDir, taskName, true);
             InitializeComponent();
+        }
+
+        private void openUri(string uri)
+        {
+            if (string.IsNullOrWhiteSpace(uri))
+                return;
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = uri,
+                UseShellExecute = true,
+            };
+            Process.Start(psi);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             providerComboBox.SelectedItem = core.CurrentProvider;
-            providerComboBox.SelectedText = core.CurrentProvider?.DisplayName;
+            providerComboBox.SelectedText = core.CurrentProvider?.Provider.DisplayName;
             updateProviderInfo();
 
-            enabledCheckBox.Checked = core.Enabled;
+            optionsEnabledCheckBox.Checked = core.Enabled;
 
-            updateTimePicker.Value = core.UpdateTime;
-            updateTimePicker.Enabled = enabledCheckBox.Checked;
+            optionsUpdateTimePicker.Value = core.UpdateTime;
+            optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked;
 
-            blurredFitCheckBox.Checked = core.DoBlurredFit;
-            blurStrengthTrackBar.Value = core.BlurStrength;
-            blurStrengthTrackBar.Enabled = blurredFitCheckBox.Checked;
+            optionsBlurredFitCheckBox.Checked = core.DoBlurredFit;
+            optionsBlurStrengthTrackBar.Value = core.BlurStrength;
+            optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked;
             updateBlurStrengthToolTip();
 
             stateBackgroundWorker.RunWorkerAsync();
@@ -48,46 +78,46 @@ namespace DailyDesktop.Desktop
 
         private void providerComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ProviderComboboxItem item = providerComboBox.SelectedItem as ProviderComboboxItem;
-            core.CurrentProvider = item?.Provider;
+            ProviderWrapper item = providerComboBox.SelectedItem as ProviderWrapper;
+            core.CurrentProvider = item;
             updateProviderInfo();
         }
 
         private void updateProviderInfo()
         {
-            providerDescriptionLabel.Text = core.CurrentProvider?.Description ?? NULL_DESCRIPTION;
-            providerSourceLinkLabel.Text = core.CurrentProvider?.SourceUri;
+            providerDescriptionLabel.Text = core.CurrentProvider?.Provider.Description ?? NULL_DESCRIPTION;
+            providerSourceLinkLabel.Text = core.CurrentProvider?.Provider.SourceUri;
         }
 
         private void providerComboBox_DropDown(object sender, EventArgs e)
         {
             providerComboBox.Items.Clear();
-            foreach (IProvider provider in core.Providers)
+            foreach (var keyVal in core.Providers)
             {
-                ProviderComboboxItem item = new ProviderComboboxItem(provider);
-                providerComboBox.Items.Add(item);
+                try
+                {
+                    IProvider provider = IProvider.Instantiate(keyVal.Value);
+                    ProviderWrapper item = new ProviderWrapper(keyVal.Key, provider);
+                    providerComboBox.Items.Add(item);
+                }
+                catch (ProviderException ex)
+                {
+                    Console.WriteLine(ex.StackTrace);
+                }
             }
         }
 
-        private void providerSourceLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            ProcessStartInfo psi = new ProcessStartInfo
-            {
-                FileName = providerSourceLinkLabel.Text,
-                UseShellExecute = true,
-            };
-            Process.Start(psi);
-        }
-
+        private void providerSourceLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => openUri(providerSourceLinkLabel.Text);
+        
         private void updateTimePicker_ValueChanged(object sender, EventArgs e)
         {
-            core.UpdateTime = updateTimePicker.Value;
+            core.UpdateTime = optionsUpdateTimePicker.Value;
         }
 
         private void enabledCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            core.Enabled = enabledCheckBox.Checked;
-            updateTimePicker.Enabled = enabledCheckBox.Checked;
+            core.Enabled = optionsEnabledCheckBox.Checked;
+            optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked;
         }
 
         private void updateWallpaperButton_Click(object sender, EventArgs e)
@@ -95,44 +125,60 @@ namespace DailyDesktop.Desktop
             core.UpdateWallpaper();
         }
 
-        private void providersDirectoryButton_Click(object sender, EventArgs e)
-        {
-            ProcessStartInfo psi = new ProcessStartInfo
-            {
-                FileName = core.ProvidersDirectory,
-                UseShellExecute = true,
-            };
-            Process.Start(psi);
-        }
-
-        private void okButton_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
+        private void providersDirectoryButton_Click(object sender, EventArgs e) => openUri(core.ProvidersDirectory);
 
         private void blurStrengthTrackBar_Scroll(object sender, EventArgs e)
         {
-            core.BlurStrength = blurStrengthTrackBar.Value;
+            core.BlurStrength = optionsBlurStrengthTrackBar.Value;
             updateBlurStrengthToolTip();
         }
 
         private void updateBlurStrengthToolTip()
         {
-            string strength = (blurStrengthTrackBar.Value / 100f).ToString("0.00");
-            mainToolTip.SetToolTip(blurStrengthTrackBar, strength);
+            string strength = (optionsBlurStrengthTrackBar.Value / 100f).ToString("0.00");
+            mainToolTip.SetToolTip(optionsBlurStrengthTrackBar, strength);
         }
 
         private void blurredFitCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            core.DoBlurredFit = blurredFitCheckBox.Checked;
-            blurStrengthTrackBar.Enabled = blurredFitCheckBox.Checked;
+            core.DoBlurredFit = optionsBlurredFitCheckBox.Checked;
+            optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked;
+        }
+
+        private void wallpaperTitleLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => openUri(wallpaper.TitleUri);
+
+        private void wallpaperAuthorLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => openUri(wallpaper.AuthorUri);
+
+        private void updateWallpaperInfo()
+        {
+            try
+            {
+                string jsonString = File.ReadAllText(core.WallpaperInfoJsonPath);
+                wallpaper = JsonSerializer.Deserialize<WallpaperInfo>(jsonString);
+                wallpaperTitleLinkLabel.Text = wallpaper.Title;
+                wallpaperAuthorLinkLabel.Text = wallpaper.Author;
+                wallpaperDescriptionLabel.Text = wallpaper.Description ?? NULL_DESCRIPTION;
+
+                Uri temp;
+                wallpaperTitleLinkLabel.Enabled = Uri.TryCreate(wallpaper.TitleUri, UriKind.Absolute, out temp);
+                wallpaperAuthorLinkLabel.Enabled = Uri.TryCreate(wallpaper.AuthorUri, UriKind.Absolute, out temp);
+            }
+            catch (Exception e)
+            {
+                if (e is JsonException || e is FileNotFoundException)
+                    Console.WriteLine(e.StackTrace);
+                else
+                    throw e;
+            }
         }
 
         private void stateBackgroundWorker_DoWork(object sender, EventArgs e)
         {
             while (!stateBackgroundWorker.CancellationPending)
             {
-                stateBackgroundWorker.ReportProgress((int)core.TaskState);
+                if (previousState != core.TaskState)
+                    stateBackgroundWorker.ReportProgress((int)core.TaskState);
+                previousState = core.TaskState;
             }
         }
 
@@ -140,6 +186,14 @@ namespace DailyDesktop.Desktop
         {
             TaskState state = (TaskState)e.ProgressPercentage;
             stateLabel.Text = state.ToString();
+
+            if (state == TaskState.Ready)
+                updateWallpaperInfo();
+        }
+
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

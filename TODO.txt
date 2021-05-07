@@ -1,9 +1,4 @@
 TODO
-- image crediting in IProvider
-- IProvider constructor or factory that takes in a DLL path
-- ProviderStore empty constructor that does not autoscan, then constructor that takes in path and autoscans
-- ProviderStore.Scan(directory)
-- ProviderStore no longer uses dict?
-- pass back image uri, page uri, description, author, title in a struct and cache it so that they are always synced
+- update providers to return info structs
 - scrolling description
 - last updated label
