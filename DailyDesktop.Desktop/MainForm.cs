@@ -155,18 +155,28 @@ namespace DailyDesktop.Desktop
             {
                 string jsonString = File.ReadAllText(core.WallpaperInfoJsonPath);
                 wallpaper = JsonSerializer.Deserialize<WallpaperInfo>(jsonString);
+                string updateDate = wallpaper.Date.ToString("dddd, MMMM d");
+                wallpaperUpdatedLabel.Text = $"updated on {updateDate}";
                 wallpaperTitleLinkLabel.Text = wallpaper.Title;
                 wallpaperAuthorLinkLabel.Text = wallpaper.Author;
                 wallpaperDescriptionLabel.Text = wallpaper.Description ?? NULL_DESCRIPTION;
-
+                
                 Uri temp;
-                wallpaperTitleLinkLabel.Enabled = Uri.TryCreate(wallpaper.TitleUri, UriKind.Absolute, out temp);
-                wallpaperAuthorLinkLabel.Enabled = Uri.TryCreate(wallpaper.AuthorUri, UriKind.Absolute, out temp);
+                wallpaperTitleLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.TitleUri, UriKind.Absolute, out temp);
+                wallpaperAuthorLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.AuthorUri, UriKind.Absolute, out temp);
             }
             catch (Exception e)
             {
                 if (e is JsonException || e is FileNotFoundException)
+                {
                     Console.WriteLine(e.StackTrace);
+                    wallpaperUpdatedLabel.Text = $"updated on null";
+                    wallpaperTitleLinkLabel.Text = "null";
+                    wallpaperAuthorLinkLabel.Text = "null";
+                    wallpaperDescriptionLabel.Text = NULL_DESCRIPTION;
+                    wallpaperTitleLinkLabel.Links[0].Enabled = false;
+                    wallpaperAuthorLinkLabel.Links[0].Enabled = false;
+                }
                 else
                     throw e;
             }
