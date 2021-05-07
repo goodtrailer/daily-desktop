@@ -258,9 +258,7 @@ namespace DailyDesktop.Desktop
             this.wallpaperDescriptionLabel.Name = "wallpaperDescriptionLabel";
             this.wallpaperDescriptionLabel.Size = new System.Drawing.Size(376, 162);
             this.wallpaperDescriptionLabel.TabIndex = 1;
-            this.wallpaperDescriptionLabel.Text = "第46回 i.m.a.展　 ドラマティックアート部門モダニスティック・イラストレーション・ギャラリーにて真夏に花が咲くがドラマティックアート賞をいただきました。\r" +
-    "\n\r\n会場は東京都美術館／上野、会期は2021/03/02(TUE) – 03/07(SUN)となっております。\r\n展示会のURL　http://ima1981" +
-    ".org/mig/";
+            this.wallpaperDescriptionLabel.Text = "No description.";
             // 
             // wallpaperCreditFlowLayout
             // 
@@ -278,19 +276,20 @@ namespace DailyDesktop.Desktop
             // 
             this.wallpaperTitleLinkLabel.AutoSize = true;
             this.wallpaperTitleLinkLabel.DisabledLinkColor = System.Drawing.SystemColors.ControlText;
+            this.wallpaperTitleLinkLabel.Enabled = false;
             this.wallpaperTitleLinkLabel.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.wallpaperTitleLinkLabel.Location = new System.Drawing.Point(3, 0);
             this.wallpaperTitleLinkLabel.Name = "wallpaperTitleLinkLabel";
-            this.wallpaperTitleLinkLabel.Size = new System.Drawing.Size(80, 15);
+            this.wallpaperTitleLinkLabel.Size = new System.Drawing.Size(27, 15);
             this.wallpaperTitleLinkLabel.TabIndex = 0;
             this.wallpaperTitleLinkLabel.TabStop = true;
-            this.wallpaperTitleLinkLabel.Text = "真夏に花が咲く";
+            this.wallpaperTitleLinkLabel.Text = "null";
             this.wallpaperTitleLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.wallpaperTitleLinkLabel_LinkClicked);
             // 
             // wallpaperCreditLabel
             // 
             this.wallpaperCreditLabel.AutoSize = true;
-            this.wallpaperCreditLabel.Location = new System.Drawing.Point(89, 0);
+            this.wallpaperCreditLabel.Location = new System.Drawing.Point(36, 0);
             this.wallpaperCreditLabel.Name = "wallpaperCreditLabel";
             this.wallpaperCreditLabel.Size = new System.Drawing.Size(58, 15);
             this.wallpaperCreditLabel.TabIndex = 1;
@@ -300,13 +299,14 @@ namespace DailyDesktop.Desktop
             // 
             this.wallpaperAuthorLinkLabel.AutoSize = true;
             this.wallpaperAuthorLinkLabel.DisabledLinkColor = System.Drawing.SystemColors.ControlText;
+            this.wallpaperAuthorLinkLabel.Enabled = false;
             this.wallpaperAuthorLinkLabel.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.wallpaperAuthorLinkLabel.Location = new System.Drawing.Point(153, 0);
+            this.wallpaperAuthorLinkLabel.Location = new System.Drawing.Point(100, 0);
             this.wallpaperAuthorLinkLabel.Name = "wallpaperAuthorLinkLabel";
-            this.wallpaperAuthorLinkLabel.Size = new System.Drawing.Size(43, 15);
+            this.wallpaperAuthorLinkLabel.Size = new System.Drawing.Size(27, 15);
             this.wallpaperAuthorLinkLabel.TabIndex = 2;
             this.wallpaperAuthorLinkLabel.TabStop = true;
-            this.wallpaperAuthorLinkLabel.Text = "流感中";
+            this.wallpaperAuthorLinkLabel.Text = "null";
             this.wallpaperAuthorLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.wallpaperAuthorLinkLabel_LinkClicked);
             // 
             // optionsTabPage

@@ -291,6 +291,9 @@ namespace DailyDesktop.Core
                     AllowTrailingCommas = true,
                 };
                 settings = JsonSerializer.Deserialize<DailyDesktopSettings>(jsonString, options);
+                Type providerType = store.Add(settings.DllPath);
+                if (providerType != null)
+                    currentProvider = IProvider.Instantiate(providerType);
             }
             else
             {
