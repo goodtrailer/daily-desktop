@@ -13,7 +13,6 @@ namespace DailyDesktop.Core.Providers.MTG
         private const string TITLE_PATTERN = "(?<=(<h3>))(.*?)(?=(</h3))";
         private const string AUTHOR_PATTERN = "(?<=(<p class=\"author\">By))(.*?)(?=(</p>))";
 
-        public string Key => "MTG";
         public string DisplayName => "Magic: The Gathering";
         public string Description => "Grabs new weekly Magic: The Gathering wallpaper from the official Wizards of the Coast website and sets it as the desktop wallpaper.";
         public string SourceUri => "https://magic.wizards.com/en/articles/media/wallpapers";
@@ -44,7 +43,7 @@ namespace DailyDesktop.Core.Providers.MTG
                 string request = $"https://api.scryfall.com/cards/named?format=text&fuzzy={formattedName}";
                 cardText = client.DownloadString(request);
             }
-            
+
 
             WallpaperInfo wallpaper = new WallpaperInfo
             {

@@ -108,7 +108,7 @@ namespace DailyDesktop.Desktop
         }
 
         private void providerSourceLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => openUri(providerSourceLinkLabel.Text);
-        
+
         private void updateTimePicker_ValueChanged(object sender, EventArgs e)
         {
             core.UpdateTime = optionsUpdateTimePicker.Value;
@@ -160,7 +160,7 @@ namespace DailyDesktop.Desktop
                 wallpaperTitleLinkLabel.Text = wallpaper.Title;
                 wallpaperAuthorLinkLabel.Text = wallpaper.Author;
                 wallpaperDescriptionLabel.Text = wallpaper.Description ?? NULL_DESCRIPTION;
-                
+
                 Uri temp;
                 wallpaperTitleLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.TitleUri, UriKind.Absolute, out temp);
                 wallpaperAuthorLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.AuthorUri, UriKind.Absolute, out temp);

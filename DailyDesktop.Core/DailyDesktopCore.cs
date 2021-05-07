@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using DailyDesktop.Core.Providers;
@@ -40,7 +39,7 @@ namespace DailyDesktop.Core
         //--------------------------------------------------------------PROPERTIES
 
         public string SettingsJsonPath => Path.Combine(serializeJsonDirectory, SETTINGS_JSON_FILENAME);
-       
+
         public string WallpaperInfoJsonPath => Path.Combine(serializeJsonDirectory, WALLPAPER_INFO_JSON_FILENAME);
 
         public string TaskName
