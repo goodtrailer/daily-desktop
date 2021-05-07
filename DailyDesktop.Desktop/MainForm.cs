@@ -177,8 +177,10 @@ namespace DailyDesktop.Desktop
             while (!stateBackgroundWorker.CancellationPending)
             {
                 if (previousState != core.TaskState)
+                {
                     stateBackgroundWorker.ReportProgress((int)core.TaskState);
-                previousState = core.TaskState;
+                    previousState = core.TaskState;
+                }
             }
         }
 

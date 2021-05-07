@@ -24,16 +24,18 @@ namespace DailyDesktop.Task
         private const double MAX_BLUR_FRACTION = 0.025;
 
         // args: key, blur strength
-        private static void Main(string[] args)
+        private static int Main(string[] args)
         {
             RootCommand rootCommand = new RootCommand("Daily Desktop task target executable");
-            rootCommand.AddArgument(new Argument<string>("IProvider DLL module path"));
+            rootCommand.AddArgument(new Argument<string>("dllPath"));
             rootCommand.AddOption(new Option<string>("--json", () => string.Empty, "Where to output the wallpaper info JSON file"));
             rootCommand.AddOption(new Option<int?>("--blur", () => null, "Use blurred-fit mode with the passed value for background blur strength"));
             rootCommand.Handler = CommandHandler.Create<string, string, int?>(handleArguments);
+
+            return rootCommand.Invoke(args);
         }
 
-        private static int handleArguments(string dllPath, string jsonPath, int? blurStrength)
+        private static int handleArguments(string dllPath, string json, int? blur)
         {
             if (string.IsNullOrWhiteSpace(dllPath))
                 throw new ProviderException("Missing IProvider DLL module path");
@@ -42,10 +44,10 @@ namespace DailyDesktop.Task
             Type providerType = store.Add(dllPath);
             IProvider provider = IProvider.Instantiate(providerType);
 
-            string imagePath = downloadWallpaper(provider, jsonPath);
+            string imagePath = downloadWallpaper(provider, json);
 
-            if (blurStrength != null)
-                applyBlurredFit(imagePath, blurStrength.Value);
+            if (blur != null)
+                applyBlurredFit(imagePath, blur.Value);
 
             string jpgPath = convertToJpeg(imagePath);
 

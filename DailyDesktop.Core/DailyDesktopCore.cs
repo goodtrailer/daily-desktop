@@ -238,7 +238,7 @@ namespace DailyDesktop.Core
                 taskDefinition.Triggers.Add(logonTrigger);
             }
 
-            string args = $"{settings.DllPath} --json {WallpaperInfoJsonPath}";
+            string args = $"\"{settings.DllPath}\" --json \"{WallpaperInfoJsonPath}\"";
             if (settings.DoBlurredFit)
                 args += $" --blur {settings.BlurStrength}";
             ExecAction execAction = new ExecAction
