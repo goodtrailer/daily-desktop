@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
 // See the LICENSE file in the repository root for full licence text.
 
+using System;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -11,6 +12,10 @@ namespace DailyDesktop.Core.Providers.Pixiv
     {
         private const string IMAGE_ID_PATTERN = "(?<=data-id=\")(.*?)(?=\")";
         private const string IMAGE_URI_PATTERN = "(?<=\"original\":\")(.*?)(?=\")";
+        private const string AUTHOR_PATTERN = "(?<=((\"authorId\":\")(.*?)(\"userName\":\")))(.*?[^\\\\])(?=(\"))";
+        private const string AUTHOR_ID_PATTERN = "(?<=(\"authorId\":\"))([0-9]*)";
+        private const string TITLE_PATTERN = "(?<=(<meta property=\"twitter:title\" content=\"))([\\S\\s]*?[^\\\\])(?=(\">))";
+        private const string DESCRIPTION_PATTERN = "(?<=(<meta property=\"twitter:description\" content=\"))([\\S\\s]*?[^\\\\])(?=(\">))";
         private const string IMAGE_DOWNLOAD_NAME = "Daily Desktop pixiv";
 
         public string Key => "PIXIV";
@@ -19,7 +24,7 @@ namespace DailyDesktop.Core.Providers.Pixiv
             "Using blurred-fit mode is highly recommended due to the large variety of aspect ratios of illustrations found on pixiv.";
         public string SourceUri => "https://www.pixiv.net/ranking.php";
 
-        public string GetImageUri()
+        public WallpaperInfo GetWallpaperInfo()
         {
             // Search for image ID of #1 illustration on daily rankings page
 
@@ -34,18 +39,31 @@ namespace DailyDesktop.Core.Providers.Pixiv
             if (string.IsNullOrWhiteSpace(imageId))
                 throw new ProviderException("Didn't find an image ID.");
 
-            // Search for image URI of illustration on image's actual page
+            // Search for wallpaper info on image page
 
-            string imageHtml = string.Empty;
+            string imagePageUri = $"https://www.pixiv.net/en/artworks/{imageId}";
+            string imagePageHtml = string.Empty;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add("Referer", "https://www.pixiv.net");
-                imageHtml = client.DownloadString($"https://www.pixiv.net/en/artworks/{imageId}");
+                imagePageHtml = client.DownloadString(imagePageUri);
             }
-            Match imageUriMatch = Regex.Match(imageHtml, IMAGE_URI_PATTERN);
+            Match imageUriMatch = Regex.Match(imagePageHtml, IMAGE_URI_PATTERN);
             string imageUri = imageUriMatch.Value;
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
+
+            Match titleMatch = Regex.Match(imagePageHtml, TITLE_PATTERN);
+            string title = titleMatch.Value;
+
+            Match authorMatch = Regex.Match(imagePageHtml, AUTHOR_PATTERN);
+            string author = authorMatch.Value;
+
+            Match authorIdMatch = Regex.Match(imagePageHtml, AUTHOR_ID_PATTERN);
+            string authorUri = $"https://www.pixiv.net/users/{authorIdMatch.Value}";
+
+            Match descriptionMatch = Regex.Match(imagePageHtml, DESCRIPTION_PATTERN);
+            string description = descriptionMatch.Value;
 
             // Download illustration from image URI and return its local path,
             // which is necessary because pixiv blocks requests if the Referer
@@ -57,7 +75,19 @@ namespace DailyDesktop.Core.Providers.Pixiv
                 client.Headers.Add("Referer", "https://www.pixiv.net");
                 client.DownloadFile(imageUri, imageLocalUri);
             }
-            return imageLocalUri;
+
+            WallpaperInfo wallpaper = new WallpaperInfo
+            {
+                ImageUri = imageLocalUri,
+                Date = DateTime.Now,
+                Title = title,
+                TitleUri = imagePageUri,
+                Author = author,
+                AuthorUri = authorUri,
+                Description = description,
+            };
+
+            return wallpaper;
         }
     }
 }

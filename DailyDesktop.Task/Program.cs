@@ -1,13 +1,18 @@
 ﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
 // See the LICENSE file in the repository root for full licence text.
 
+using System;
+using System.CommandLine;
+using System.CommandLine.Invocation;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 using System.Windows.Forms;
+using DailyDesktop.Core;
 using DailyDesktop.Core.Providers;
 using SuperfastBlur;
 
@@ -18,30 +23,36 @@ namespace DailyDesktop.Task
         private const string IMAGE_FILENAME = "Daily Desktop Wallpaper";
         private const double MAX_BLUR_FRACTION = 0.025;
 
-        // args: key, blur strength
-        private static void Main(string[] args)
+        private static int Main(string[] args)
         {
-            if (args.Length < 1)
-                throw new ProviderException("No IProvider.Key passed.");
+            RootCommand rootCommand = new RootCommand("Daily Desktop task target executable");
+            rootCommand.AddArgument(new Argument<string>("dllPath"));
+            rootCommand.AddOption(new Option<string>("--json", () => string.Empty, "Where to output the wallpaper info JSON file"));
+            rootCommand.AddOption(new Option<int?>("--blur", () => null, "Use blurred-fit mode with the passed value for background blur strength"));
+            rootCommand.Handler = CommandHandler.Create<string, string, int?>(handleArguments);
+
+            return rootCommand.Invoke(args);
+        }
+
+        private static int handleArguments(string dllPath, string json, int? blur)
+        {
+            if (string.IsNullOrWhiteSpace(dllPath))
+                throw new ProviderException("Missing IProvider DLL module path");
 
             ProviderStore store = new ProviderStore();
-            IProvider provider = store.Providers[args[0]];
+            Type providerType = store.Add(dllPath);
+            IProvider provider = IProvider.Instantiate(providerType);
 
-            string imagePath = downloadWallpaper(provider);
+            string imagePath = downloadWallpaper(provider, json);
 
-            int blurStrength = 0;
-            bool doBlurredFit = false;
-            if (args.Length >= 2)
-                doBlurredFit = int.TryParse(args[1], out blurStrength);
-
-            if (doBlurredFit)
-                applyBlurredFit(imagePath, blurStrength);
+            if (blur != null)
+                applyBlurredFit(imagePath, blur.Value);
 
             string jpgPath = convertToJpeg(imagePath);
 
             // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa#parameters
             // SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE
-            SystemParametersInfo(0x14, 0, jpgPath, 0x1 | 0x2);
+            return SystemParametersInfo(0x14, 0, jpgPath, 0x1 | 0x2);
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -49,14 +60,25 @@ namespace DailyDesktop.Task
         private static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
 
         // Downloads a wallpaper image from a provider and returns its path
-        private static string downloadWallpaper(IProvider provider)
+        private static string downloadWallpaper(IProvider provider, string jsonPath = null)
         {
             string imagePath = Path.Combine(Path.GetTempPath(), IMAGE_FILENAME);
 
-            string uri = provider.GetImageUri();
+            WallpaperInfo info = provider.GetWallpaperInfo();
+
+            if (!string.IsNullOrWhiteSpace(jsonPath))
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                };
+                string jsonString = JsonSerializer.Serialize(info, options);
+                File.WriteAllText(jsonPath, jsonString);
+            }
+
             using (WebClient client = new WebClient())
             {
-                client.DownloadFile(uri, imagePath);
+                client.DownloadFile(info.ImageUri, imagePath);
             }
 
             return imagePath;

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
 // See the LICENSE file in the repository root for full licence text.
 
+using System;
+
 namespace DailyDesktop.Core.Providers
 {
     /// <summary>
@@ -10,11 +12,6 @@ namespace DailyDesktop.Core.Providers
     /// </summary>
     public interface IProvider
     {
-        /// <summary>
-        /// Any length string that <i>cannot</i> contain whitespace that serves as a unique identifier.
-        /// </summary>
-        string Key { get; }
-
         /// <summary>
         /// The name that will appear in the Provider combobox.
         /// </summary>
@@ -31,9 +28,25 @@ namespace DailyDesktop.Core.Providers
         string SourceUri { get; }
 
         /// <summary>
-        /// Gets the image URI to download from and set as the desktop wallpaper.
+        /// Gets an up-to-date <see cref="WallpaperInfo"/>.
         /// </summary>
-        /// <returns>The image URI to download from.</returns>
-        string GetImageUri();
+        /// <returns>The up-to-date <see cref="WallpaperInfo"/>.</returns>
+        WallpaperInfo GetWallpaperInfo();
+
+        /// <summary>
+        /// Instantiates an <see cref="IProvider"/> given a <see cref="Type"/>.
+        /// </summary>
+        /// <param name="type">The type of the <see cref="IProvider"/> to instantiate.</param>
+        /// <returns>The instance of the <see cref="IProvider"/>.</returns>
+        /// <exception cref="ProviderException" />
+        public static IProvider Instantiate(Type type)
+        {
+            IProvider provider = Activator.CreateInstance(type) as IProvider;
+
+            if (provider == null)
+                throw new ProviderException("Failed to instantiate an IProvider from the assembly.");
+
+            return provider;
+        }
     }
 }

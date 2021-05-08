@@ -1,8 +1,7 @@
 {
   "profiles": {
     "DailyDesktop.Task": {
-      "commandName": "Project",
-      "commandLineArgs": "R/EARTHPORN"
+      "commandName": "Project"
     }
   }
 }

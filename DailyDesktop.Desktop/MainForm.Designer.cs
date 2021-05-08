@@ -35,33 +35,46 @@ namespace DailyDesktop.Desktop
             this.bottomPanel = new System.Windows.Forms.Panel();
             this.stateLabel = new System.Windows.Forms.Label();
             this.okButton = new System.Windows.Forms.Button();
+            this.mainTabControl = new System.Windows.Forms.TabControl();
+            this.mainTabPage = new System.Windows.Forms.TabPage();
+            this.mainTableLayout2 = new System.Windows.Forms.TableLayoutPanel();
             this.providerGroupBox = new System.Windows.Forms.GroupBox();
-            this.descriptionGroupBox = new System.Windows.Forms.GroupBox();
-            this.descriptionTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.providerDescriptionTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.providerDescriptionLabel = new System.Windows.Forms.Label();
             this.providerSourceLinkLabel = new System.Windows.Forms.LinkLabel();
             this.providerComboBox = new System.Windows.Forms.ComboBox();
-            this.optionsGroupBox = new System.Windows.Forms.GroupBox();
+            this.wallpaperGroupBox = new System.Windows.Forms.GroupBox();
+            this.wallpaperDescriptionLabel = new System.Windows.Forms.Label();
+            this.wallpaperCreditFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.wallpaperTitleLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.wallpaperCreditLabel = new System.Windows.Forms.Label();
+            this.wallpaperAuthorLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.wallpaperUpdatedLabel = new System.Windows.Forms.Label();
+            this.optionsTabPage = new System.Windows.Forms.TabPage();
             this.optionsPanel = new System.Windows.Forms.Panel();
-            this.blurStrengthTrackBar = new System.Windows.Forms.TrackBar();
-            this.blurStrengthLabel = new System.Windows.Forms.Label();
-            this.blurredFitCheckBox = new System.Windows.Forms.CheckBox();
-            this.updateTimePicker = new System.Windows.Forms.DateTimePicker();
-            this.enabledCheckBox = new System.Windows.Forms.CheckBox();
-            this.updateTimeLabel = new System.Windows.Forms.Label();
-            this.providersDirectoryButton = new System.Windows.Forms.Button();
-            this.updateWallpaperButton = new System.Windows.Forms.Button();
+            this.optionsBlurStrengthTrackBar = new System.Windows.Forms.TrackBar();
+            this.optionsBlurStrengthLabel = new System.Windows.Forms.Label();
+            this.optionsBlurredFitCheckBox = new System.Windows.Forms.CheckBox();
+            this.optionsUpdateTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.optionsEnabledCheckBox = new System.Windows.Forms.CheckBox();
+            this.optionsUpdateTimeLabel = new System.Windows.Forms.Label();
+            this.optionsProvidersDirectoryButton = new System.Windows.Forms.Button();
+            this.optionsUpdateWallpaperButton = new System.Windows.Forms.Button();
             this.bannerPicture = new System.Windows.Forms.PictureBox();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.stateBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.mainTableLayout.SuspendLayout();
             this.bottomPanel.SuspendLayout();
+            this.mainTabControl.SuspendLayout();
+            this.mainTabPage.SuspendLayout();
+            this.mainTableLayout2.SuspendLayout();
             this.providerGroupBox.SuspendLayout();
-            this.descriptionGroupBox.SuspendLayout();
-            this.descriptionTableLayout.SuspendLayout();
-            this.optionsGroupBox.SuspendLayout();
+            this.providerDescriptionTableLayout.SuspendLayout();
+            this.wallpaperGroupBox.SuspendLayout();
+            this.wallpaperCreditFlowLayout.SuspendLayout();
+            this.optionsTabPage.SuspendLayout();
             this.optionsPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.blurStrengthTrackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.optionsBlurStrengthTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bannerPicture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,18 +86,16 @@ namespace DailyDesktop.Desktop
             this.mainTableLayout.AutoScroll = true;
             this.mainTableLayout.ColumnCount = 1;
             this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.mainTableLayout.Controls.Add(this.bottomPanel, 0, 2);
-            this.mainTableLayout.Controls.Add(this.providerGroupBox, 0, 0);
-            this.mainTableLayout.Controls.Add(this.optionsGroupBox, 0, 1);
+            this.mainTableLayout.Controls.Add(this.bottomPanel, 0, 1);
+            this.mainTableLayout.Controls.Add(this.mainTabControl, 0, 0);
             this.mainTableLayout.Location = new System.Drawing.Point(9, 178);
             this.mainTableLayout.Margin = new System.Windows.Forms.Padding(0);
             this.mainTableLayout.Name = "mainTableLayout";
-            this.mainTableLayout.RowCount = 3;
-            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 54.6798F));
-            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.3202F));
+            this.mainTableLayout.RowCount = 2;
+            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.mainTableLayout.Size = new System.Drawing.Size(356, 484);
+            this.mainTableLayout.Size = new System.Drawing.Size(366, 484);
             this.mainTableLayout.TabIndex = 1;
             // 
             // bottomPanel
@@ -93,76 +104,103 @@ namespace DailyDesktop.Desktop
             this.bottomPanel.Controls.Add(this.stateLabel);
             this.bottomPanel.Controls.Add(this.okButton);
             this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bottomPanel.Location = new System.Drawing.Point(0, 452);
+            this.bottomPanel.Location = new System.Drawing.Point(0, 453);
             this.bottomPanel.Margin = new System.Windows.Forms.Padding(0);
             this.bottomPanel.Name = "bottomPanel";
-            this.bottomPanel.Size = new System.Drawing.Size(356, 32);
+            this.bottomPanel.Size = new System.Drawing.Size(366, 31);
             this.bottomPanel.TabIndex = 3;
             // 
             // stateLabel
             // 
             this.stateLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.stateLabel.AutoSize = true;
-            this.stateLabel.Location = new System.Drawing.Point(3, 8);
+            this.stateLabel.Location = new System.Drawing.Point(3, 7);
             this.stateLabel.Name = "stateLabel";
-            this.stateLabel.Size = new System.Drawing.Size(26, 15);
+            this.stateLabel.Size = new System.Drawing.Size(58, 15);
             this.stateLabel.TabIndex = 9;
-            this.stateLabel.Text = "Idle";
+            this.stateLabel.Text = "Unknown";
             // 
             // okButton
             // 
             this.okButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.okButton.Location = new System.Drawing.Point(278, 4);
+            this.okButton.Location = new System.Drawing.Point(288, 3);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 8;
+            this.okButton.TabIndex = 10;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            // 
+            // mainTabControl
+            // 
+            this.mainTabControl.Controls.Add(this.mainTabPage);
+            this.mainTabControl.Controls.Add(this.optionsTabPage);
+            this.mainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainTabControl.HotTrack = true;
+            this.mainTabControl.Location = new System.Drawing.Point(0, 0);
+            this.mainTabControl.Margin = new System.Windows.Forms.Padding(0);
+            this.mainTabControl.Name = "mainTabControl";
+            this.mainTabControl.SelectedIndex = 0;
+            this.mainTabControl.Size = new System.Drawing.Size(366, 453);
+            this.mainTabControl.TabIndex = 0;
+            // 
+            // mainTabPage
+            // 
+            this.mainTabPage.BackColor = System.Drawing.SystemColors.Window;
+            this.mainTabPage.Controls.Add(this.mainTableLayout2);
+            this.mainTabPage.Location = new System.Drawing.Point(4, 24);
+            this.mainTabPage.Margin = new System.Windows.Forms.Padding(0);
+            this.mainTabPage.Name = "mainTabPage";
+            this.mainTabPage.Size = new System.Drawing.Size(358, 425);
+            this.mainTabPage.TabIndex = 0;
+            this.mainTabPage.Text = "Main";
+            // 
+            // mainTableLayout2
+            // 
+            this.mainTableLayout2.ColumnCount = 1;
+            this.mainTableLayout2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.mainTableLayout2.Controls.Add(this.providerGroupBox, 0, 0);
+            this.mainTableLayout2.Controls.Add(this.wallpaperGroupBox, 0, 1);
+            this.mainTableLayout2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainTableLayout2.Location = new System.Drawing.Point(0, 0);
+            this.mainTableLayout2.Margin = new System.Windows.Forms.Padding(0);
+            this.mainTableLayout2.Name = "mainTableLayout2";
+            this.mainTableLayout2.RowCount = 2;
+            this.mainTableLayout2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.mainTableLayout2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.mainTableLayout2.Size = new System.Drawing.Size(358, 425);
+            this.mainTableLayout2.TabIndex = 0;
             // 
             // providerGroupBox
             // 
             this.providerGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.providerGroupBox.Controls.Add(this.descriptionGroupBox);
+            this.providerGroupBox.Controls.Add(this.providerDescriptionTableLayout);
             this.providerGroupBox.Controls.Add(this.providerComboBox);
             this.providerGroupBox.Location = new System.Drawing.Point(3, 3);
             this.providerGroupBox.Name = "providerGroupBox";
-            this.providerGroupBox.Size = new System.Drawing.Size(350, 241);
-            this.providerGroupBox.TabIndex = 0;
+            this.providerGroupBox.Size = new System.Drawing.Size(352, 206);
+            this.providerGroupBox.TabIndex = 1;
             this.providerGroupBox.TabStop = false;
             this.providerGroupBox.Text = "Provider";
             // 
-            // descriptionGroupBox
+            // providerDescriptionTableLayout
             // 
-            this.descriptionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.providerDescriptionTableLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.descriptionGroupBox.Controls.Add(this.descriptionTableLayout);
-            this.descriptionGroupBox.Location = new System.Drawing.Point(6, 51);
-            this.descriptionGroupBox.Name = "descriptionGroupBox";
-            this.descriptionGroupBox.Size = new System.Drawing.Size(338, 184);
-            this.descriptionGroupBox.TabIndex = 2;
-            this.descriptionGroupBox.TabStop = false;
-            this.descriptionGroupBox.Text = "Description";
-            // 
-            // descriptionTableLayout
-            // 
-            this.descriptionTableLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.descriptionTableLayout.ColumnCount = 1;
-            this.descriptionTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.descriptionTableLayout.Controls.Add(this.providerDescriptionLabel, 0, 0);
-            this.descriptionTableLayout.Controls.Add(this.providerSourceLinkLabel, 0, 1);
-            this.descriptionTableLayout.Location = new System.Drawing.Point(7, 23);
-            this.descriptionTableLayout.Name = "descriptionTableLayout";
-            this.descriptionTableLayout.RowCount = 2;
-            this.descriptionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.descriptionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.descriptionTableLayout.Size = new System.Drawing.Size(325, 155);
-            this.descriptionTableLayout.TabIndex = 1;
+            this.providerDescriptionTableLayout.ColumnCount = 1;
+            this.providerDescriptionTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.providerDescriptionTableLayout.Controls.Add(this.providerDescriptionLabel, 0, 0);
+            this.providerDescriptionTableLayout.Controls.Add(this.providerSourceLinkLabel, 0, 1);
+            this.providerDescriptionTableLayout.Location = new System.Drawing.Point(6, 51);
+            this.providerDescriptionTableLayout.Name = "providerDescriptionTableLayout";
+            this.providerDescriptionTableLayout.RowCount = 2;
+            this.providerDescriptionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.providerDescriptionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.providerDescriptionTableLayout.Size = new System.Drawing.Size(340, 149);
+            this.providerDescriptionTableLayout.TabIndex = 2;
             // 
             // providerDescriptionLabel
             // 
@@ -171,17 +209,19 @@ namespace DailyDesktop.Desktop
             this.providerDescriptionLabel.Location = new System.Drawing.Point(3, 3);
             this.providerDescriptionLabel.Margin = new System.Windows.Forms.Padding(3);
             this.providerDescriptionLabel.Name = "providerDescriptionLabel";
-            this.providerDescriptionLabel.Size = new System.Drawing.Size(319, 129);
+            this.providerDescriptionLabel.Size = new System.Drawing.Size(334, 123);
             this.providerDescriptionLabel.TabIndex = 0;
             // 
             // providerSourceLinkLabel
             // 
             this.providerSourceLinkLabel.AutoEllipsis = true;
             this.providerSourceLinkLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.providerSourceLinkLabel.Location = new System.Drawing.Point(3, 135);
+            this.providerSourceLinkLabel.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.providerSourceLinkLabel.Location = new System.Drawing.Point(0, 129);
+            this.providerSourceLinkLabel.Margin = new System.Windows.Forms.Padding(0);
             this.providerSourceLinkLabel.Name = "providerSourceLinkLabel";
-            this.providerSourceLinkLabel.Size = new System.Drawing.Size(319, 20);
-            this.providerSourceLinkLabel.TabIndex = 1;
+            this.providerSourceLinkLabel.Size = new System.Drawing.Size(340, 20);
+            this.providerSourceLinkLabel.TabIndex = 2;
             this.providerSourceLinkLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.providerSourceLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.providerSourceLinkLabel_LinkClicked);
             // 
@@ -189,142 +229,230 @@ namespace DailyDesktop.Desktop
             // 
             this.providerComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.providerComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.providerComboBox.FormattingEnabled = true;
             this.providerComboBox.Location = new System.Drawing.Point(6, 22);
             this.providerComboBox.Name = "providerComboBox";
-            this.providerComboBox.Size = new System.Drawing.Size(338, 23);
-            this.providerComboBox.TabIndex = 0;
+            this.providerComboBox.Size = new System.Drawing.Size(340, 23);
+            this.providerComboBox.TabIndex = 1;
             this.providerComboBox.DropDown += new System.EventHandler(this.providerComboBox_DropDown);
             this.providerComboBox.SelectedIndexChanged += new System.EventHandler(this.providerComboBox_SelectedIndexChanged);
             // 
-            // optionsGroupBox
+            // wallpaperGroupBox
             // 
-            this.optionsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.wallpaperGroupBox.Controls.Add(this.wallpaperDescriptionLabel);
+            this.wallpaperGroupBox.Controls.Add(this.wallpaperCreditFlowLayout);
+            this.wallpaperGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wallpaperGroupBox.Location = new System.Drawing.Point(3, 215);
+            this.wallpaperGroupBox.Name = "wallpaperGroupBox";
+            this.wallpaperGroupBox.Size = new System.Drawing.Size(352, 207);
+            this.wallpaperGroupBox.TabIndex = 2;
+            this.wallpaperGroupBox.TabStop = false;
+            this.wallpaperGroupBox.Text = "Wallpaper";
+            // 
+            // wallpaperDescriptionLabel
+            // 
+            this.wallpaperDescriptionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.optionsGroupBox.Controls.Add(this.optionsPanel);
-            this.optionsGroupBox.Location = new System.Drawing.Point(3, 250);
-            this.optionsGroupBox.Name = "optionsGroupBox";
-            this.optionsGroupBox.Size = new System.Drawing.Size(350, 199);
-            this.optionsGroupBox.TabIndex = 2;
-            this.optionsGroupBox.TabStop = false;
-            this.optionsGroupBox.Text = "Options";
+            this.wallpaperDescriptionLabel.AutoEllipsis = true;
+            this.wallpaperDescriptionLabel.Location = new System.Drawing.Point(7, 49);
+            this.wallpaperDescriptionLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.wallpaperDescriptionLabel.Name = "wallpaperDescriptionLabel";
+            this.wallpaperDescriptionLabel.Size = new System.Drawing.Size(339, 152);
+            this.wallpaperDescriptionLabel.TabIndex = 1;
+            this.wallpaperDescriptionLabel.Text = "No description.";
+            // 
+            // wallpaperCreditFlowLayout
+            // 
+            this.wallpaperCreditFlowLayout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.wallpaperCreditFlowLayout.Controls.Add(this.wallpaperTitleLinkLabel);
+            this.wallpaperCreditFlowLayout.Controls.Add(this.wallpaperCreditLabel);
+            this.wallpaperCreditFlowLayout.Controls.Add(this.wallpaperAuthorLinkLabel);
+            this.wallpaperCreditFlowLayout.Controls.Add(this.wallpaperUpdatedLabel);
+            this.wallpaperCreditFlowLayout.Location = new System.Drawing.Point(6, 22);
+            this.wallpaperCreditFlowLayout.Name = "wallpaperCreditFlowLayout";
+            this.wallpaperCreditFlowLayout.Size = new System.Drawing.Size(340, 20);
+            this.wallpaperCreditFlowLayout.TabIndex = 0;
+            this.wallpaperCreditFlowLayout.WrapContents = false;
+            // 
+            // wallpaperTitleLinkLabel
+            // 
+            this.wallpaperTitleLinkLabel.AutoSize = true;
+            this.wallpaperTitleLinkLabel.DisabledLinkColor = System.Drawing.SystemColors.ControlText;
+            this.wallpaperTitleLinkLabel.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.wallpaperTitleLinkLabel.Location = new System.Drawing.Point(0, 0);
+            this.wallpaperTitleLinkLabel.Margin = new System.Windows.Forms.Padding(0);
+            this.wallpaperTitleLinkLabel.Name = "wallpaperTitleLinkLabel";
+            this.wallpaperTitleLinkLabel.Size = new System.Drawing.Size(27, 15);
+            this.wallpaperTitleLinkLabel.TabIndex = 3;
+            this.wallpaperTitleLinkLabel.TabStop = true;
+            this.wallpaperTitleLinkLabel.Text = "null";
+            this.wallpaperTitleLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.wallpaperTitleLinkLabel_LinkClicked);
+            // 
+            // wallpaperCreditLabel
+            // 
+            this.wallpaperCreditLabel.AutoSize = true;
+            this.wallpaperCreditLabel.Location = new System.Drawing.Point(27, 0);
+            this.wallpaperCreditLabel.Margin = new System.Windows.Forms.Padding(0);
+            this.wallpaperCreditLabel.Name = "wallpaperCreditLabel";
+            this.wallpaperCreditLabel.Size = new System.Drawing.Size(20, 15);
+            this.wallpaperCreditLabel.TabIndex = 1;
+            this.wallpaperCreditLabel.Text = "by";
+            // 
+            // wallpaperAuthorLinkLabel
+            // 
+            this.wallpaperAuthorLinkLabel.AutoSize = true;
+            this.wallpaperAuthorLinkLabel.DisabledLinkColor = System.Drawing.SystemColors.ControlText;
+            this.wallpaperAuthorLinkLabel.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.wallpaperAuthorLinkLabel.Location = new System.Drawing.Point(47, 0);
+            this.wallpaperAuthorLinkLabel.Margin = new System.Windows.Forms.Padding(0);
+            this.wallpaperAuthorLinkLabel.Name = "wallpaperAuthorLinkLabel";
+            this.wallpaperAuthorLinkLabel.Size = new System.Drawing.Size(27, 15);
+            this.wallpaperAuthorLinkLabel.TabIndex = 4;
+            this.wallpaperAuthorLinkLabel.TabStop = true;
+            this.wallpaperAuthorLinkLabel.Text = "null";
+            this.wallpaperAuthorLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.wallpaperAuthorLinkLabel_LinkClicked);
+            // 
+            // wallpaperUpdatedLabel
+            // 
+            this.wallpaperUpdatedLabel.AutoSize = true;
+            this.wallpaperUpdatedLabel.Location = new System.Drawing.Point(74, 0);
+            this.wallpaperUpdatedLabel.Margin = new System.Windows.Forms.Padding(0);
+            this.wallpaperUpdatedLabel.Name = "wallpaperUpdatedLabel";
+            this.wallpaperUpdatedLabel.Size = new System.Drawing.Size(91, 15);
+            this.wallpaperUpdatedLabel.TabIndex = 3;
+            this.wallpaperUpdatedLabel.Text = "updated on null";
+            this.wallpaperUpdatedLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // optionsTabPage
+            // 
+            this.optionsTabPage.BackColor = System.Drawing.SystemColors.Window;
+            this.optionsTabPage.Controls.Add(this.optionsPanel);
+            this.optionsTabPage.Location = new System.Drawing.Point(4, 24);
+            this.optionsTabPage.Margin = new System.Windows.Forms.Padding(0);
+            this.optionsTabPage.Name = "optionsTabPage";
+            this.optionsTabPage.Size = new System.Drawing.Size(358, 425);
+            this.optionsTabPage.TabIndex = 1;
+            this.optionsTabPage.Text = "Options";
             // 
             // optionsPanel
             // 
             this.optionsPanel.AutoScroll = true;
-            this.optionsPanel.Controls.Add(this.blurStrengthTrackBar);
-            this.optionsPanel.Controls.Add(this.blurStrengthLabel);
-            this.optionsPanel.Controls.Add(this.blurredFitCheckBox);
-            this.optionsPanel.Controls.Add(this.updateTimePicker);
-            this.optionsPanel.Controls.Add(this.enabledCheckBox);
-            this.optionsPanel.Controls.Add(this.updateTimeLabel);
-            this.optionsPanel.Controls.Add(this.providersDirectoryButton);
-            this.optionsPanel.Controls.Add(this.updateWallpaperButton);
+            this.optionsPanel.Controls.Add(this.optionsBlurStrengthTrackBar);
+            this.optionsPanel.Controls.Add(this.optionsBlurStrengthLabel);
+            this.optionsPanel.Controls.Add(this.optionsBlurredFitCheckBox);
+            this.optionsPanel.Controls.Add(this.optionsUpdateTimePicker);
+            this.optionsPanel.Controls.Add(this.optionsEnabledCheckBox);
+            this.optionsPanel.Controls.Add(this.optionsUpdateTimeLabel);
+            this.optionsPanel.Controls.Add(this.optionsProvidersDirectoryButton);
+            this.optionsPanel.Controls.Add(this.optionsUpdateWallpaperButton);
             this.optionsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.optionsPanel.Location = new System.Drawing.Point(3, 19);
+            this.optionsPanel.Location = new System.Drawing.Point(0, 0);
+            this.optionsPanel.Margin = new System.Windows.Forms.Padding(0);
             this.optionsPanel.Name = "optionsPanel";
-            this.optionsPanel.Size = new System.Drawing.Size(344, 177);
+            this.optionsPanel.Size = new System.Drawing.Size(358, 425);
             this.optionsPanel.TabIndex = 11;
             // 
-            // blurStrengthTrackBar
+            // optionsBlurStrengthTrackBar
             // 
-            this.blurStrengthTrackBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.optionsBlurStrengthTrackBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.blurStrengthTrackBar.LargeChange = 10;
-            this.blurStrengthTrackBar.Location = new System.Drawing.Point(151, 69);
-            this.blurStrengthTrackBar.Maximum = 100;
-            this.blurStrengthTrackBar.Name = "blurStrengthTrackBar";
-            this.blurStrengthTrackBar.Size = new System.Drawing.Size(190, 45);
-            this.blurStrengthTrackBar.TabIndex = 5;
-            this.blurStrengthTrackBar.TickFrequency = 10;
-            this.blurStrengthTrackBar.Scroll += new System.EventHandler(this.blurStrengthTrackBar_Scroll);
+            this.optionsBlurStrengthTrackBar.LargeChange = 10;
+            this.optionsBlurStrengthTrackBar.Location = new System.Drawing.Point(151, 69);
+            this.optionsBlurStrengthTrackBar.Maximum = 100;
+            this.optionsBlurStrengthTrackBar.Name = "optionsBlurStrengthTrackBar";
+            this.optionsBlurStrengthTrackBar.Size = new System.Drawing.Size(204, 45);
+            this.optionsBlurStrengthTrackBar.TabIndex = 4;
+            this.optionsBlurStrengthTrackBar.TickFrequency = 10;
+            this.optionsBlurStrengthTrackBar.Scroll += new System.EventHandler(this.blurStrengthTrackBar_Scroll);
             // 
-            // blurStrengthLabel
+            // optionsBlurStrengthLabel
             // 
-            this.blurStrengthLabel.AutoSize = true;
-            this.blurStrengthLabel.Location = new System.Drawing.Point(3, 72);
-            this.blurStrengthLabel.Name = "blurStrengthLabel";
-            this.blurStrengthLabel.Size = new System.Drawing.Size(142, 15);
-            this.blurStrengthLabel.TabIndex = 8;
-            this.blurStrengthLabel.Text = "Background blur strength";
-            this.mainToolTip.SetToolTip(this.blurStrengthLabel, "Background blur strength. Only applicable if blurred-fit\r\nmode is turned on. High" +
+            this.optionsBlurStrengthLabel.AutoSize = true;
+            this.optionsBlurStrengthLabel.Location = new System.Drawing.Point(3, 72);
+            this.optionsBlurStrengthLabel.Name = "optionsBlurStrengthLabel";
+            this.optionsBlurStrengthLabel.Size = new System.Drawing.Size(142, 15);
+            this.optionsBlurStrengthLabel.TabIndex = 8;
+            this.optionsBlurStrengthLabel.Text = "Background blur strength";
+            this.mainToolTip.SetToolTip(this.optionsBlurStrengthLabel, "Background blur strength. Only applicable if blurred-fit\r\nmode is turned on. High" +
         "er blur strengths do not require\r\nextra computation time.");
             // 
-            // blurredFitCheckBox
+            // optionsBlurredFitCheckBox
             // 
-            this.blurredFitCheckBox.AutoSize = true;
-            this.blurredFitCheckBox.Location = new System.Drawing.Point(2, 50);
-            this.blurredFitCheckBox.Name = "blurredFitCheckBox";
-            this.blurredFitCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.blurredFitCheckBox.Size = new System.Drawing.Size(114, 19);
-            this.blurredFitCheckBox.TabIndex = 4;
-            this.blurredFitCheckBox.Text = "Blurred-fit mode";
-            this.mainToolTip.SetToolTip(this.blurredFitCheckBox, resources.GetString("blurredFitCheckBox.ToolTip"));
-            this.blurredFitCheckBox.UseVisualStyleBackColor = true;
-            this.blurredFitCheckBox.CheckedChanged += new System.EventHandler(this.blurredFitCheckBox_CheckedChanged);
+            this.optionsBlurredFitCheckBox.AutoSize = true;
+            this.optionsBlurredFitCheckBox.Location = new System.Drawing.Point(2, 50);
+            this.optionsBlurredFitCheckBox.Name = "optionsBlurredFitCheckBox";
+            this.optionsBlurredFitCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.optionsBlurredFitCheckBox.Size = new System.Drawing.Size(114, 19);
+            this.optionsBlurredFitCheckBox.TabIndex = 3;
+            this.optionsBlurredFitCheckBox.Text = "Blurred-fit mode";
+            this.mainToolTip.SetToolTip(this.optionsBlurredFitCheckBox, resources.GetString("optionsBlurredFitCheckBox.ToolTip"));
+            this.optionsBlurredFitCheckBox.UseVisualStyleBackColor = true;
+            this.optionsBlurredFitCheckBox.CheckedChanged += new System.EventHandler(this.blurredFitCheckBox_CheckedChanged);
             // 
-            // updateTimePicker
+            // optionsUpdateTimePicker
             // 
-            this.updateTimePicker.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.updateTimePicker.CustomFormat = "h:mm tt";
-            this.updateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.updateTimePicker.Location = new System.Drawing.Point(81, 20);
-            this.updateTimePicker.Name = "updateTimePicker";
-            this.updateTimePicker.ShowUpDown = true;
-            this.updateTimePicker.Size = new System.Drawing.Size(92, 23);
-            this.updateTimePicker.TabIndex = 3;
-            this.updateTimePicker.Value = new System.DateTime(2021, 4, 26, 0, 0, 0, 0);
-            this.updateTimePicker.ValueChanged += new System.EventHandler(this.updateTimePicker_ValueChanged);
+            this.optionsUpdateTimePicker.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.optionsUpdateTimePicker.CustomFormat = "h:mm tt";
+            this.optionsUpdateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.optionsUpdateTimePicker.Location = new System.Drawing.Point(81, 20);
+            this.optionsUpdateTimePicker.Name = "optionsUpdateTimePicker";
+            this.optionsUpdateTimePicker.ShowUpDown = true;
+            this.optionsUpdateTimePicker.Size = new System.Drawing.Size(92, 23);
+            this.optionsUpdateTimePicker.TabIndex = 2;
+            this.optionsUpdateTimePicker.Value = new System.DateTime(2021, 4, 26, 0, 0, 0, 0);
+            this.optionsUpdateTimePicker.ValueChanged += new System.EventHandler(this.updateTimePicker_ValueChanged);
             // 
-            // enabledCheckBox
+            // optionsEnabledCheckBox
             // 
-            this.enabledCheckBox.AutoSize = true;
-            this.enabledCheckBox.Location = new System.Drawing.Point(2, 3);
-            this.enabledCheckBox.Name = "enabledCheckBox";
-            this.enabledCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.enabledCheckBox.Size = new System.Drawing.Size(68, 19);
-            this.enabledCheckBox.TabIndex = 2;
-            this.enabledCheckBox.Text = "Enabled";
-            this.mainToolTip.SetToolTip(this.enabledCheckBox, "Whether automatic desktop wallpaper update triggers should be enabled or disabled" +
+            this.optionsEnabledCheckBox.AutoSize = true;
+            this.optionsEnabledCheckBox.Location = new System.Drawing.Point(2, 3);
+            this.optionsEnabledCheckBox.Name = "optionsEnabledCheckBox";
+            this.optionsEnabledCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.optionsEnabledCheckBox.Size = new System.Drawing.Size(68, 19);
+            this.optionsEnabledCheckBox.TabIndex = 1;
+            this.optionsEnabledCheckBox.Text = "Enabled";
+            this.mainToolTip.SetToolTip(this.optionsEnabledCheckBox, "Whether automatic desktop wallpaper update triggers should be enabled or disabled" +
         ".");
-            this.enabledCheckBox.UseVisualStyleBackColor = false;
-            this.enabledCheckBox.CheckedChanged += new System.EventHandler(this.enabledCheckBox_CheckedChanged);
+            this.optionsEnabledCheckBox.UseVisualStyleBackColor = false;
+            this.optionsEnabledCheckBox.CheckedChanged += new System.EventHandler(this.enabledCheckBox_CheckedChanged);
             // 
-            // updateTimeLabel
+            // optionsUpdateTimeLabel
             // 
-            this.updateTimeLabel.AutoSize = true;
-            this.updateTimeLabel.Location = new System.Drawing.Point(3, 25);
-            this.updateTimeLabel.Name = "updateTimeLabel";
-            this.updateTimeLabel.Size = new System.Drawing.Size(72, 15);
-            this.updateTimeLabel.TabIndex = 1;
-            this.updateTimeLabel.Text = "Update time";
-            this.mainToolTip.SetToolTip(this.updateTimeLabel, "When in the day to trigger an automatic desktop\r\nwallpaper update.\r\nIf the time i" +
+            this.optionsUpdateTimeLabel.AutoSize = true;
+            this.optionsUpdateTimeLabel.Location = new System.Drawing.Point(3, 25);
+            this.optionsUpdateTimeLabel.Name = "optionsUpdateTimeLabel";
+            this.optionsUpdateTimeLabel.Size = new System.Drawing.Size(72, 15);
+            this.optionsUpdateTimeLabel.TabIndex = 1;
+            this.optionsUpdateTimeLabel.Text = "Update time";
+            this.mainToolTip.SetToolTip(this.optionsUpdateTimeLabel, "When in the day to trigger an automatic desktop\r\nwallpaper update.\r\nIf the time i" +
         "s missed, then it will trigger on next logon.");
             // 
-            // providersDirectoryButton
+            // optionsProvidersDirectoryButton
             // 
-            this.providersDirectoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.optionsProvidersDirectoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.providersDirectoryButton.Location = new System.Drawing.Point(3, 149);
-            this.providersDirectoryButton.Name = "providersDirectoryButton";
-            this.providersDirectoryButton.Size = new System.Drawing.Size(338, 23);
-            this.providersDirectoryButton.TabIndex = 7;
-            this.providersDirectoryButton.Text = "Open providers folder";
-            this.providersDirectoryButton.UseVisualStyleBackColor = true;
-            this.providersDirectoryButton.Click += new System.EventHandler(this.providersDirectoryButton_Click);
+            this.optionsProvidersDirectoryButton.Location = new System.Drawing.Point(3, 149);
+            this.optionsProvidersDirectoryButton.Name = "optionsProvidersDirectoryButton";
+            this.optionsProvidersDirectoryButton.Size = new System.Drawing.Size(352, 23);
+            this.optionsProvidersDirectoryButton.TabIndex = 6;
+            this.optionsProvidersDirectoryButton.Text = "Open providers folder";
+            this.optionsProvidersDirectoryButton.UseVisualStyleBackColor = true;
+            this.optionsProvidersDirectoryButton.Click += new System.EventHandler(this.providersDirectoryButton_Click);
             // 
-            // updateWallpaperButton
+            // optionsUpdateWallpaperButton
             // 
-            this.updateWallpaperButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.optionsUpdateWallpaperButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.updateWallpaperButton.Location = new System.Drawing.Point(3, 120);
-            this.updateWallpaperButton.Name = "updateWallpaperButton";
-            this.updateWallpaperButton.Size = new System.Drawing.Size(338, 23);
-            this.updateWallpaperButton.TabIndex = 6;
-            this.updateWallpaperButton.Text = "Update desktop wallpaper";
-            this.updateWallpaperButton.UseVisualStyleBackColor = true;
-            this.updateWallpaperButton.Click += new System.EventHandler(this.updateWallpaperButton_Click);
+            this.optionsUpdateWallpaperButton.Location = new System.Drawing.Point(3, 120);
+            this.optionsUpdateWallpaperButton.Name = "optionsUpdateWallpaperButton";
+            this.optionsUpdateWallpaperButton.Size = new System.Drawing.Size(352, 23);
+            this.optionsUpdateWallpaperButton.TabIndex = 5;
+            this.optionsUpdateWallpaperButton.Text = "Update desktop wallpaper";
+            this.optionsUpdateWallpaperButton.UseVisualStyleBackColor = true;
+            this.optionsUpdateWallpaperButton.Click += new System.EventHandler(this.updateWallpaperButton_Click);
             // 
             // bannerPicture
             // 
@@ -349,9 +477,9 @@ namespace DailyDesktop.Desktop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(374, 671);
-            this.Controls.Add(this.bannerPicture);
+            this.ClientSize = new System.Drawing.Size(384, 671);
             this.Controls.Add(this.mainTableLayout);
+            this.Controls.Add(this.bannerPicture);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(390, 600);
@@ -362,13 +490,18 @@ namespace DailyDesktop.Desktop
             this.mainTableLayout.ResumeLayout(false);
             this.bottomPanel.ResumeLayout(false);
             this.bottomPanel.PerformLayout();
+            this.mainTabControl.ResumeLayout(false);
+            this.mainTabPage.ResumeLayout(false);
+            this.mainTableLayout2.ResumeLayout(false);
             this.providerGroupBox.ResumeLayout(false);
-            this.descriptionGroupBox.ResumeLayout(false);
-            this.descriptionTableLayout.ResumeLayout(false);
-            this.optionsGroupBox.ResumeLayout(false);
+            this.providerDescriptionTableLayout.ResumeLayout(false);
+            this.wallpaperGroupBox.ResumeLayout(false);
+            this.wallpaperCreditFlowLayout.ResumeLayout(false);
+            this.wallpaperCreditFlowLayout.PerformLayout();
+            this.optionsTabPage.ResumeLayout(false);
             this.optionsPanel.ResumeLayout(false);
             this.optionsPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.blurStrengthTrackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.optionsBlurStrengthTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bannerPicture)).EndInit();
             this.ResumeLayout(false);
 
@@ -376,28 +509,37 @@ namespace DailyDesktop.Desktop
 
         #endregion
         private System.Windows.Forms.TableLayoutPanel mainTableLayout;
-        private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.GroupBox optionsGroupBox;
-        private System.Windows.Forms.Label updateTimeLabel;
-        private System.Windows.Forms.DateTimePicker updateTimePicker;
-        private System.Windows.Forms.Button updateWallpaperButton;
-        private System.Windows.Forms.Button providersDirectoryButton;
-        private System.Windows.Forms.CheckBox enabledCheckBox;
+        private System.Windows.Forms.Label optionsUpdateTimeLabel;
+        private System.Windows.Forms.DateTimePicker optionsUpdateTimePicker;
+        private System.Windows.Forms.Button optionsUpdateWallpaperButton;
+        private System.Windows.Forms.Button optionsProvidersDirectoryButton;
+        private System.Windows.Forms.CheckBox optionsEnabledCheckBox;
         private System.Windows.Forms.GroupBox providerGroupBox;
-        private System.Windows.Forms.GroupBox descriptionGroupBox;
-        private System.Windows.Forms.TableLayoutPanel descriptionTableLayout;
+        private System.Windows.Forms.TableLayoutPanel providerDescriptionTableLayout;
         private System.Windows.Forms.LinkLabel providerSourceLinkLabel;
         private System.Windows.Forms.ComboBox providerComboBox;
         private System.Windows.Forms.PictureBox bannerPicture;
         private System.Windows.Forms.Panel optionsPanel;
         private System.Windows.Forms.Label providerDescriptionLabel;
-        private System.Windows.Forms.CheckBox blurredFitCheckBox;
-        private System.Windows.Forms.Label blurStrengthLabel;
-        private System.Windows.Forms.TrackBar blurStrengthTrackBar;
+        private System.Windows.Forms.CheckBox optionsBlurredFitCheckBox;
+        private System.Windows.Forms.Label optionsBlurStrengthLabel;
+        private System.Windows.Forms.TrackBar optionsBlurStrengthTrackBar;
         private System.Windows.Forms.ToolTip mainToolTip;
+        private System.ComponentModel.BackgroundWorker stateBackgroundWorker;
+        private System.Windows.Forms.TabControl mainTabControl;
+        private System.Windows.Forms.TabPage mainTabPage;
+        private System.Windows.Forms.TabPage optionsTabPage;
         private System.Windows.Forms.Panel bottomPanel;
         private System.Windows.Forms.Label stateLabel;
-        private System.ComponentModel.BackgroundWorker stateBackgroundWorker;
+        private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.TableLayoutPanel mainTableLayout2;
+        private System.Windows.Forms.GroupBox wallpaperGroupBox;
+        private System.Windows.Forms.FlowLayoutPanel wallpaperCreditFlowLayout;
+        private System.Windows.Forms.LinkLabel wallpaperTitleLinkLabel;
+        private System.Windows.Forms.Label wallpaperCreditLabel;
+        private System.Windows.Forms.LinkLabel wallpaperAuthorLinkLabel;
+        private System.Windows.Forms.Label wallpaperDescriptionLabel;
+        private System.Windows.Forms.Label wallpaperUpdatedLabel;
     }
 }
 

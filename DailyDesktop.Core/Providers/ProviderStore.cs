@@ -10,103 +10,67 @@ using System.Reflection;
 namespace DailyDesktop.Core.Providers
 {
     /// <summary>
-    /// Scans, loads, and instantiates <see cref="IProvider"/> implementations
-    /// from DLL modules placed in <see cref="ProvidersDirectory"/> and stores
-    /// them in a <see cref="Dictionary{TKey, TValue}"/>. <br />
-    /// <br />
-    /// TKey is <see cref="string"/>.<br />
-    /// TValue is <see cref="IProvider"/>.
+    /// Scans and stores <see cref="IProvider"/> DLL modules and
+    /// instantiates their <see cref="IProvider"/> implementation.
     /// </summary>
     public class ProviderStore
     {
-        private const string PROVIDERS_DIR = "providers";
         private const string PROVIDERS_SEARCH_PATTERN = "*.dll";
 
         /// <summary>
-        /// Dictionary of <see cref="IProvider"/>s loaded from DLL modules found
-        /// in <see cref="ProvidersDirectory"/>.
+        /// Dictionary of <see cref="IProvider"/> <see cref="Type"/>s
+        /// added through <see cref="Scan"/> and <see cref="Add"/>.
+        /// Key is DLL module path.
         /// </summary>
-        public readonly Dictionary<string, IProvider> Providers;
+        public readonly Dictionary<string, Type> Providers = new Dictionary<string, Type>();
 
         /// <summary>
-        /// The providers directory where <see cref="IProvider"/> DLL modules
-        /// are scanned from.
+        /// Clears <see cref="Providers"/>. Identical to directly
+        /// calling <see cref="List{T}.Clear"/> on
+        /// <see cref="Providers"/>.
         /// </summary>
-        public readonly string ProvidersDirectory;
+        public void Clear() => Providers.Clear();
 
         /// <summary>
-        /// Constructs a <see cref="ProviderStore"/> and immediately calls
-        /// <see cref="Scan"/>.
+        /// Adds one DLL module to <see cref="Providers"/>. Will not
+        /// do anything if the DLL module has already been added
+        /// before.
         /// </summary>
-        public ProviderStore()
+        /// <param name="dllPath">The path of the <see cref="IProvider"/> DLL module to add</param>
+        /// <returns>The <see cref="IProvider"/> implementation <see cref="Type"/>.</returns>
+        public Type Add(string dllPath)
         {
-            string appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            ProvidersDirectory = Path.Combine(appDataDir, "Daily Desktop", PROVIDERS_DIR);
-            Providers = new Dictionary<string, IProvider>();
+            if (Providers.ContainsKey(dllPath))
+                return Providers[dllPath];
 
-            Scan();
-        }
+            var assembly = Assembly.LoadFile(dllPath);
 
-        /// <summary>
-        /// Scans <see cref="ProvidersDirectory"/> for any <see cref="IProvider"/>
-        /// DLL modules and loads them into <see cref="Providers"/>. Any
-        /// <see cref="IProvider"/>s previously contained in
-        /// <see cref="Providers"/> will be cleared.
-        /// </summary>
-        public void Scan()
-        {
-            Providers.Clear();
-
-            string[] paths;
-            try
-            {
-                Directory.CreateDirectory(ProvidersDirectory);
-                paths = Directory.GetFiles(ProvidersDirectory, PROVIDERS_SEARCH_PATTERN, SearchOption.AllDirectories);
-            }
-            catch (IOException e)
-            {
-                Console.WriteLine(e.StackTrace);
-                paths = new string[0];
-            }
-
-            foreach (string path in paths)
-            {
-                try
-                {
-                    IProvider provider = instantiateProviderFromAssembly(path);
-                    Providers.Add(provider.Key, provider);
-                }
-                catch (ProviderException e)
-                {
-                    Console.WriteLine(e.StackTrace);
-                }
-                catch (ReflectionTypeLoadException e)
-                {
-                    Console.WriteLine(e.StackTrace);
-                }
-            }
-        }
-
-        private IProvider instantiateProviderFromAssembly(string fullPath)
-        {
-            var assembly = Assembly.LoadFile(fullPath);
-
-            Type[] types = assembly.GetTypes();
-            Type providerType = assembly.GetTypes().First(type =>
+            foreach (Type type in assembly.GetTypes())
             {
                 bool isPublic = type.IsPublic;
                 bool isProvider = type.GetInterfaces().Contains(typeof(IProvider));
-                return isPublic && isProvider;
-            });
+                if (isPublic && isProvider)
+                {
+                    Providers.Add(dllPath, type);
+                    return type;
+                }
+            }
+            return null;
+        }
 
-            IProvider provider = Activator.CreateInstance(providerType) as IProvider;
-
-            if (provider == null)
-                throw new ProviderException("Failed to instantiate an IProvider from the assembly.");
-            if (provider.Key.Any(Char.IsWhiteSpace))
-                throw new ProviderException("IProvider.Key contains whitespace.");
-
-            return provider;
+        /// <summary>
+        /// Scans a directory for any <see cref="IProvider"/> DLL
+        /// modules and adds their paths to <see cref="Providers"/>.
+        /// </summary>
+        /// <param name="directory">The directory to scan</param>
+        public void Scan(string directory)
+        {
+            if (Directory.Exists(directory))
+            {
+                string[] paths = Directory.GetFiles(directory, PROVIDERS_SEARCH_PATTERN, SearchOption.AllDirectories);
+                foreach (string path in paths)
+                    Add(path);
+            }
         }
     }
 }
