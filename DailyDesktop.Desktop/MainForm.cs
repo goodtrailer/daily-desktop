@@ -93,6 +93,8 @@ namespace DailyDesktop.Desktop
         // The most over-engineered vaguely O(n) algorithm of all time that will
         // almost certainly run slower than a normal O(n^2) algorithm for any
         // normal use-case where there are less than 5 providers.
+        // 
+        // tbh idek why i did this O(n^2) isn't even that unreasonable...
         private void repopulateProviderComboBox()
         {
             Dictionary<string, int> items = new Dictionary<string, int>();

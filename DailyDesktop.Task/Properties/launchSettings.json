@@ -1,8 +1,7 @@
 {
   "profiles": {
     "DailyDesktop.Task": {
-      "commandName": "Project",
-      "commandLineArgs": "\"C:\\Users\\Alden\\AppData\\Roaming\\Daily Desktop\\providers\\DailyDesktop.Core.Providers.MTG.dll\" --json \"C:\\Users\\Alden\\AppData\\Roaming\\Daily Desktop\\wallpaper.json\" --blur 40"
+      "commandName": "Project"
     }
   }
 }
