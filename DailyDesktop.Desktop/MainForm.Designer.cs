@@ -43,7 +43,7 @@ namespace DailyDesktop.Desktop
             this.providerDescriptionLabel = new System.Windows.Forms.Label();
             this.providerSourceLinkLabel = new System.Windows.Forms.LinkLabel();
             this.providerComboBox = new System.Windows.Forms.ComboBox();
-            this.wallpaperInfoGroupBox = new System.Windows.Forms.GroupBox();
+            this.wallpaperGroupBox = new System.Windows.Forms.GroupBox();
             this.wallpaperDescriptionLabel = new System.Windows.Forms.Label();
             this.wallpaperCreditFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.wallpaperTitleLinkLabel = new System.Windows.Forms.LinkLabel();
@@ -70,7 +70,7 @@ namespace DailyDesktop.Desktop
             this.mainTableLayout2.SuspendLayout();
             this.providerGroupBox.SuspendLayout();
             this.providerDescriptionTableLayout.SuspendLayout();
-            this.wallpaperInfoGroupBox.SuspendLayout();
+            this.wallpaperGroupBox.SuspendLayout();
             this.wallpaperCreditFlowLayout.SuspendLayout();
             this.optionsTabPage.SuspendLayout();
             this.optionsPanel.SuspendLayout();
@@ -126,7 +126,7 @@ namespace DailyDesktop.Desktop
             this.okButton.Location = new System.Drawing.Point(288, 3);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 8;
+            this.okButton.TabIndex = 10;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
@@ -142,7 +142,7 @@ namespace DailyDesktop.Desktop
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
             this.mainTabControl.Size = new System.Drawing.Size(366, 453);
-            this.mainTabControl.TabIndex = 3;
+            this.mainTabControl.TabIndex = 0;
             // 
             // mainTabPage
             // 
@@ -160,7 +160,7 @@ namespace DailyDesktop.Desktop
             this.mainTableLayout2.ColumnCount = 1;
             this.mainTableLayout2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mainTableLayout2.Controls.Add(this.providerGroupBox, 0, 0);
-            this.mainTableLayout2.Controls.Add(this.wallpaperInfoGroupBox, 0, 1);
+            this.mainTableLayout2.Controls.Add(this.wallpaperGroupBox, 0, 1);
             this.mainTableLayout2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTableLayout2.Location = new System.Drawing.Point(0, 0);
             this.mainTableLayout2.Margin = new System.Windows.Forms.Padding(0);
@@ -181,7 +181,7 @@ namespace DailyDesktop.Desktop
             this.providerGroupBox.Location = new System.Drawing.Point(3, 3);
             this.providerGroupBox.Name = "providerGroupBox";
             this.providerGroupBox.Size = new System.Drawing.Size(352, 206);
-            this.providerGroupBox.TabIndex = 0;
+            this.providerGroupBox.TabIndex = 1;
             this.providerGroupBox.TabStop = false;
             this.providerGroupBox.Text = "Provider";
             // 
@@ -200,7 +200,7 @@ namespace DailyDesktop.Desktop
             this.providerDescriptionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.providerDescriptionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.providerDescriptionTableLayout.Size = new System.Drawing.Size(340, 149);
-            this.providerDescriptionTableLayout.TabIndex = 1;
+            this.providerDescriptionTableLayout.TabIndex = 2;
             // 
             // providerDescriptionLabel
             // 
@@ -221,7 +221,7 @@ namespace DailyDesktop.Desktop
             this.providerSourceLinkLabel.Margin = new System.Windows.Forms.Padding(0);
             this.providerSourceLinkLabel.Name = "providerSourceLinkLabel";
             this.providerSourceLinkLabel.Size = new System.Drawing.Size(340, 20);
-            this.providerSourceLinkLabel.TabIndex = 1;
+            this.providerSourceLinkLabel.TabIndex = 2;
             this.providerSourceLinkLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.providerSourceLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.providerSourceLinkLabel_LinkClicked);
             // 
@@ -234,21 +234,21 @@ namespace DailyDesktop.Desktop
             this.providerComboBox.Location = new System.Drawing.Point(6, 22);
             this.providerComboBox.Name = "providerComboBox";
             this.providerComboBox.Size = new System.Drawing.Size(340, 23);
-            this.providerComboBox.TabIndex = 0;
+            this.providerComboBox.TabIndex = 1;
             this.providerComboBox.DropDown += new System.EventHandler(this.providerComboBox_DropDown);
             this.providerComboBox.SelectedIndexChanged += new System.EventHandler(this.providerComboBox_SelectedIndexChanged);
             // 
-            // wallpaperInfoGroupBox
+            // wallpaperGroupBox
             // 
-            this.wallpaperInfoGroupBox.Controls.Add(this.wallpaperDescriptionLabel);
-            this.wallpaperInfoGroupBox.Controls.Add(this.wallpaperCreditFlowLayout);
-            this.wallpaperInfoGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wallpaperInfoGroupBox.Location = new System.Drawing.Point(3, 215);
-            this.wallpaperInfoGroupBox.Name = "wallpaperInfoGroupBox";
-            this.wallpaperInfoGroupBox.Size = new System.Drawing.Size(352, 207);
-            this.wallpaperInfoGroupBox.TabIndex = 1;
-            this.wallpaperInfoGroupBox.TabStop = false;
-            this.wallpaperInfoGroupBox.Text = "Wallpaper";
+            this.wallpaperGroupBox.Controls.Add(this.wallpaperDescriptionLabel);
+            this.wallpaperGroupBox.Controls.Add(this.wallpaperCreditFlowLayout);
+            this.wallpaperGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wallpaperGroupBox.Location = new System.Drawing.Point(3, 215);
+            this.wallpaperGroupBox.Name = "wallpaperGroupBox";
+            this.wallpaperGroupBox.Size = new System.Drawing.Size(352, 207);
+            this.wallpaperGroupBox.TabIndex = 2;
+            this.wallpaperGroupBox.TabStop = false;
+            this.wallpaperGroupBox.Text = "Wallpaper";
             // 
             // wallpaperDescriptionLabel
             // 
@@ -286,7 +286,7 @@ namespace DailyDesktop.Desktop
             this.wallpaperTitleLinkLabel.Margin = new System.Windows.Forms.Padding(0);
             this.wallpaperTitleLinkLabel.Name = "wallpaperTitleLinkLabel";
             this.wallpaperTitleLinkLabel.Size = new System.Drawing.Size(27, 15);
-            this.wallpaperTitleLinkLabel.TabIndex = 0;
+            this.wallpaperTitleLinkLabel.TabIndex = 3;
             this.wallpaperTitleLinkLabel.TabStop = true;
             this.wallpaperTitleLinkLabel.Text = "null";
             this.wallpaperTitleLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.wallpaperTitleLinkLabel_LinkClicked);
@@ -310,7 +310,7 @@ namespace DailyDesktop.Desktop
             this.wallpaperAuthorLinkLabel.Margin = new System.Windows.Forms.Padding(0);
             this.wallpaperAuthorLinkLabel.Name = "wallpaperAuthorLinkLabel";
             this.wallpaperAuthorLinkLabel.Size = new System.Drawing.Size(27, 15);
-            this.wallpaperAuthorLinkLabel.TabIndex = 2;
+            this.wallpaperAuthorLinkLabel.TabIndex = 4;
             this.wallpaperAuthorLinkLabel.TabStop = true;
             this.wallpaperAuthorLinkLabel.Text = "null";
             this.wallpaperAuthorLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.wallpaperAuthorLinkLabel_LinkClicked);
@@ -364,7 +364,7 @@ namespace DailyDesktop.Desktop
             this.optionsBlurStrengthTrackBar.Maximum = 100;
             this.optionsBlurStrengthTrackBar.Name = "optionsBlurStrengthTrackBar";
             this.optionsBlurStrengthTrackBar.Size = new System.Drawing.Size(204, 45);
-            this.optionsBlurStrengthTrackBar.TabIndex = 5;
+            this.optionsBlurStrengthTrackBar.TabIndex = 4;
             this.optionsBlurStrengthTrackBar.TickFrequency = 10;
             this.optionsBlurStrengthTrackBar.Scroll += new System.EventHandler(this.blurStrengthTrackBar_Scroll);
             // 
@@ -386,7 +386,7 @@ namespace DailyDesktop.Desktop
             this.optionsBlurredFitCheckBox.Name = "optionsBlurredFitCheckBox";
             this.optionsBlurredFitCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.optionsBlurredFitCheckBox.Size = new System.Drawing.Size(114, 19);
-            this.optionsBlurredFitCheckBox.TabIndex = 4;
+            this.optionsBlurredFitCheckBox.TabIndex = 3;
             this.optionsBlurredFitCheckBox.Text = "Blurred-fit mode";
             this.mainToolTip.SetToolTip(this.optionsBlurredFitCheckBox, resources.GetString("optionsBlurredFitCheckBox.ToolTip"));
             this.optionsBlurredFitCheckBox.UseVisualStyleBackColor = true;
@@ -401,7 +401,7 @@ namespace DailyDesktop.Desktop
             this.optionsUpdateTimePicker.Name = "optionsUpdateTimePicker";
             this.optionsUpdateTimePicker.ShowUpDown = true;
             this.optionsUpdateTimePicker.Size = new System.Drawing.Size(92, 23);
-            this.optionsUpdateTimePicker.TabIndex = 3;
+            this.optionsUpdateTimePicker.TabIndex = 2;
             this.optionsUpdateTimePicker.Value = new System.DateTime(2021, 4, 26, 0, 0, 0, 0);
             this.optionsUpdateTimePicker.ValueChanged += new System.EventHandler(this.updateTimePicker_ValueChanged);
             // 
@@ -412,7 +412,7 @@ namespace DailyDesktop.Desktop
             this.optionsEnabledCheckBox.Name = "optionsEnabledCheckBox";
             this.optionsEnabledCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.optionsEnabledCheckBox.Size = new System.Drawing.Size(68, 19);
-            this.optionsEnabledCheckBox.TabIndex = 2;
+            this.optionsEnabledCheckBox.TabIndex = 1;
             this.optionsEnabledCheckBox.Text = "Enabled";
             this.mainToolTip.SetToolTip(this.optionsEnabledCheckBox, "Whether automatic desktop wallpaper update triggers should be enabled or disabled" +
         ".");
@@ -437,7 +437,7 @@ namespace DailyDesktop.Desktop
             this.optionsProvidersDirectoryButton.Location = new System.Drawing.Point(3, 149);
             this.optionsProvidersDirectoryButton.Name = "optionsProvidersDirectoryButton";
             this.optionsProvidersDirectoryButton.Size = new System.Drawing.Size(352, 23);
-            this.optionsProvidersDirectoryButton.TabIndex = 7;
+            this.optionsProvidersDirectoryButton.TabIndex = 6;
             this.optionsProvidersDirectoryButton.Text = "Open providers folder";
             this.optionsProvidersDirectoryButton.UseVisualStyleBackColor = true;
             this.optionsProvidersDirectoryButton.Click += new System.EventHandler(this.providersDirectoryButton_Click);
@@ -449,7 +449,7 @@ namespace DailyDesktop.Desktop
             this.optionsUpdateWallpaperButton.Location = new System.Drawing.Point(3, 120);
             this.optionsUpdateWallpaperButton.Name = "optionsUpdateWallpaperButton";
             this.optionsUpdateWallpaperButton.Size = new System.Drawing.Size(352, 23);
-            this.optionsUpdateWallpaperButton.TabIndex = 6;
+            this.optionsUpdateWallpaperButton.TabIndex = 5;
             this.optionsUpdateWallpaperButton.Text = "Update desktop wallpaper";
             this.optionsUpdateWallpaperButton.UseVisualStyleBackColor = true;
             this.optionsUpdateWallpaperButton.Click += new System.EventHandler(this.updateWallpaperButton_Click);
@@ -495,7 +495,7 @@ namespace DailyDesktop.Desktop
             this.mainTableLayout2.ResumeLayout(false);
             this.providerGroupBox.ResumeLayout(false);
             this.providerDescriptionTableLayout.ResumeLayout(false);
-            this.wallpaperInfoGroupBox.ResumeLayout(false);
+            this.wallpaperGroupBox.ResumeLayout(false);
             this.wallpaperCreditFlowLayout.ResumeLayout(false);
             this.wallpaperCreditFlowLayout.PerformLayout();
             this.optionsTabPage.ResumeLayout(false);
@@ -533,7 +533,7 @@ namespace DailyDesktop.Desktop
         private System.Windows.Forms.Label stateLabel;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.TableLayoutPanel mainTableLayout2;
-        private System.Windows.Forms.GroupBox wallpaperInfoGroupBox;
+        private System.Windows.Forms.GroupBox wallpaperGroupBox;
         private System.Windows.Forms.FlowLayoutPanel wallpaperCreditFlowLayout;
         private System.Windows.Forms.LinkLabel wallpaperTitleLinkLabel;
         private System.Windows.Forms.Label wallpaperCreditLabel;
