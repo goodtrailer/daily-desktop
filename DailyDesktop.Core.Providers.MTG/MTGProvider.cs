@@ -44,7 +44,6 @@ namespace DailyDesktop.Core.Providers.MTG
                 cardText = client.DownloadString(request);
             }
 
-
             WallpaperInfo wallpaper = new WallpaperInfo
             {
                 ImageUri = imageUri,
