@@ -2,6 +2,7 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -54,8 +55,8 @@ namespace DailyDesktop.Desktop
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            providerComboBox.SelectedItem = core.CurrentProvider;
-            providerComboBox.SelectedText = core.CurrentProvider?.Provider.DisplayName;
+            repopulateProviderComboBox();
+            providerComboBox.SelectedIndex = providerComboBox.FindString(core.CurrentProvider.ToString());
             updateProviderInfo();
 
             optionsEnabledCheckBox.Checked = core.Enabled;
@@ -89,23 +90,43 @@ namespace DailyDesktop.Desktop
             providerSourceLinkLabel.Text = core.CurrentProvider?.Provider.SourceUri;
         }
 
-        private void providerComboBox_DropDown(object sender, EventArgs e)
+        // The most over-engineered vaguely O(n) algorithm of all time that will
+        // almost certainly run slower than a normal O(n^2) algorithm for any
+        // normal use-case where there are less than 5 providers.
+        private void repopulateProviderComboBox()
         {
-            providerComboBox.Items.Clear();
-            foreach (var keyVal in core.Providers)
+            Dictionary<string, int> items = new Dictionary<string, int>();
+            Dictionary<string, Type> providers = core.Providers;
+
+            for (int i = 0; i < providerComboBox.Items.Count; i++)
             {
-                try
-                {
-                    IProvider provider = IProvider.Instantiate(keyVal.Value);
-                    ProviderWrapper item = new ProviderWrapper(keyVal.Key, provider);
-                    providerComboBox.Items.Add(item);
-                }
-                catch (ProviderException ex)
-                {
-                    Console.WriteLine(ex.StackTrace);
-                }
+                ProviderWrapper provider = providerComboBox.Items[i] as ProviderWrapper;
+                items.Add(provider.DllPath, i);
+            }
+
+            foreach (var keyVal in providers)
+            {
+                if (!items.ContainsKey(keyVal.Key))
+                    try
+                    {
+                        IProvider provider = IProvider.Instantiate(keyVal.Value);
+                        ProviderWrapper item = new ProviderWrapper(keyVal.Key, provider);
+                        providerComboBox.Items.Add(item);
+                    }
+                    catch (ProviderException ex)
+                    {
+                        Console.WriteLine(ex.StackTrace);
+                    }
+            }
+
+            foreach (var keyVal in items)
+            {
+                if (!core.Providers.ContainsKey(keyVal.Key))
+                    providerComboBox.Items.RemoveAt(keyVal.Value);
             }
         }
+
+        private void providerComboBox_DropDown(object sender, EventArgs e) => repopulateProviderComboBox();
 
         private void providerSourceLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => openUri(providerSourceLinkLabel.Text);
 

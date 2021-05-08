@@ -32,7 +32,7 @@ namespace DailyDesktop.Core.Providers
             Provider = provider;
             DllPath = dllPath;
         }
-        
+
         /// <summary>
         /// Returns the <see cref="IProvider.DisplayName"/> of
         /// <see cref="Provider"/>.
