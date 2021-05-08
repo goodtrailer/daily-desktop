@@ -21,8 +21,6 @@ namespace DailyDesktop.Core
     {
         //---------------------------------------------------------------VARIABLES
 
-        public bool AutoCreateTask;
-
         private const string SETTINGS_JSON_FILENAME = "settings.json";
         private const string WALLPAPER_INFO_JSON_FILENAME = "wallpaper.json";
         private const string TASK_EXECUTABLE_FILENAME = "DailyDesktop.Task.exe";
@@ -38,10 +36,28 @@ namespace DailyDesktop.Core
 
         //--------------------------------------------------------------PROPERTIES
 
+        /// <summary>
+        /// Gets or sets whether or not to automatically create the task on
+        /// when settings are changed or loaded.
+        /// </summary>
+        public bool AutoCreateTask { get; set; }
+
+        /// <summary>
+        /// Gets the path of the settings JSON file, based on
+        /// <see cref="SerializeJsonDirectory"/>.
+        /// </summary>
         public string SettingsJsonPath => Path.Combine(serializeJsonDirectory, SETTINGS_JSON_FILENAME);
 
+        /// <summary>
+        /// Gets the path of the wallpaper information JSON file, based on
+        /// <see cref="SerializeJsonDirectory"/>.
+        /// </summary>
         public string WallpaperInfoJsonPath => Path.Combine(serializeJsonDirectory, WALLPAPER_INFO_JSON_FILENAME);
 
+        /// <summary>
+        /// Gets or sets name of the task registered in the Windows Task
+        /// Scheduler.
+        /// </summary>
         public string TaskName
         {
             get => taskName;
@@ -134,8 +150,8 @@ namespace DailyDesktop.Core
         }
 
         /// <summary>
-        /// Gets or sets the current provider to fetch wallpaper
-        /// image URIs from in a <see cref="ProviderWrapper"/>.
+        /// Gets or sets the current provider to fetch wallpaper image URIs from
+        /// in a <see cref="ProviderWrapper"/>.
         /// </summary>
         public ProviderWrapper CurrentProvider
         {
@@ -194,10 +210,12 @@ namespace DailyDesktop.Core
 
         /// <summary>
         /// Constructs a <see cref="DailyDesktopCore"/> and calls
-        /// <see cref="LoadSettings"/>.
+        /// <see cref="LoadSettings()"/>.
         /// </summary>
         /// <param name="providersDir">The directory to automatically scan <see cref="IProvider"/> DLL modules from.</param>
         /// <param name="serializeJsonDir">The directory to save JSON serializations in.</param>
+        /// <param name="taskName">The name of the task registered in the Windows Task Scheduler.</param>
+        /// <param name="autoCreateTask">Whether or not to automatically create the task when settings are changed or loaded.</param>
         public DailyDesktopCore(string providersDir, string serializeJsonDir, string taskName, bool autoCreateTask)
         {
             ProvidersDirectory = providersDir;
@@ -270,6 +288,9 @@ namespace DailyDesktop.Core
             task.Run();
         }
 
+        /// <summary>
+        /// Serializes settings to a JSON file at <see cref="SettingsJsonPath"/>.
+        /// </summary>
         public void SaveSettings()
         {
             JsonSerializerOptions options = new JsonSerializerOptions()
@@ -280,6 +301,11 @@ namespace DailyDesktop.Core
             File.WriteAllText(SettingsJsonPath, jsonString);
         }
 
+        /// <summary>
+        /// Deserializes settings from a JSON file at
+        /// <see cref="SettingsJsonPath"/> and loads them using
+        /// <see cref="LoadSettings(DailyDesktopSettings)"/>.
+        /// </summary>
         public void LoadSettings()
         {
             if (File.Exists(SettingsJsonPath))
@@ -289,17 +315,30 @@ namespace DailyDesktop.Core
                 {
                     AllowTrailingCommas = true,
                 };
-                settings = JsonSerializer.Deserialize<DailyDesktopSettings>(jsonString, options);
-                if (File.Exists(settings.DllPath))
-                {
-                    Type providerType = store.Add(settings.DllPath);
-                    currentProvider = IProvider.Instantiate(providerType);
-                }
+                DailyDesktopSettings newSettings = JsonSerializer.Deserialize<DailyDesktopSettings>(jsonString, options);
+                LoadSettings(newSettings);
             }
             else
             {
-                settings = DailyDesktopSettings.Default;
+                LoadSettings(default);
             }
+        }
+
+        /// <summary>
+        /// Loads settings from a <see cref="DailyDesktopSettings"/>.
+        /// </summary>
+        /// <param name="newSettings">The new settings to set.</param>
+        public void LoadSettings(DailyDesktopSettings newSettings)
+        {
+            settings = newSettings;
+            if (File.Exists(settings.DllPath))
+            {
+                Type providerType = store.Add(settings.DllPath);
+                currentProvider = IProvider.Instantiate(providerType);
+            }
+
+            if (AutoCreateTask)
+                CreateTask();
         }
 
         private string getTaskExecutablePath()
