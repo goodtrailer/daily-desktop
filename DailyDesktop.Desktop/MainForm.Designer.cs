@@ -229,6 +229,7 @@ namespace DailyDesktop.Desktop
             // 
             this.providerComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.providerComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.providerComboBox.FormattingEnabled = true;
             this.providerComboBox.Location = new System.Drawing.Point(6, 22);
             this.providerComboBox.Name = "providerComboBox";

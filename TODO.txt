@@ -1,6 +1,4 @@
 TODO
-- fix null selected provider
 - XML comment documentation
 - update providers to return info structs
 - scrolling description
-- last updated label
