@@ -19,6 +19,9 @@ To develop your own Daily Desktop provider modules, use the [NuGet package](http
 
 Then, implement the [IProvider](/DailyDesktop.Core/Providers/IProvider.cs) interface in a *public* class. For examples, check these [providers I already implemented](#implemented).
 
+#### Debugging
+Wallpapers are actually downloaded/applied by DailyDesktop.Task. To debug a provider module, build and run DailyDesktop.Task in `Debug` mode and pass it the arguments `"path\to\provider.dll" --json "path\to\info-output.json" --blur 40`. The `--blur 40` is optional and the value can be changed between 0 to 100. Arguments can be passed through `DailyDesktop.Task > Properties > Debug` in Visual Studio.
+
 ## Providers
 #### Implemented
 * ❌ Bing @ [/DailyDesktop.Core.Providers.Bing/](/DailyDesktop.Core.Providers.Bing/)
