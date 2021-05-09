@@ -56,7 +56,8 @@ namespace DailyDesktop.Desktop
         private void MainForm_Load(object sender, EventArgs e)
         {
             repopulateProviderComboBox();
-            providerComboBox.SelectedIndex = providerComboBox.FindString(core.CurrentProvider.ToString());
+            if (core.CurrentProvider != null)
+                providerComboBox.SelectedIndex = providerComboBox.FindString(core.CurrentProvider.ToString());
             updateProviderInfo();
 
             optionsEnabledCheckBox.Checked = core.Enabled;

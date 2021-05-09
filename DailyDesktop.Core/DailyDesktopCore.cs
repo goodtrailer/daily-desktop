@@ -320,7 +320,7 @@ namespace DailyDesktop.Core
             }
             else
             {
-                LoadSettings(default);
+                LoadSettings(DailyDesktopSettings.Default);
             }
         }
 
