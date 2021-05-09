@@ -24,7 +24,7 @@ Wallpapers are actually downloaded/applied by DailyDesktop.Task. To debug a prov
 
 ## Providers
 #### Implemented
-* ❌ Bing @ [/DailyDesktop.Core.Providers.Bing/](/DailyDesktop.Core.Providers.Bing/)
+* Bing @ [/DailyDesktop.Core.Providers.Bing/](/DailyDesktop.Core.Providers.Bing/)
 * ❌ DeviantArt @ [/DailyDesktop.Core.Providers.DeviantArt/](/DailyDesktop.Core.Providers.DeviantArt/)
 * Magic: The Gathering @ [/DailyDesktop.Core.Providers.MTG/](/DailyDesktop.Core.Providers.MTG/)
 * Pixiv @ [/DailyDesktop.Core.Providers.Pixiv/](/DailyDesktop.Core.Providers.Pixiv/)
