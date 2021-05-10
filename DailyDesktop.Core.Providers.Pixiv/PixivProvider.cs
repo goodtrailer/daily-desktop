@@ -18,7 +18,6 @@ namespace DailyDesktop.Core.Providers.Pixiv
         private const string DESCRIPTION_PATTERN = "(?<=(<meta property=\"twitter:description\" content=\"))([\\S\\s]*?[^\\\\])(?=(\">))";
         private const string IMAGE_DOWNLOAD_NAME = "Daily Desktop pixiv";
 
-        public string Key => "PIXIV";
         public string DisplayName => "pixiv";
         public string Description => "Fetches the illustration ranked #1 on the pixiv Overall Daily Rankings for the previous day.\r\n" +
             "Using blurred-fit mode is highly recommended due to the large variety of aspect ratios of illustrations found on pixiv.";

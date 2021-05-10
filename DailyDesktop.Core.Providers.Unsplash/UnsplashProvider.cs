@@ -23,8 +23,6 @@ namespace DailyDesktop.Core.Providers.Unsplash
         private const string SHUTTER_SPEED_PATTERN = "(?<=(\\\\\"exposure_time\\\\\":\\\\\"))(.*?)(?=(\\\\\"))";
         private const string ISO_PATTERN = "(?<=(\\\\\"iso\\\\\":))[0-9]*";
 
-
-        public string Key => "UNSPLASH";
         public string DisplayName => "Unsplash";
         public string Description => "Nabs the Photo of the Day that is currently being displayed on the front page of the website Unsplash, an online source for high-quality and freely-usable images.";
         public string SourceUri => "https://unsplash.com/collections/1459961/photo-of-the-day-(archive)";

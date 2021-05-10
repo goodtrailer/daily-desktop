@@ -16,7 +16,6 @@ namespace DailyDesktop.Core.Providers.DeviantArt
         private const string TITLE_PATTERN = "(.*)(?=( by))";
         private const string DESCRIPTION_PATTERN = "(?<=(</div><div class=\"legacy-journal[^\"]*\">))(.*?)(?=(</div>))";
 
-        public string Key => "DEVIANT";
         public string DisplayName => "DeviantArt";
         public string Description => "Fetches one of DeviantArt's currently " +
             "featured piece from its Daily Deviations, a collection of art " +

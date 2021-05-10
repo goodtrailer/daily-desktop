@@ -17,7 +17,6 @@ namespace DailyDesktop.Core.Providers.Bing
         private const string TITLE_URI_PATTERN = "(?<=(<a href=\"/))search(.*?)(?=(\"(.*?)class=\"learn_more\">))";
         private const string DESCRIPTION_PATTERN = "(?<=(<span(.*?)id=\"iotd_desc\">))(.*?)(?=(</span>))";
 
-        public string Key => "BING";
         public string DisplayName => "Bing";
         public string Description => "Grabs Bing's featured Image of the Day, which can be found on Bing's home page.";
         public string SourceUri => "https://www.bing.com/";
