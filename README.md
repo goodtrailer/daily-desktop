@@ -30,7 +30,7 @@ Wallpapers are actually downloaded/applied by DailyDesktop.Task. To debug a prov
 * Pixiv @ [/DailyDesktop.Core.Providers.Pixiv/](/DailyDesktop.Core.Providers.Pixiv/)
 * r/EarthPorn (SFW) @ [/DailyDesktop.Core.Providers.RedditEarthPorn/](/DailyDesktop.Core.Providers.RedditEarthPorn/)
 * Unsplash @ [/DailyDesktop.Core.Providers.Unsplash/](/DailyDesktop.Core.Providers.Unsplash/)
-* ❌ Wikimedia Commons @ [/DailyDesktop.Core.Providers.WikimediaCommons/](/DailyDesktop.Core.Providers.WikimediaCommons/)
+* Wikimedia Commons @ [/DailyDesktop.Core.Providers.WikimediaCommons/](/DailyDesktop.Core.Providers.WikimediaCommons/)
 
 #### Planned
 * National Geographic

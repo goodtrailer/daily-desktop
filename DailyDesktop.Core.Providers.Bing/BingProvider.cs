@@ -49,13 +49,13 @@ namespace DailyDesktop.Core.Providers.Bing
 
             WallpaperInfo wallpaper = new WallpaperInfo
             {
-               ImageUri = imageUri,
-               Date = DateTime.Now,
-               Author = author,
-               AuthorUri = null,
-               Title = title,
-               TitleUri = titleUri,
-               Description = description,
+                ImageUri = imageUri,
+                Date = DateTime.Now,
+                Author = author,
+                AuthorUri = null,
+                Title = title,
+                TitleUri = titleUri,
+                Description = description,
             };
 
             return wallpaper;
