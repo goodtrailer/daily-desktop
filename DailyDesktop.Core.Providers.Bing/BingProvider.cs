@@ -9,9 +9,7 @@ namespace DailyDesktop.Core.Providers.Bing
 {
     public class BingProvider : IProvider
     {
-        private const string RESOLUTION_PATTERN = "(?<=(_))([0-9x]*)(?=(\\.))";
-        private const string RESOLUTION_REPLACEMENT = "1920x1080";
-        private const string IMAGE_URI_PATTERN = "(?<=(<a href=\"))(/th\\?id=)(.*?)(?=(&))";
+        private const string IMAGE_RELATIVE_URI_PATTERN = "(/th\\?id=)([^\"/>]*?)1920x1080.[a-z]*";
         private const string AUTHOR_PATTERN = "(?<=(<div class=\"copyright\" id=\"copyright\">))(.*?)(?=(</div>))";
         private const string TITLE_PATTERN = "(?<=(<div class=\"vs_bs_title\">))(.*?)(?=(</div>))";
         private const string TITLE_URI_PATTERN = "(?<=(<a href=\"/))search(.*?)(?=(\"(.*?)class=\"learn_more\">))";
@@ -28,11 +26,10 @@ namespace DailyDesktop.Core.Providers.Bing
             {
                 pageHtml = client.DownloadString(SourceUri);
             }
-            Match imageRelativeUriMatch = Regex.Match(pageHtml, IMAGE_URI_PATTERN);
+            Match imageRelativeUriMatch = Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN);
             string imageRelativeUri = imageRelativeUriMatch.Value;
             if (string.IsNullOrWhiteSpace(imageRelativeUri))
                 throw new ProviderException("Didn't find a relative image URI.");
-            imageRelativeUri = Regex.Replace(imageRelativeUri, RESOLUTION_PATTERN, RESOLUTION_REPLACEMENT);
             string imageUri = SourceUri + imageRelativeUri;
 
             Match authorMatch = Regex.Match(pageHtml, AUTHOR_PATTERN);
