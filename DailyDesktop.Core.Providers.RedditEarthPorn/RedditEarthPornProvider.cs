@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace DailyDesktop.Core.Providers.RedditEarthPorn
 {
-    public class RedditEarthPorn : IProvider
+    public class RedditEarthPornProvider : IProvider
     {
         private const string IMAGE_URI_PATTERN = "(https://i\\.redd\\.it/)([^\\s/]*?)(\\.)([A-Za-z]*)";
         private const string AUTHOR_PATTERN = "(?<=(\"author\":\"))(.*?)(?=\")";
