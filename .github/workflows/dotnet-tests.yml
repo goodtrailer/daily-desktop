@@ -1,0 +1,23 @@
+name: .NET Tests Only
+
+on:
+  schedule:
+    - cron: '40 5 * * *'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.x
+    - name: Restore dependencies
+      run: dotnet restore DailyDesktop.Tests/DailyDesktop.Tests.csproj
+    - name: Build
+      run: dotnet build DailyDesktop.Tests --no-restore
+    - name: Test
+      run: dotnet test --filter ClassName=DailyDesktop.Tests.TestProviders --no-build --verbosity normal
