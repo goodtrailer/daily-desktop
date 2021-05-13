@@ -1,4 +1,4 @@
-name: .NET Tests Only
+name: .NET Test Providers
 
 on:
   schedule:
@@ -15,9 +15,9 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.x
-    - name: Restore dependencies
+    - name: Restore DailyDesktop.Tests dependencies
       run: dotnet restore DailyDesktop.Tests/DailyDesktop.Tests.csproj
-    - name: Build
+    - name: Build DailyDesktop.Tests
       run: dotnet build DailyDesktop.Tests --no-restore
-    - name: Test
+    - name: Test DailyDesktop.Tests.TestProviders
       run: dotnet test --filter ClassName=DailyDesktop.Tests.TestProviders --no-build --verbosity normal
