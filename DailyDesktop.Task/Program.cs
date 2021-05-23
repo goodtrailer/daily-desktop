@@ -48,11 +48,11 @@ namespace DailyDesktop.Task
             if (blur != null)
                 applyBlurredFit(imagePath, blur.Value);
 
-            string jpgPath = convertToJpeg(imagePath);
+            string tiffPath = convertToTiff(imagePath);
 
             // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa#parameters
             // SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE
-            return SystemParametersInfo(0x14, 0, jpgPath, 0x1 | 0x2);
+            return SystemParametersInfo(0x14, 0, tiffPath, 0x1 | 0x2);
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -143,19 +143,17 @@ namespace DailyDesktop.Task
             }
         }
 
-        // Creates a new JPEG from an image and returns its path
-        private static string convertToJpeg(string imagePath, long quality = 100L)
+        // Creates a new TIFF from an image and returns its path
+        private static string convertToTiff(string imagePath)
         {
             Bitmap image = new Bitmap(imagePath);
 
-            ImageCodecInfo jpgEncoder = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == ImageFormat.Jpeg.Guid);
-            EncoderParameters parameters = new EncoderParameters(1);
-            parameters.Param[0] = new EncoderParameter(Encoder.Compression, quality);
+            ImageCodecInfo tiffCodecInfo = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == ImageFormat.Tiff.Guid);
+            
+            string tifPath = imagePath + ".tif";
+            image.Save(tifPath, tiffCodecInfo, null);
 
-            string jpgPath = imagePath + ".jpg";
-            image.Save(jpgPath, jpgEncoder, parameters);
-
-            return jpgPath;
+            return tifPath;
         }
     }
 }
