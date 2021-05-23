@@ -62,7 +62,7 @@ namespace DailyDesktop.Core.Providers.Pixiv
             string authorUri = $"https://www.pixiv.net/users/{authorIdMatch.Value}";
 
             Match descriptionMatch = Regex.Match(imagePageHtml, DESCRIPTION_PATTERN);
-            string description = descriptionMatch.Value;
+            string description = WebUtility.HtmlDecode(descriptionMatch.Value);
 
             // Download illustration from image URI and return its local path,
             // which is necessary because pixiv blocks requests if the Referer
