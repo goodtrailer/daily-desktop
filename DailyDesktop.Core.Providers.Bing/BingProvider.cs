@@ -11,7 +11,7 @@ namespace DailyDesktop.Core.Providers.Bing
     {
         private const string IMAGE_RELATIVE_URI_PATTERN = "(/th\\?id=)([^\"/>]*?)1920x1080.[a-z]*";
         private const string AUTHOR_PATTERN = "(?<=(<div class=\"copyright\" id=\"copyright\">))(.*?)(?=(</div>))";
-        private const string TITLE_PATTERN = "(?<=(<div class=\"vs_bs_title\">))(.*?)(?=(</div>))";
+        private const string TITLE_PATTERN = "(?<=(<meta property=\"og:title\" content=\"))(.*?)(?=(\" />))";
         private const string TITLE_URI_PATTERN = "(?<=(<a href=\"/))search(.*?)(?=(\"(.*?)class=\"learn_more\">))";
         private const string DESCRIPTION_PATTERN = "(?<=(<span(.*?)id=\"iotd_desc\">))(.*?)(?=(</span>))";
 
