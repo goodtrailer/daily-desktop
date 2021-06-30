@@ -32,6 +32,7 @@ namespace DailyDesktop.Core.Providers.Unsplash
             string homeHtml = string.Empty;
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
                 homeHtml = client.DownloadString(TRUE_SOURCE_URI);
             }
 
@@ -55,6 +56,7 @@ namespace DailyDesktop.Core.Providers.Unsplash
             string pageHtml = string.Empty;
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
                 pageHtml = client.DownloadString(titleUri);
             }
 

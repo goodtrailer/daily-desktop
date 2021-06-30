@@ -22,6 +22,7 @@ namespace DailyDesktop.Core.Providers.MTG
             string pageHtml = string.Empty;
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
                 pageHtml = client.DownloadString(SourceUri);
             }
 
@@ -41,6 +42,7 @@ namespace DailyDesktop.Core.Providers.MTG
             {
                 string formattedName = title.Replace(" ", "%20");
                 string request = $"https://api.scryfall.com/cards/named?format=text&fuzzy={formattedName}";
+                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
                 cardText = client.DownloadString(request);
             }
 

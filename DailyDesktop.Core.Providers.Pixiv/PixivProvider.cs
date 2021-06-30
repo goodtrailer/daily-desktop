@@ -30,6 +30,7 @@ namespace DailyDesktop.Core.Providers.Pixiv
             string rankingHtml = string.Empty;
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
                 client.Headers.Add("Referer", "https://www.pixiv.net");
                 rankingHtml = client.DownloadString(SourceUri);
             }
@@ -44,6 +45,7 @@ namespace DailyDesktop.Core.Providers.Pixiv
             string imagePageHtml = string.Empty;
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
                 client.Headers.Add("Referer", "https://www.pixiv.net");
                 imagePageHtml = client.DownloadString(imagePageUri);
             }
@@ -71,6 +73,7 @@ namespace DailyDesktop.Core.Providers.Pixiv
             string imageLocalUri = Path.Combine(Path.GetTempPath(), IMAGE_DOWNLOAD_NAME);
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
                 client.Headers.Add(HttpRequestHeader.Referer, "https://www.pixiv.net");
                 client.DownloadFile(imageUri, imageLocalUri);
             }

@@ -28,6 +28,7 @@ namespace DailyDesktop.Core.Providers.DeviantArt
             string dailyDeviationHtml = string.Empty;
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
                 dailyDeviationHtml = client.DownloadString(SourceUri);
             }
 
@@ -39,6 +40,7 @@ namespace DailyDesktop.Core.Providers.DeviantArt
             string imagePageHtml = string.Empty;
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
                 imagePageHtml = client.DownloadString(imagePageUri);
             }
 

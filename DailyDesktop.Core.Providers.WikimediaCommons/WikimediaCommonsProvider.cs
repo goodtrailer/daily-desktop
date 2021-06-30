@@ -31,6 +31,7 @@ namespace DailyDesktop.Core.Providers.WikimediaCommons
             string potdHtml = string.Empty;
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
                 potdHtml = client.DownloadString(SourceUri);
             }
             Match titleRelativeUriMatch = Regex.Match(potdHtml, TITLE_RELATIVE_URI_PATTERN);
@@ -42,6 +43,7 @@ namespace DailyDesktop.Core.Providers.WikimediaCommons
             string imagePageHtml = string.Empty;
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
                 imagePageHtml = client.DownloadString(titleUri);
             }
             Match imageUriMatch = Regex.Match(imagePageHtml, IMAGE_URI_PATTERN);

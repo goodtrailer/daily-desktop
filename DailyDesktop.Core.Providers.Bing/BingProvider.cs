@@ -24,6 +24,7 @@ namespace DailyDesktop.Core.Providers.Bing
             string pageHtml = string.Empty;
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
                 pageHtml = client.DownloadString(SourceUri);
             }
             Match imageRelativeUriMatch = Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN);
