@@ -22,6 +22,7 @@ Wallpapers are actually downloaded/applied by DailyDesktop.Task. To debug a prov
 ## Providers
 #### Implemented
 * Bing @ [/DailyDesktop.Core.Providers.Bing/](/DailyDesktop.Core.Providers.Bing/)
+* Calvin and Hobbes @ [/DailyDesktop.Core.Providers.CalvinAndHobbes/](/DailyDesktop.Core.Providers.CalvinAndHobbes/)
 * DeviantArt @ [/DailyDesktop.Core.Providers.DeviantArt/](/DailyDesktop.Core.Providers.DeviantArt/)
 * Magic: The Gathering @ [/DailyDesktop.Core.Providers.MTG/](/DailyDesktop.Core.Providers.MTG/)
 * Pixiv @ [/DailyDesktop.Core.Providers.Pixiv/](/DailyDesktop.Core.Providers.Pixiv/)
@@ -30,8 +31,8 @@ Wallpapers are actually downloaded/applied by DailyDesktop.Task. To debug a prov
 * Wikimedia Commons @ [/DailyDesktop.Core.Providers.WikimediaCommons/](/DailyDesktop.Core.Providers.WikimediaCommons/)
 
 #### Planned
-* National Geographic
-    * *I lied. Writing a provider wouldn't be very hard, but on their website Nat Geo make it pretty blatantly clear they don't want people downloading these images. It's a shame, but it's understandable.*
+* ~~National Geographic~~
+    * *No longer planned. Writing a provider wouldn't be very hard, but on their website Nat Geo make it pretty blatantly clear they don't want people downloading these images. It's a shame, but it's understandable.*
 
 ## Blurred-fit Mode
 Daily Desktop has an optional "blurred-fit" mode that fits the entire image within the wallpaper, then fills in the background with a blurred and enlarged version of the image itself, instead of using a solid color like Windows does. This is useful if a provider's source contains images that are of a vastly different aspect ratio than your primary display.
