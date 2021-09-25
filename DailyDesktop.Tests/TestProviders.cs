@@ -1,13 +1,14 @@
-using DailyDesktop.Core;
+﻿using DailyDesktop.Core;
 using DailyDesktop.Core.Providers.Bing;
+using DailyDesktop.Core.Providers.CalvinAndHobbes;
 using DailyDesktop.Core.Providers.DeviantArt;
+using DailyDesktop.Core.Providers.FalseKnees;
 using DailyDesktop.Core.Providers.MTG;
 using DailyDesktop.Core.Providers.Pixiv;
 using DailyDesktop.Core.Providers.RedditEarthPorn;
 using DailyDesktop.Core.Providers.Unsplash;
 using DailyDesktop.Core.Providers.WikimediaCommons;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace DailyDesktop.Tests
 {
@@ -36,6 +37,19 @@ namespace DailyDesktop.Tests
         }
 
         [TestMethod]
+        public void TestCalvinAndHobbes()
+        {
+            var provider = new CalvinAndHobbesProvider();
+            WallpaperInfo wallpaper = provider.GetWallpaperInfo();
+
+            TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
+            TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
+
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.TitleUri), "Null/whitespace title URI.");
+        }
+
+        [TestMethod]
         public void TestDeviantArt()
         {
             var provider = new DeviantArtProvider();
@@ -51,6 +65,23 @@ namespace DailyDesktop.Tests
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.AuthorUri), "Null/whitespace author URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Title), "Null/whitespace title.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.TitleUri), "Null/whitespace title URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Description), "Null/whitespace description.");
+        }
+
+        [TestMethod]
+        public void TestFalseKnees()
+        {
+            var provider = new FalseKneesProvider();
+            WallpaperInfo wallpaper = provider.GetWallpaperInfo();
+
+            TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
+            TestContext.WriteLine("Title: " + wallpaper.Title);
+            TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            TestContext.WriteLine("Description: " + wallpaper.Description);
+
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Title), "Null/whitespace title.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.TitleUri), "Null/whitespace title URI.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Description), "Null/whitespace description.");

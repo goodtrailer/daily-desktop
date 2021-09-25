@@ -15,7 +15,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DailyDesktop.Core.Providers.Bing\DailyDesktop.Core.Providers.Bing.csproj" />
+    <ProjectReference Include="..\DailyDesktop.Core.Providers.CalvinAndHobbes\DailyDesktop.Core.Providers.CalvinAndHobbes.csproj" />
     <ProjectReference Include="..\DailyDesktop.Core.Providers.DeviantArt\DailyDesktop.Core.Providers.DeviantArt.csproj" />
+    <ProjectReference Include="..\DailyDesktop.Core.Providers.FalseKnees\DailyDesktop.Core.Providers.FalseKnees.csproj" />
     <ProjectReference Include="..\DailyDesktop.Core.Providers.MTG\DailyDesktop.Core.Providers.MTG.csproj" />
     <ProjectReference Include="..\DailyDesktop.Core.Providers.Pixiv\DailyDesktop.Core.Providers.Pixiv.csproj" />
     <ProjectReference Include="..\DailyDesktop.Core.Providers.RedditEarthPorn\DailyDesktop.Core.Providers.RedditEarthPorn.csproj" />
