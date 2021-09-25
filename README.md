@@ -24,6 +24,7 @@ Wallpapers are actually downloaded/applied by DailyDesktop.Task. To debug a prov
 * Bing @ [/DailyDesktop.Core.Providers.Bing/](/DailyDesktop.Core.Providers.Bing/)
 * Calvin and Hobbes @ [/DailyDesktop.Core.Providers.CalvinAndHobbes/](/DailyDesktop.Core.Providers.CalvinAndHobbes/)
 * DeviantArt @ [/DailyDesktop.Core.Providers.DeviantArt/](/DailyDesktop.Core.Providers.DeviantArt/)
+* False Knees @ [/DailyDesktop.Core.Providers.FalseKnees/](/DailyDesktop.Core.Providers.FalseKnees/)
 * Magic: The Gathering @ [/DailyDesktop.Core.Providers.MTG/](/DailyDesktop.Core.Providers.MTG/)
 * Pixiv @ [/DailyDesktop.Core.Providers.Pixiv/](/DailyDesktop.Core.Providers.Pixiv/)
 * r/EarthPorn (SFW) @ [/DailyDesktop.Core.Providers.RedditEarthPorn/](/DailyDesktop.Core.Providers.RedditEarthPorn/)
