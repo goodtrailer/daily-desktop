@@ -150,7 +150,7 @@ namespace DailyDesktop.Task
             Bitmap image = new Bitmap(imagePath);
 
             ImageCodecInfo tiffCodecInfo = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == ImageFormat.Tiff.Guid);
-            
+
             string tifPath = imagePath + ".tif";
             image.Save(tifPath, tiffCodecInfo, null);
 

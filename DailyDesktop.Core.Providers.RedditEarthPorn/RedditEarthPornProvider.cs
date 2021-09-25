@@ -21,7 +21,7 @@ namespace DailyDesktop.Core.Providers.RedditEarthPorn
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            string subredditHtml = string.Empty;
+            string subredditHtml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");

@@ -27,7 +27,7 @@ namespace DailyDesktop.Core.Providers.Pixiv
         {
             // Search for image ID of #1 illustration on daily rankings page
 
-            string rankingHtml = string.Empty;
+            string rankingHtml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
@@ -42,7 +42,7 @@ namespace DailyDesktop.Core.Providers.Pixiv
             // Search for wallpaper info on image page
 
             string imagePageUri = $"https://www.pixiv.net/en/artworks/{imageId}";
-            string imagePageHtml = string.Empty;
+            string imagePageHtml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");

@@ -25,7 +25,7 @@ namespace DailyDesktop.Core.Providers.DeviantArt
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            string dailyDeviationHtml = string.Empty;
+            string dailyDeviationHtml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
@@ -37,7 +37,7 @@ namespace DailyDesktop.Core.Providers.DeviantArt
             if (string.IsNullOrWhiteSpace(imagePageUri))
                 throw new ProviderException("Didn't find an image page URI.");
 
-            string imagePageHtml = string.Empty;
+            string imagePageHtml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
@@ -50,7 +50,7 @@ namespace DailyDesktop.Core.Providers.DeviantArt
                 throw new ProviderException("Didn't find an image URI.");
 
             Match creditMatch = Regex.Match(imagePageHtml, CREDIT_PATTERN);
-            string credit = creditMatch.Value ?? string.Empty;
+            string credit = creditMatch.Value ?? null;
 
             Match authorMatch = Regex.Match(credit, AUTHOR_PATTERN);
             string author = authorMatch.Value;

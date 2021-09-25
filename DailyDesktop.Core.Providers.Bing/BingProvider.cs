@@ -21,7 +21,7 @@ namespace DailyDesktop.Core.Providers.Bing
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            string pageHtml = string.Empty;
+            string pageHtml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");

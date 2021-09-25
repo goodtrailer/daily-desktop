@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
+// See the LICENSE file in the repository root for full licence text.
+
+using System;
 using System.Net;
 using System.Text.RegularExpressions;
 
@@ -18,7 +21,7 @@ namespace DailyDesktop.Core.Providers.CalvinAndHobbes
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            string pageHtml = string.Empty;
+            string pageHtml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");

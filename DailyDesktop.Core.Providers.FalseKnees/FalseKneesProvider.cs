@@ -1,5 +1,7 @@
-﻿using System;
-using System.IO;
+﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
+// See the LICENSE file in the repository root for full licence text.
+
+using System;
 using System.Net;
 using System.Text.RegularExpressions;
 
@@ -23,15 +25,15 @@ namespace DailyDesktop.Core.Providers.FalseKnees
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            string imageUri = string.Empty;
-            string title = string.Empty;
-            string titleUri = string.Empty;
-            string description = string.Empty;
+            string imageUri = null;
+            string title = null;
+            string titleUri = null;
+            string description = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
-                string pageHtml = string.Empty;
-                
+                string pageHtml = null;
+
                 pageHtml = client.DownloadString(SourceUri);
                 imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
                 titleUri = SourceUri + "/" + Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value;
@@ -39,7 +41,7 @@ namespace DailyDesktop.Core.Providers.FalseKnees
 
                 pageHtml = client.DownloadString(ARCHIVE_URI);
                 title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
-            }            
+            }
 
             WallpaperInfo wallpaper = new WallpaperInfo
             {

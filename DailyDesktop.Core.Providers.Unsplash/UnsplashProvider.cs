@@ -29,7 +29,7 @@ namespace DailyDesktop.Core.Providers.Unsplash
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            string homeHtml = string.Empty;
+            string homeHtml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
@@ -53,7 +53,7 @@ namespace DailyDesktop.Core.Providers.Unsplash
             Match authorRelativeUriMatch = Regex.Match(homeHtml, AUTHOR_RELATIVE_URI_PATTERN);
             string authorUri = TRUE_SOURCE_URI + authorRelativeUriMatch.Value;
 
-            string pageHtml = string.Empty;
+            string pageHtml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");

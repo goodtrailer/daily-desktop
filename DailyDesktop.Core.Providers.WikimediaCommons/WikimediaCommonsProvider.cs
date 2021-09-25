@@ -28,7 +28,7 @@ namespace DailyDesktop.Core.Providers.WikimediaCommons
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            string potdHtml = string.Empty;
+            string potdHtml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
@@ -40,7 +40,7 @@ namespace DailyDesktop.Core.Providers.WikimediaCommons
                 throw new ProviderException("Didn't find a relative image page URI.");
             string titleUri = BASE_URI + titleRelativeUri;
 
-            string imagePageHtml = string.Empty;
+            string imagePageHtml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
