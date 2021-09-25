@@ -8,4 +8,8 @@
     <ProjectReference Include="..\DailyDesktop.Core\DailyDesktop.Core.csproj" />
   </ItemGroup>
   
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="mkdir &quot;$(SolutionDir)bin\&quot;&#xD;&#xA;copy &quot;$(TargetPath)&quot; &quot;$(SolutionDir)bin\$(TargetFileName)&quot;&#xD;&#xA;" />
+  </Target>
+  
 </Project>

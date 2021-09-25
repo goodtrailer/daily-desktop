@@ -19,7 +19,7 @@ namespace DailyDesktop.Core.Providers.MTG
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            string pageHtml = string.Empty;
+            string pageHtml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
@@ -37,7 +37,7 @@ namespace DailyDesktop.Core.Providers.MTG
             Match titleMatch = Regex.Match(pageHtml, TITLE_PATTERN);
             string title = titleMatch.Value.Trim();
 
-            string cardText = string.Empty;
+            string cardText = null;
             using (WebClient client = new WebClient())
             {
                 string formattedName = title.Replace(" ", "%20");
