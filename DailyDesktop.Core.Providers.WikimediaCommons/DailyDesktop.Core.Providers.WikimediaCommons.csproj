@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="mkdir &quot;$(SolutionDir)bin\&quot;&#xD;&#xA;copy &quot;$(TargetPath)&quot; &quot;$(SolutionDir)bin\$(TargetFileName)&quot;&#xD;&#xA;" />
+    <Exec Command="if not &quot;$(SolutionDir)&quot; == &quot;*Undefined*&quot; mkdir &quot;$(SolutionDir)bin\&quot; &amp; copy &quot;$(TargetPath)&quot; &quot;$(SolutionDir)bin\$(TargetFileName)&quot; &#xD;&#xA;" />
   </Target>
-  
+
 </Project>
