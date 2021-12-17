@@ -2,7 +2,9 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
+using System.IO;
 using System.Net;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace DailyDesktop.Core.Providers.MTG
@@ -40,14 +42,19 @@ namespace DailyDesktop.Core.Providers.MTG
             string cardText = null;
             using (WebClient client = new WebClient())
             {
-                string formattedName = title.Replace(" ", "%20");
-                string request = $"https://api.scryfall.com/cards/named?format=text&fuzzy={formattedName}";
+                string request = $"https://api.scryfall.com/cards/named?format=text&fuzzy={title}";
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
                 try
                 {
                     cardText = client.DownloadString(request);
                 }
-                catch (WebException) { }
+                catch (WebException e)
+                {
+                    string response = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+                    JsonDocument json = JsonDocument.Parse(response);
+                    if (json.RootElement.GetProperty("status").GetInt32() == 404)
+                        cardText = json.RootElement.GetProperty("details").GetString();
+                }
             }
 
             WallpaperInfo wallpaper = new WallpaperInfo
