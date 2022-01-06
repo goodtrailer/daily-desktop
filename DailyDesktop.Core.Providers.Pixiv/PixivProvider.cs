@@ -21,7 +21,7 @@ namespace DailyDesktop.Core.Providers.Pixiv
         public string DisplayName => "pixiv";
         public string Description => "Fetches the illustration ranked #1 on the pixiv Overall Daily Rankings for the previous day.\r\n" +
             "Using blurred-fit mode is highly recommended due to the large variety of aspect ratios of illustrations found on pixiv.";
-        public string SourceUri => "https://www.pixiv.net/ranking.php";
+        public string SourceUri => "https://www.pixiv.net/ranking.php?content=illust";
 
         public WallpaperInfo GetWallpaperInfo()
         {
