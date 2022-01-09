@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using DailyDesktop.Core;
 using DailyDesktop.Core.Providers;
@@ -20,6 +21,7 @@ namespace DailyDesktop.Desktop
         private const string APP_DATA_DIR = "Daily Desktop";
         private const string TASK_NAME_PREFIX = "Daily Desktop";
         private const string NULL_DESCRIPTION = "No description.";
+        private const string FETCHED_TEXT = "fetched on ";
         private const string PROVIDERS_DIR = "providers";
         private const string SERIALIZE_JSON_DIR = "";
 
@@ -180,10 +182,11 @@ namespace DailyDesktop.Desktop
                 string jsonString = File.ReadAllText(core.WallpaperInfoJsonPath);
                 wallpaper = JsonSerializer.Deserialize<WallpaperInfo>(jsonString);
                 string updateDate = wallpaper.Date.ToString("dddd, MMMM d");
-                wallpaperUpdatedLabel.Text = $"fetched on {updateDate}";
+                wallpaperUpdatedLabel.Text = FETCHED_TEXT + updateDate;
                 wallpaperTitleLinkLabel.Text = wallpaper.Title;
                 wallpaperAuthorLinkLabel.Text = wallpaper.Author;
-                wallpaperDescriptionLabel.Text = wallpaper.Description ?? NULL_DESCRIPTION;
+                string text = wallpaper.Description ?? NULL_DESCRIPTION;
+                wallpaperDescriptionTextBox.Text = Regex.Replace(text, "(?<=[^\r])\n", "\r\n");
 
                 Uri temp;
                 wallpaperTitleLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.TitleUri, UriKind.Absolute, out temp);
@@ -196,10 +199,10 @@ namespace DailyDesktop.Desktop
                 if (e is JsonException || e is FileNotFoundException)
                 {
                     Console.WriteLine(e.StackTrace);
-                    wallpaperUpdatedLabel.Text = "fetched on null";
+                    wallpaperUpdatedLabel.Text = FETCHED_TEXT + "null";
                     wallpaperTitleLinkLabel.Text = "null";
                     wallpaperAuthorLinkLabel.Text = "null";
-                    wallpaperDescriptionLabel.Text = NULL_DESCRIPTION;
+                    wallpaperDescriptionTextBox.Text = NULL_DESCRIPTION;
                     wallpaperTitleLinkLabel.Links[0].Enabled = false;
                     wallpaperAuthorLinkLabel.Links[0].Enabled = false;
                 }

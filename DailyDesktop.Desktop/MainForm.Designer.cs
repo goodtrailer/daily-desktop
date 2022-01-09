@@ -44,7 +44,7 @@ namespace DailyDesktop.Desktop
             this.providerSourceLinkLabel = new System.Windows.Forms.LinkLabel();
             this.providerComboBox = new System.Windows.Forms.ComboBox();
             this.wallpaperGroupBox = new System.Windows.Forms.GroupBox();
-            this.wallpaperDescriptionLabel = new System.Windows.Forms.Label();
+            this.wallpaperDescriptionTextBox = new System.Windows.Forms.TextBox();
             this.wallpaperCreditFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.wallpaperTitleLinkLabel = new System.Windows.Forms.LinkLabel();
             this.wallpaperCreditLabel = new System.Windows.Forms.Label();
@@ -240,7 +240,7 @@ namespace DailyDesktop.Desktop
             // 
             // wallpaperGroupBox
             // 
-            this.wallpaperGroupBox.Controls.Add(this.wallpaperDescriptionLabel);
+            this.wallpaperGroupBox.Controls.Add(this.wallpaperDescriptionTextBox);
             this.wallpaperGroupBox.Controls.Add(this.wallpaperCreditFlowLayout);
             this.wallpaperGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wallpaperGroupBox.Location = new System.Drawing.Point(3, 215);
@@ -250,18 +250,22 @@ namespace DailyDesktop.Desktop
             this.wallpaperGroupBox.TabStop = false;
             this.wallpaperGroupBox.Text = "Wallpaper";
             // 
-            // wallpaperDescriptionLabel
+            // wallpaperDescriptionTextBox
             // 
-            this.wallpaperDescriptionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.wallpaperDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.wallpaperDescriptionLabel.AutoEllipsis = true;
-            this.wallpaperDescriptionLabel.Location = new System.Drawing.Point(7, 49);
-            this.wallpaperDescriptionLabel.Margin = new System.Windows.Forms.Padding(3);
-            this.wallpaperDescriptionLabel.Name = "wallpaperDescriptionLabel";
-            this.wallpaperDescriptionLabel.Size = new System.Drawing.Size(339, 152);
-            this.wallpaperDescriptionLabel.TabIndex = 1;
-            this.wallpaperDescriptionLabel.Text = "No description.";
+            this.wallpaperDescriptionTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.wallpaperDescriptionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.wallpaperDescriptionTextBox.Location = new System.Drawing.Point(6, 48);
+            this.wallpaperDescriptionTextBox.Multiline = true;
+            this.wallpaperDescriptionTextBox.Name = "wallpaperDescriptionTextBox";
+            this.wallpaperDescriptionTextBox.ReadOnly = true;
+            this.wallpaperDescriptionTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.wallpaperDescriptionTextBox.Size = new System.Drawing.Size(340, 153);
+            this.wallpaperDescriptionTextBox.TabIndex = 1;
+            this.wallpaperDescriptionTextBox.TabStop = false;
+            this.wallpaperDescriptionTextBox.Text = "No description.";
             // 
             // wallpaperCreditFlowLayout
             // 
@@ -496,6 +500,7 @@ namespace DailyDesktop.Desktop
             this.providerGroupBox.ResumeLayout(false);
             this.providerDescriptionTableLayout.ResumeLayout(false);
             this.wallpaperGroupBox.ResumeLayout(false);
+            this.wallpaperGroupBox.PerformLayout();
             this.wallpaperCreditFlowLayout.ResumeLayout(false);
             this.wallpaperCreditFlowLayout.PerformLayout();
             this.optionsTabPage.ResumeLayout(false);
@@ -538,8 +543,9 @@ namespace DailyDesktop.Desktop
         private System.Windows.Forms.LinkLabel wallpaperTitleLinkLabel;
         private System.Windows.Forms.Label wallpaperCreditLabel;
         private System.Windows.Forms.LinkLabel wallpaperAuthorLinkLabel;
-        private System.Windows.Forms.Label wallpaperDescriptionLabel;
         private System.Windows.Forms.Label wallpaperUpdatedLabel;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox wallpaperDescriptionTextBox;
     }
 }
 

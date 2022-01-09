@@ -1,2 +1,1 @@
-change wording from "updated" to "fetched"
 scrolling description
