@@ -180,7 +180,7 @@ namespace DailyDesktop.Desktop
                 string jsonString = File.ReadAllText(core.WallpaperInfoJsonPath);
                 wallpaper = JsonSerializer.Deserialize<WallpaperInfo>(jsonString);
                 string updateDate = wallpaper.Date.ToString("dddd, MMMM d");
-                wallpaperUpdatedLabel.Text = $"updated on {updateDate}";
+                wallpaperUpdatedLabel.Text = $"fetched on {updateDate}";
                 wallpaperTitleLinkLabel.Text = wallpaper.Title;
                 wallpaperAuthorLinkLabel.Text = wallpaper.Author;
                 wallpaperDescriptionLabel.Text = wallpaper.Description ?? NULL_DESCRIPTION;
@@ -196,7 +196,7 @@ namespace DailyDesktop.Desktop
                 if (e is JsonException || e is FileNotFoundException)
                 {
                     Console.WriteLine(e.StackTrace);
-                    wallpaperUpdatedLabel.Text = $"updated on null";
+                    wallpaperUpdatedLabel.Text = "fetched on null";
                     wallpaperTitleLinkLabel.Text = "null";
                     wallpaperAuthorLinkLabel.Text = "null";
                     wallpaperDescriptionLabel.Text = NULL_DESCRIPTION;

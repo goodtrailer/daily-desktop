@@ -321,9 +321,9 @@ namespace DailyDesktop.Desktop
             this.wallpaperUpdatedLabel.Location = new System.Drawing.Point(74, 0);
             this.wallpaperUpdatedLabel.Margin = new System.Windows.Forms.Padding(0);
             this.wallpaperUpdatedLabel.Name = "wallpaperUpdatedLabel";
-            this.wallpaperUpdatedLabel.Size = new System.Drawing.Size(91, 15);
+            this.wallpaperUpdatedLabel.Size = new System.Drawing.Size(87, 15);
             this.wallpaperUpdatedLabel.TabIndex = 3;
-            this.wallpaperUpdatedLabel.Text = "updated on null";
+            this.wallpaperUpdatedLabel.Text = "fetched on null";
             this.wallpaperUpdatedLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // optionsTabPage
