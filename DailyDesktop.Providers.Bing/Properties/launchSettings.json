@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DailyDesktop.Providers.Bing": {
+      "commandName": "Project",
+      "jsWebView2Debugging": true
+    }
+  }
+}

@@ -2,7 +2,6 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
-using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -14,18 +13,19 @@ namespace DailyDesktop.Providers.WikimediaCommons
     public class WikimediaCommonsProvider : IProvider
     {
         private const string BASE_URI = "https://commons.wikimedia.org/";
-        private const string BASE_TITLE_URI = BASE_URI + "wiki/File:";
+        private const string BASE_TITLE_URI = BASE_URI + "wiki/";
+        private const string BASE_TITLE = "File:";
         private const string BASE_API_URI = "https://magnus-toolserver.toolforge.org/commonsapi.php?image=";
         private const string POTD_FEED_URI = "https://commons.wikimedia.org/w/api.php?action=featuredfeed&feed=potd&feedformat=atom";
 
         // stage 1: potd feed
-        private const string TITLE_PATTERN = "(?<=<img alt=\").*?(?=\" src=)";
-        private const string FILENAME_PATTERN = "(?<=wiki\\/File:).*?(?=\" class=\"image\")";
+        private const string TITLE_RELATIVE_URI_PATTERN = "File:.*?(?=\")";
         private const string DESCRIPTION_PATTERN = "(?<=display:inline;\">).*?(?=<\\/div>)";
 
         // stage 2: api request
-        private const string AUTHOR_PATTERN = "(?<=<author><a.*?>).*?(?=<\\/a>)";
-        private const string AUTHOR_URI_PATTERN = "(?<=<author><a href=\").*?(?=\")";
+        private const string AUTHOR_ELEMENT_PATTERN = "<author>[\\S\\s]*?<\\/author>";
+        private const string AUTHOR_PATTERN = "(?<=http[s]?:\\/\\/commons\\.wikimedia\\.org\\/wiki\\/.*?\" title=\").*?(?=\")";
+        private const string AUTHOR_URI_PATTERN = "http[s]?:\\/\\/commons\\.wikimedia\\.org\\/wiki\\/.*?(?=\")";
         private const string IMAGE_URI_PATTERN = "(?<=<urls><file>).*?(?=<\\/file>)";
 
         public string DisplayName => "Wikimedia Commons";
@@ -48,22 +48,21 @@ namespace DailyDesktop.Providers.WikimediaCommons
                 feedXml = HttpUtility.HtmlDecode(client.DownloadString(POTD_FEED_URI));
             }
 
-            string description = Regex.Matches(feedXml, DESCRIPTION_PATTERN).Last().Value;
+            string titleRelativeUri = Regex.Matches(feedXml, TITLE_RELATIVE_URI_PATTERN)[^1].Value;
+            string title = HttpUtility.HtmlDecode(titleRelativeUri);
+            string titleUri = BASE_TITLE_URI + titleRelativeUri;
+            
+            string description = Regex.Matches(feedXml, DESCRIPTION_PATTERN)[^1].Value;
             description = Regex.Replace(description, "<[^>]*>", "");
-            string title = Regex.Matches(feedXml, TITLE_PATTERN).Last().Value;
-
-            string filename = Regex.Matches(feedXml, FILENAME_PATTERN).Last().Value;
-            if (string.IsNullOrWhiteSpace(filename))
-                throw new ProviderException("Didn't find an image filename.");
-
-            string titleUri = BASE_TITLE_URI + filename;
-
+            
             // stage 2 ---
 
             string requestXml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+
+                string filename = titleRelativeUri.Substring(BASE_TITLE.Length);
                 requestXml = HttpUtility.HtmlDecode(client.DownloadString(BASE_API_URI + filename));
             }
 
@@ -71,8 +70,13 @@ namespace DailyDesktop.Providers.WikimediaCommons
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            string author = Regex.Match(requestXml, AUTHOR_PATTERN).Value;
-            string authorUri = Regex.Match(requestXml, AUTHOR_URI_PATTERN).Value;
+            string authorElement = Regex.Match(requestXml, AUTHOR_ELEMENT_PATTERN).Value;
+
+            string author = Regex.Match(authorElement, AUTHOR_PATTERN).Value;
+            string authorUri = Regex.Match(authorElement, AUTHOR_URI_PATTERN).Value;
+
+            if (String.IsNullOrWhiteSpace(author))
+                author = Regex.Replace(authorElement, "<[^>]*>", "");
 
             return new WallpaperInfo
             {
