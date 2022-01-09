@@ -4,8 +4,10 @@
 using System;
 using System.Net;
 using System.Text.RegularExpressions;
+using DailyDesktop.Core;
+using DailyDesktop.Core.Providers;
 
-namespace DailyDesktop.Core.Providers.Bing
+namespace DailyDesktop.Providers.Bing
 {
     public class BingProvider : IProvider
     {

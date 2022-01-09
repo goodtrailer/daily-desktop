@@ -1,3 +1,2 @@
-TODO
-- update providers to return info structs
-- scrolling description
+change wording from "updated" to "fetched"
+scrolling description

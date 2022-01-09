@@ -6,8 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
+using DailyDesktop.Core;
+using DailyDesktop.Core.Providers;
 
-namespace DailyDesktop.Core.Providers.WikimediaCommons
+namespace DailyDesktop.Providers.WikimediaCommons
 {
     public class WikimediaCommonsProvider : IProvider
     {

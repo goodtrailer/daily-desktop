@@ -6,8 +6,10 @@ using System.IO;
 using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using DailyDesktop.Core;
+using DailyDesktop.Core.Providers;
 
-namespace DailyDesktop.Core.Providers.MTG
+namespace DailyDesktop.Providers.MTG
 {
     public class MTGProvider : IProvider
     {

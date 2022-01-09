@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core", "DailyDesktop.Core\DailyDesktop.Core.csproj", "{C1D6DB17-EFAA-4D03-BBA9-E77488CE6CB5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core.Providers.MTG", "DailyDesktop.Core.Providers.MTG\DailyDesktop.Core.Providers.MTG.csproj", "{14E0EC29-52DE-40AC-96D7-5489920FEA63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Providers.MTG", "DailyDesktop.Providers.MTG\DailyDesktop.Providers.MTG.csproj", "{14E0EC29-52DE-40AC-96D7-5489920FEA63}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C1D6DB17-EFAA-4D03-BBA9-E77488CE6CB5} = {C1D6DB17-EFAA-4D03-BBA9-E77488CE6CB5}
 	EndProjectSection
@@ -16,23 +16,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Desktop", "Dai
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DailyDesktop.Setup", "DailyDesktop.Setup\DailyDesktop.Setup.vdproj", "{AF21D390-94D6-403D-ACF9-CC243F8355B0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core.Providers.Pixiv", "DailyDesktop.Core.Providers.Pixiv\DailyDesktop.Core.Providers.Pixiv.csproj", "{3E827370-7B8B-4F1E-82CF-B374CCEA6744}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Providers.Pixiv", "DailyDesktop.Providers.Pixiv\DailyDesktop.Providers.Pixiv.csproj", "{3E827370-7B8B-4F1E-82CF-B374CCEA6744}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core.Providers.Unsplash", "DailyDesktop.Core.Providers.Unsplash\DailyDesktop.Core.Providers.Unsplash.csproj", "{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Providers.Unsplash", "DailyDesktop.Providers.Unsplash\DailyDesktop.Providers.Unsplash.csproj", "{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core.Providers.WikimediaCommons", "DailyDesktop.Core.Providers.WikimediaCommons\DailyDesktop.Core.Providers.WikimediaCommons.csproj", "{170B34DD-A803-4CED-B1A6-7487AB61F473}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Providers.WikimediaCommons", "DailyDesktop.Providers.WikimediaCommons\DailyDesktop.Providers.WikimediaCommons.csproj", "{170B34DD-A803-4CED-B1A6-7487AB61F473}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core.Providers.Bing", "DailyDesktop.Core.Providers.Bing\DailyDesktop.Core.Providers.Bing.csproj", "{53B8F7F5-D7BB-4935-80F2-9D603CC32608}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Providers.Bing", "DailyDesktop.Providers.Bing\DailyDesktop.Providers.Bing.csproj", "{53B8F7F5-D7BB-4935-80F2-9D603CC32608}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core.Providers.DeviantArt", "DailyDesktop.Core.Providers.DeviantArt\DailyDesktop.Core.Providers.DeviantArt.csproj", "{92DAF9D3-3F37-4DB1-8FC9-C9B60E961652}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Providers.DeviantArt", "DailyDesktop.Providers.DeviantArt\DailyDesktop.Providers.DeviantArt.csproj", "{92DAF9D3-3F37-4DB1-8FC9-C9B60E961652}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core.Providers.RedditEarthPorn", "DailyDesktop.Core.Providers.RedditEarthPorn\DailyDesktop.Core.Providers.RedditEarthPorn.csproj", "{DA90DCEE-630B-44DF-B964-17BA3A359EF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Providers.RedditEarthPorn", "DailyDesktop.Providers.RedditEarthPorn\DailyDesktop.Providers.RedditEarthPorn.csproj", "{DA90DCEE-630B-44DF-B964-17BA3A359EF4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Tests", "DailyDesktop.Tests\DailyDesktop.Tests.csproj", "{7703C8EF-73D5-444B-B057-64C5359D9BC9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core.Providers.CalvinAndHobbes", "DailyDesktop.Core.Providers.CalvinAndHobbes\DailyDesktop.Core.Providers.CalvinAndHobbes.csproj", "{BA0FECF0-4333-4076-8DC4-1E1D09359050}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Providers.CalvinAndHobbes", "DailyDesktop.Providers.CalvinAndHobbes\DailyDesktop.Providers.CalvinAndHobbes.csproj", "{BA0FECF0-4333-4076-8DC4-1E1D09359050}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyDesktop.Core.Providers.FalseKnees", "DailyDesktop.Core.Providers.FalseKnees\DailyDesktop.Core.Providers.FalseKnees.csproj", "{F349ABE2-FC9F-43BB-A8EA-843B5004F68A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Providers.FalseKnees", "DailyDesktop.Providers.FalseKnees\DailyDesktop.Providers.FalseKnees.csproj", "{F349ABE2-FC9F-43BB-A8EA-843B5004F68A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ACB43272-8AF4-47DE-8E2C-F893E0D8FFEB}"
 	ProjectSection(SolutionItems) = preProject

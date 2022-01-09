@@ -4,8 +4,10 @@
 using System;
 using System.Net;
 using System.Text.RegularExpressions;
+using DailyDesktop.Core;
+using DailyDesktop.Core.Providers;
 
-namespace DailyDesktop.Core.Providers.Unsplash
+namespace DailyDesktop.Providers.Unsplash
 {
     public class UnsplashProvider : IProvider
     {

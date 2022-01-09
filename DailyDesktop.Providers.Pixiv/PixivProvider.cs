@@ -5,8 +5,10 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
+using DailyDesktop.Core;
+using DailyDesktop.Core.Providers;
 
-namespace DailyDesktop.Core.Providers.Pixiv
+namespace DailyDesktop.Providers.Pixiv
 {
     public class PixivProvider : IProvider
     {

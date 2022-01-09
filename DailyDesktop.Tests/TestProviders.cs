@@ -2,15 +2,15 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using DailyDesktop.Core;
-using DailyDesktop.Core.Providers.Bing;
-using DailyDesktop.Core.Providers.CalvinAndHobbes;
-using DailyDesktop.Core.Providers.DeviantArt;
-using DailyDesktop.Core.Providers.FalseKnees;
-using DailyDesktop.Core.Providers.MTG;
-using DailyDesktop.Core.Providers.Pixiv;
-using DailyDesktop.Core.Providers.RedditEarthPorn;
-using DailyDesktop.Core.Providers.Unsplash;
-using DailyDesktop.Core.Providers.WikimediaCommons;
+using DailyDesktop.Providers.Bing;
+using DailyDesktop.Providers.CalvinAndHobbes;
+using DailyDesktop.Providers.DeviantArt;
+using DailyDesktop.Providers.FalseKnees;
+using DailyDesktop.Providers.MTG;
+using DailyDesktop.Providers.Pixiv;
+using DailyDesktop.Providers.RedditEarthPorn;
+using DailyDesktop.Providers.Unsplash;
+using DailyDesktop.Providers.WikimediaCommons;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DailyDesktop.Tests
