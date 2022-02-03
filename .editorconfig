@@ -12,7 +12,7 @@ file_header_template = Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed und
 indent_size = 4
 insert_final_newline = true
 charset = utf-8-bom
-[/ThirdParty/*.{cs,csx,vb,vbx}]
+[*/ThirdParty/*.{cs,csx,vb,vbx}]
 file_header_template = unset
 ###############################
 # .NET Coding Conventions     #
