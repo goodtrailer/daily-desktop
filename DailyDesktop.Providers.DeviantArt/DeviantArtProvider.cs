@@ -34,8 +34,7 @@ namespace DailyDesktop.Providers.DeviantArt
                 dailyDeviationHtml = client.DownloadString(SourceUri);
             }
 
-            Match imagePageUriMatch = Regex.Match(dailyDeviationHtml, IMAGE_PAGE_URI_PATTERN);
-            string imagePageUri = imagePageUriMatch.Value;
+            string imagePageUri = Regex.Match(dailyDeviationHtml, IMAGE_PAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imagePageUri))
                 throw new ProviderException("Didn't find an image page URI.");
 
@@ -46,29 +45,19 @@ namespace DailyDesktop.Providers.DeviantArt
                 imagePageHtml = client.DownloadString(imagePageUri);
             }
 
-            Match imageUriMatch = Regex.Match(imagePageHtml, IMAGE_URI_PATTERN);
-            string imageUri = imageUriMatch.Value;
+            string imageUri = Regex.Match(imagePageHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            Match creditMatch = Regex.Match(imagePageHtml, CREDIT_PATTERN);
-            string credit = creditMatch.Value ?? null;
-
-            Match authorMatch = Regex.Match(credit, AUTHOR_PATTERN);
-            string author = authorMatch.Value;
-
+            string credit = Regex.Match(imagePageHtml, CREDIT_PATTERN).Value ?? null;
+            string author = Regex.Match(credit, AUTHOR_PATTERN).Value;
             string authorUri = "https://www.deviantart.com/" + WebUtility.UrlEncode(author);
-
-            Match titleMatch = Regex.Match(credit, TITLE_PATTERN);
-            string title = titleMatch.Value;
-
-            Match descriptionMatch = Regex.Match(imagePageHtml, DESCRIPTION_PATTERN);
-            string description = WebUtility.HtmlDecode(descriptionMatch.Value);
-            description = Regex.Replace(description, "<([^<>]*?)>", "");
-            if (string.IsNullOrWhiteSpace(descriptionMatch.Value))
+            string title = Regex.Match(credit, TITLE_PATTERN).Value;
+            string description = Regex.Replace(WebUtility.HtmlDecode(Regex.Match(imagePageHtml, DESCRIPTION_PATTERN).Value), "<([^<>]*?)>", "");
+            if (string.IsNullOrWhiteSpace(description))
                 description = null;
 
-            WallpaperInfo wallpaper = new WallpaperInfo
+            return new WallpaperInfo
             {
                 ImageUri = imageUri,
                 Date = DateTime.Now,
@@ -78,8 +67,6 @@ namespace DailyDesktop.Providers.DeviantArt
                 TitleUri = imagePageUri,
                 Description = description,
             };
-
-            return wallpaper;
         }
     }
 }

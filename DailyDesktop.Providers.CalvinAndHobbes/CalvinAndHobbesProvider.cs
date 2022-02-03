@@ -17,6 +17,7 @@ namespace DailyDesktop.Providers.CalvinAndHobbes
         private const string TITLE = "Comic strip";
         private const string TITLE_RELATIVE_URI_PATTERN = "(?<=/calvinandhobbes)[/0-9]+?(?=\")";
         private const string DESCRIPTION = null;
+
         public string DisplayName => "Calvin and Hobbes";
         public string Description => "Fetches today's Calvin and Hobbes comic, a daily American comic strip created by cartoonist Bill Watterson from 1985 to 1995.";
         public string SourceUri => "https://www.gocomics.com/calvinandhobbes";
@@ -29,14 +30,11 @@ namespace DailyDesktop.Providers.CalvinAndHobbes
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
                 pageHtml = client.DownloadString(SourceUri);
             }
-            Match imageUriMatch = Regex.Match(pageHtml, IMAGE_URI_PATTERN);
-            string imageUri = imageUriMatch.Value;
 
-            Match titleRelativeUriMatch = Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN);
-            string titleRelativeUri = titleRelativeUriMatch.Value;
-            string titleUri = SourceUri + titleRelativeUri;
+            string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
+            string titleUri = SourceUri + Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value;
 
-            WallpaperInfo wallpaper = new WallpaperInfo
+            return new WallpaperInfo
             {
                 ImageUri = imageUri,
                 Date = DateTime.Now,
@@ -46,8 +44,6 @@ namespace DailyDesktop.Providers.CalvinAndHobbes
                 TitleUri = titleUri,
                 Description = DESCRIPTION,
             };
-
-            return wallpaper;
         }
     }
 }

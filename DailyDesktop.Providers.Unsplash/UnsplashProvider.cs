@@ -11,7 +11,6 @@ namespace DailyDesktop.Providers.Unsplash
 {
     public class UnsplashProvider : IProvider
     {
-        private const string TRUE_SOURCE_URI = "https://unsplash.com/";
         private const string IMAGE_URI_PATTERN = "(?<=<source srcSet=\")(.*?)(?=\\?)";
         private const string TITLE_PATTERN = "(?<=(itemProp=\"contentUrl\"(.*?)title=\"))(.*?)(?=(\"))";
         private const string TITLE_RELATIVE_URI_PATTERN = "(?<=(itemProp=\"contentUrl\"(.*?)href=\"/))(.*?)(?=(\"))";
@@ -35,25 +34,17 @@ namespace DailyDesktop.Providers.Unsplash
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
-                homeHtml = client.DownloadString(TRUE_SOURCE_URI);
+                homeHtml = client.DownloadString("https://unsplash.com/");
             }
 
-            Match imageUriMatch = Regex.Match(homeHtml, IMAGE_URI_PATTERN);
-            string imageUri = imageUriMatch.Value;
+            string imageUri = Regex.Match(homeHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            Match titleMatch = Regex.Match(homeHtml, TITLE_PATTERN);
-            string title = titleMatch.Value;
-
-            Match titleRelativeUriMatch = Regex.Match(homeHtml, TITLE_RELATIVE_URI_PATTERN);
-            string titleUri = TRUE_SOURCE_URI + titleRelativeUriMatch.Value;
-
-            Match authorMatch = Regex.Match(homeHtml, AUTHOR_PATTERN);
-            string author = authorMatch.Value;
-
-            Match authorRelativeUriMatch = Regex.Match(homeHtml, AUTHOR_RELATIVE_URI_PATTERN);
-            string authorUri = TRUE_SOURCE_URI + authorRelativeUriMatch.Value;
+            string title = Regex.Match(homeHtml, TITLE_PATTERN).Value;
+            string titleUri = "https://unsplash.com/" + Regex.Match(homeHtml, TITLE_RELATIVE_URI_PATTERN).Value;
+            string author = Regex.Match(homeHtml, AUTHOR_PATTERN).Value;
+            string authorUri = "https://unsplash.com/" + Regex.Match(homeHtml, AUTHOR_RELATIVE_URI_PATTERN).Value;
 
             string pageHtml = null;
             using (WebClient client = new WebClient())
@@ -62,22 +53,15 @@ namespace DailyDesktop.Providers.Unsplash
                 pageHtml = client.DownloadString(titleUri);
             }
 
-            Match makeMatch = Regex.Match(pageHtml, MAKE_PATTERN);
-            Match modelMatch = Regex.Match(pageHtml, MODEL_MATCH);
-            Match focalLengthMatch = Regex.Match(pageHtml, FOCAL_LENGTH_PATTERN);
-            Match apertureMatch = Regex.Match(pageHtml, APERTURE_PATTERN);
-            Match shutterSpeedMatch = Regex.Match(pageHtml, SHUTTER_SPEED_PATTERN);
-            Match isoMatch = Regex.Match(pageHtml, ISO_PATTERN);
-
             string description =
-                $"Camera Make: {makeMatch.Value}\r\n" +
-                $"Camera Model: {modelMatch.Value}\r\n" +
-                $"Focal Length: {focalLengthMatch.Value}mm\r\n" +
-                $"Aperture: ƒ/{apertureMatch.Value}\r\n" +
-                $"Shutter Speed: {shutterSpeedMatch.Value}s\r\n" +
-                $"ISO: {isoMatch.Value}";
+                $"Camera Make: {Regex.Match(pageHtml, MAKE_PATTERN).Value}\r\n" +
+                $"Camera Model: {Regex.Match(pageHtml, MODEL_MATCH).Value}\r\n" +
+                $"Focal Length: {Regex.Match(pageHtml, FOCAL_LENGTH_PATTERN).Value}mm\r\n" +
+                $"Aperture: ƒ/{Regex.Match(pageHtml, APERTURE_PATTERN).Value}\r\n" +
+                $"Shutter Speed: {Regex.Match(pageHtml, SHUTTER_SPEED_PATTERN).Value}s\r\n" +
+                $"ISO: {Regex.Match(pageHtml, ISO_PATTERN).Value}";
 
-            WallpaperInfo wallpaper = new WallpaperInfo
+            return new WallpaperInfo
             {
                 ImageUri = imageUri,
                 Date = DateTime.Now,
@@ -87,8 +71,6 @@ namespace DailyDesktop.Providers.Unsplash
                 TitleUri = titleUri,
                 Description = description,
             };
-
-            return wallpaper;
         }
     }
 }

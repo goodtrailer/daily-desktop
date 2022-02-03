@@ -30,16 +30,12 @@ namespace DailyDesktop.Providers.MTG
                 pageHtml = client.DownloadString(SourceUri);
             }
 
-            Match imageUriMatch = Regex.Match(pageHtml, IMAGE_URI_PATTERN);
-            string imageUri = imageUriMatch.Value;
+            string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            Match authorMatch = Regex.Match(pageHtml, AUTHOR_PATTERN);
-            string author = authorMatch.Value.Trim();
-
-            Match titleMatch = Regex.Match(pageHtml, TITLE_PATTERN);
-            string title = titleMatch.Value.Trim();
+            string author = Regex.Match(pageHtml, AUTHOR_PATTERN).Value.Trim();
+            string title = Regex.Match(pageHtml, TITLE_PATTERN).Value.Trim();
 
             string cardText = null;
             using (WebClient client = new WebClient())
@@ -52,14 +48,13 @@ namespace DailyDesktop.Providers.MTG
                 }
                 catch (WebException e)
                 {
-                    string response = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
-                    JsonDocument json = JsonDocument.Parse(response);
-                    if (json.RootElement.GetProperty("status").GetInt32() == 404)
-                        cardText = json.RootElement.GetProperty("details").GetString();
+                    JsonDocument response = JsonDocument.Parse(new StreamReader(e.Response.GetResponseStream()).ReadToEnd());
+                    if (response.RootElement.GetProperty("status").GetInt32() == 404)
+                        cardText = response.RootElement.GetProperty("details").GetString();
                 }
             }
 
-            WallpaperInfo wallpaper = new WallpaperInfo
+            return new WallpaperInfo
             {
                 ImageUri = imageUri,
                 Date = DateTime.Now,
@@ -69,8 +64,6 @@ namespace DailyDesktop.Providers.MTG
                 AuthorUri = null,
                 Description = cardText,
             };
-
-            return wallpaper;
         }
     }
 }

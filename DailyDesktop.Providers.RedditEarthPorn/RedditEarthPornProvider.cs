@@ -30,22 +30,16 @@ namespace DailyDesktop.Providers.RedditEarthPorn
                 subredditHtml = client.DownloadString(SourceUri);
             }
 
-            Match imageUriMatch = Regex.Match(subredditHtml, IMAGE_URI_PATTERN);
-            string imageUri = imageUriMatch.Value;
+            string imageUri = Regex.Match(subredditHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            Match authorMatch = Regex.Match(subredditHtml, AUTHOR_PATTERN);
-            string author = $"u/{authorMatch.Value}";
-            string authorUri = $"https://www.reddit.com/" + author;
+            string author = "u/" + Regex.Match(subredditHtml, AUTHOR_PATTERN).Value;
+            string authorUri = "https://www.reddit.com/" + author;
+            string titleUri = Regex.Match(subredditHtml, TITLE_URI_PATTERN).Value;
+            string description = Regex.Match(subredditHtml, DESCRIPTION_PATTERN).Value;
 
-            Match titleUriMatch = Regex.Match(subredditHtml, TITLE_URI_PATTERN);
-            string titleUri = titleUriMatch.Value;
-
-            Match descriptionMatch = Regex.Match(subredditHtml, DESCRIPTION_PATTERN);
-            string description = descriptionMatch.Value;
-
-            WallpaperInfo wallpaper = new WallpaperInfo
+            return new WallpaperInfo
             {
                 ImageUri = imageUri,
                 Date = DateTime.Now,
@@ -55,8 +49,6 @@ namespace DailyDesktop.Providers.RedditEarthPorn
                 TitleUri = titleUri,
                 Description = description,
             };
-
-            return wallpaper;
         }
     }
 }

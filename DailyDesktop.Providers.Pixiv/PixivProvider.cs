@@ -36,14 +36,14 @@ namespace DailyDesktop.Providers.Pixiv
                 client.Headers.Add("Referer", "https://www.pixiv.net");
                 rankingHtml = client.DownloadString(SourceUri);
             }
-            Match imageIdMatch = Regex.Match(rankingHtml, IMAGE_ID_PATTERN);
-            string imageId = imageIdMatch.Value;
+
+            string imageId = Regex.Match(rankingHtml, IMAGE_ID_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageId))
                 throw new ProviderException("Didn't find an image ID.");
 
             // Search for wallpaper info on image page
 
-            string imagePageUri = $"https://www.pixiv.net/en/artworks/{imageId}";
+            string imagePageUri = "https://www.pixiv.net/en/artworks/" + imageId;
             string imagePageHtml = null;
             using (WebClient client = new WebClient())
             {
@@ -51,22 +51,15 @@ namespace DailyDesktop.Providers.Pixiv
                 client.Headers.Add("Referer", "https://www.pixiv.net");
                 imagePageHtml = client.DownloadString(imagePageUri);
             }
-            Match imageUriMatch = Regex.Match(imagePageHtml, IMAGE_URI_PATTERN);
-            string imageUri = imageUriMatch.Value;
+
+            string imageUri = Regex.Match(imagePageHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            Match titleMatch = Regex.Match(imagePageHtml, TITLE_PATTERN);
-            string title = titleMatch.Value;
-
-            Match authorMatch = Regex.Match(imagePageHtml, AUTHOR_PATTERN);
-            string author = authorMatch.Value;
-
-            Match authorIdMatch = Regex.Match(imagePageHtml, AUTHOR_ID_PATTERN);
-            string authorUri = $"https://www.pixiv.net/users/{authorIdMatch.Value}";
-
-            Match descriptionMatch = Regex.Match(imagePageHtml, DESCRIPTION_PATTERN);
-            string description = WebUtility.HtmlDecode(descriptionMatch.Value);
+            string title = Regex.Match(imagePageHtml, TITLE_PATTERN).Value;
+            string author = Regex.Match(imagePageHtml, AUTHOR_PATTERN).Value;
+            string authorUri = "https://www.pixiv.net/users/" + Regex.Match(imagePageHtml, AUTHOR_ID_PATTERN).Value;
+            string description = WebUtility.HtmlDecode(Regex.Match(imagePageHtml, DESCRIPTION_PATTERN).Value);
 
             // Download illustration from image URI and return its local path,
             // which is necessary because pixiv blocks requests if the Referer
@@ -80,7 +73,7 @@ namespace DailyDesktop.Providers.Pixiv
                 client.DownloadFile(imageUri, imageLocalUri);
             }
 
-            WallpaperInfo wallpaper = new WallpaperInfo
+            return new WallpaperInfo
             {
                 ImageUri = imageLocalUri,
                 Date = DateTime.Now,
@@ -90,8 +83,6 @@ namespace DailyDesktop.Providers.Pixiv
                 AuthorUri = authorUri,
                 Description = description,
             };
-
-            return wallpaper;
         }
     }
 }

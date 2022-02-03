@@ -12,12 +12,6 @@ namespace DailyDesktop.Providers.WikimediaCommons
 {
     public class WikimediaCommonsProvider : IProvider
     {
-        private const string BASE_URI = "https://commons.wikimedia.org/";
-        private const string BASE_TITLE_URI = BASE_URI + "wiki/";
-        private const string BASE_TITLE = "File:";
-        private const string BASE_API_URI = "https://magnus-toolserver.toolforge.org/commonsapi.php?image=";
-        private const string POTD_FEED_URI = "https://commons.wikimedia.org/w/api.php?action=featuredfeed&feed=potd&feedformat=atom";
-
         // stage 1: potd feed
         private const string TITLE_RELATIVE_URI_PATTERN = "File:.*?(?=\")";
         private const string DESCRIPTION_PATTERN = "(?<=display:inline;\">).*?(?=<\\/div>)";
@@ -39,31 +33,22 @@ namespace DailyDesktop.Providers.WikimediaCommons
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            // stage 1 ---
-
             string feedXml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
-                feedXml = HttpUtility.HtmlDecode(client.DownloadString(POTD_FEED_URI));
+                feedXml = HttpUtility.HtmlDecode(client.DownloadString("https://commons.wikimedia.org/w/api.php?action=featuredfeed&feed=potd&feedformat=atom"));
             }
 
-            string titleRelativeUri = Regex.Matches(feedXml, TITLE_RELATIVE_URI_PATTERN)[^1].Value;
-            string title = HttpUtility.HtmlDecode(titleRelativeUri);
-            string titleUri = BASE_TITLE_URI + titleRelativeUri;
-            
-            string description = Regex.Matches(feedXml, DESCRIPTION_PATTERN)[^1].Value;
-            description = Regex.Replace(description, "<[^>]*>", "");
-            
-            // stage 2 ---
+            string title = HttpUtility.UrlDecode(Regex.Matches(feedXml, TITLE_RELATIVE_URI_PATTERN)[^1].Value);
+            string titleUri = "https://commons.wikimedia.org/wiki/" + title;
+            string description = Regex.Replace(Regex.Matches(feedXml, DESCRIPTION_PATTERN)[^1].Value, "<[^>]*>", "");
 
             string requestXml = null;
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
-
-                string filename = titleRelativeUri.Substring(BASE_TITLE.Length);
-                requestXml = HttpUtility.HtmlDecode(client.DownloadString(BASE_API_URI + filename));
+                requestXml = HttpUtility.HtmlDecode(client.DownloadString("https://magnus-toolserver.toolforge.org/commonsapi.php?image=" + title.Substring("File:".Length)));
             }
 
             string imageUri = Regex.Match(requestXml, IMAGE_URI_PATTERN).Value;
@@ -71,10 +56,8 @@ namespace DailyDesktop.Providers.WikimediaCommons
                 throw new ProviderException("Didn't find an image URI.");
 
             string authorElement = Regex.Match(requestXml, AUTHOR_ELEMENT_PATTERN).Value;
-
             string author = Regex.Match(authorElement, AUTHOR_PATTERN).Value;
             string authorUri = Regex.Match(authorElement, AUTHOR_URI_PATTERN).Value;
-
             if (String.IsNullOrWhiteSpace(author))
                 author = Regex.Replace(authorElement, "<[^>]*>", "");
 
