@@ -23,12 +23,11 @@ namespace DailyDesktop.Providers.MTG
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            string pageHtml = null;
-            using (WebClient client = new WebClient())
-            {
-                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+            // Scrape info from wallpapers page
+
+            string pageHtml;
+            using (WebClient client = this.CreateWebClient())
                 pageHtml = client.DownloadString(SourceUri);
-            }
 
             string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
@@ -37,21 +36,19 @@ namespace DailyDesktop.Providers.MTG
             string author = Regex.Match(pageHtml, AUTHOR_PATTERN).Value.Trim();
             string title = Regex.Match(pageHtml, TITLE_PATTERN).Value.Trim();
 
+            // Get card text through Scryfall API
+
             string cardText = null;
-            using (WebClient client = new WebClient())
+            try
             {
-                string request = $"https://api.scryfall.com/cards/named?format=text&fuzzy={title}";
-                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
-                try
-                {
-                    cardText = client.DownloadString(request);
-                }
-                catch (WebException e)
-                {
-                    JsonDocument response = JsonDocument.Parse(new StreamReader(e.Response.GetResponseStream()).ReadToEnd());
-                    if (response.RootElement.GetProperty("status").GetInt32() == 404)
-                        cardText = response.RootElement.GetProperty("details").GetString();
-                }
+                using (WebClient client = this.CreateWebClient())
+                    cardText = client.DownloadString("https://api.scryfall.com/cards/named?format=text&fuzzy=" + title);
+            }
+            catch (WebException e)
+            {
+                JsonDocument response = JsonDocument.Parse(new StreamReader(e.Response.GetResponseStream()).ReadToEnd());
+                if (response.RootElement.GetProperty("status").GetInt32() == 404)
+                    cardText = response.RootElement.GetProperty("details").GetString();
             }
 
             return new WallpaperInfo

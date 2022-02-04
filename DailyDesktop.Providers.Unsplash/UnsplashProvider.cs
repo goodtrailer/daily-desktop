@@ -30,12 +30,11 @@ namespace DailyDesktop.Providers.Unsplash
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            string homeHtml = null;
-            using (WebClient client = new WebClient())
-            {
-                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+            // Scrape info from home page
+
+            string homeHtml;
+            using (WebClient client = this.CreateWebClient())
                 homeHtml = client.DownloadString("https://unsplash.com/");
-            }
 
             string imageUri = Regex.Match(homeHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
@@ -46,12 +45,11 @@ namespace DailyDesktop.Providers.Unsplash
             string author = Regex.Match(homeHtml, AUTHOR_PATTERN).Value;
             string authorUri = "https://unsplash.com/" + Regex.Match(homeHtml, AUTHOR_RELATIVE_URI_PATTERN).Value;
 
-            string pageHtml = null;
-            using (WebClient client = new WebClient())
-            {
-                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+            // Scrape camera specs from image page
+
+            string pageHtml;
+            using (WebClient client = this.CreateWebClient())
                 pageHtml = client.DownloadString(titleUri);
-            }
 
             string description =
                 $"Camera Make: {Regex.Match(pageHtml, MAKE_PATTERN).Value}\r\n" +

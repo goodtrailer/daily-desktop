@@ -27,23 +27,21 @@ namespace DailyDesktop.Providers.DeviantArt
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            string dailyDeviationHtml = null;
-            using (WebClient client = new WebClient())
-            {
-                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+            // Search for image page URI from daily deviation page
+
+            string dailyDeviationHtml;
+            using (WebClient client = this.CreateWebClient())
                 dailyDeviationHtml = client.DownloadString(SourceUri);
-            }
 
             string imagePageUri = Regex.Match(dailyDeviationHtml, IMAGE_PAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imagePageUri))
                 throw new ProviderException("Didn't find an image page URI.");
 
-            string imagePageHtml = null;
-            using (WebClient client = new WebClient())
-            {
-                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+            // Scrape info from image page
+
+            string imagePageHtml;
+            using (WebClient client = this.CreateWebClient())
                 imagePageHtml = client.DownloadString(imagePageUri);
-            }
 
             string imageUri = Regex.Match(imagePageHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))

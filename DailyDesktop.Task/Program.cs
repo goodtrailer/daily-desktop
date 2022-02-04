@@ -76,11 +76,8 @@ namespace DailyDesktop.Task
                 File.WriteAllText(jsonPath, jsonString);
             }
 
-            using (WebClient client = new WebClient())
-            {
-                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+            using (WebClient client = provider.CreateWebClient())
                 client.DownloadFile(info.ImageUri, imagePath);
-            }
 
             return imagePath;
         }

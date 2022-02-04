@@ -23,12 +23,9 @@ namespace DailyDesktop.Providers.Bing
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            string pageHtml = null;
-            using (WebClient client = new WebClient())
-            {
-                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+            string pageHtml;
+            using (WebClient client = this.CreateWebClient())
                 pageHtml = client.DownloadString(SourceUri);
-            }
 
             string imageRelativeUri = Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageRelativeUri))

@@ -24,24 +24,23 @@ namespace DailyDesktop.Providers.FalseKnees
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            string pageHtml = null;
-            using (WebClient client = new WebClient())
-            {
-                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+            // Scrape info from front page
+
+            string pageHtml;
+            using (WebClient client = this.CreateWebClient())
                 pageHtml = client.DownloadString(SourceUri);
-            }
 
             string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
             string titleUri = SourceUri + "/" + Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value;
             string description = Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value;
 
-            using (WebClient client = new WebClient())
-            {
-                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
-                pageHtml = client.DownloadString("https://falseknees.com/archive.html");
-            }
+            // Scrape title from archive page
 
-            string title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
+            string archiveHtml;
+            using (WebClient client = this.CreateWebClient())
+                archiveHtml = client.DownloadString("https://falseknees.com/archive.html");
+
+            string title = Regex.Match(archiveHtml, TITLE_PATTERN).Value;
 
             return new WallpaperInfo
             {

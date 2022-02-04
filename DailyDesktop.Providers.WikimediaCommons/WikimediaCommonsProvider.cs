@@ -33,23 +33,21 @@ namespace DailyDesktop.Providers.WikimediaCommons
 
         public WallpaperInfo GetWallpaperInfo()
         {
-            string feedXml = null;
-            using (WebClient client = new WebClient())
-            {
-                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+            // Scrape info from POTD RSS feed
+
+            string feedXml;
+            using (WebClient client = this.CreateWebClient())
                 feedXml = HttpUtility.HtmlDecode(client.DownloadString("https://commons.wikimedia.org/w/api.php?action=featuredfeed&feed=potd&feedformat=atom"));
-            }
 
             string title = HttpUtility.UrlDecode(Regex.Matches(feedXml, TITLE_RELATIVE_URI_PATTERN)[^1].Value);
             string titleUri = "https://commons.wikimedia.org/wiki/" + title;
             string description = Regex.Replace(Regex.Matches(feedXml, DESCRIPTION_PATTERN)[^1].Value, "<[^>]*>", "");
 
-            string requestXml = null;
-            using (WebClient client = new WebClient())
-            {
-                client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+            // Scrape info from API request
+
+            string requestXml;
+            using (WebClient client = this.CreateWebClient())
                 requestXml = HttpUtility.HtmlDecode(client.DownloadString("https://magnus-toolserver.toolforge.org/commonsapi.php?image=" + title.Substring("File:".Length)));
-            }
 
             string imageUri = Regex.Match(requestXml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
@@ -58,7 +56,7 @@ namespace DailyDesktop.Providers.WikimediaCommons
             string authorElement = Regex.Match(requestXml, AUTHOR_ELEMENT_PATTERN).Value;
             string author = Regex.Match(authorElement, AUTHOR_PATTERN).Value;
             string authorUri = Regex.Match(authorElement, AUTHOR_URI_PATTERN).Value;
-            if (String.IsNullOrWhiteSpace(author))
+            if (string.IsNullOrWhiteSpace(author))
                 author = Regex.Replace(authorElement, "<[^>]*>", "");
 
             return new WallpaperInfo
