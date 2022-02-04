@@ -2,7 +2,6 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
-using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using DailyDesktop.Core;
