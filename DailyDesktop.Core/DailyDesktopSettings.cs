@@ -30,6 +30,11 @@ namespace DailyDesktop.Core
         public DateTime UpdateTime { get; set; }
 
         /// <summary>
+        /// Gets or sets whether or not to apply resize to wallpaper images to screen resolution, if larger.
+        /// </summary>
+        public bool DoResize { get; set; }
+
+        /// <summary>
         /// Gets or sets whether or not to apply blurred-fit to wallpaper images.
         /// </summary>
         public bool DoBlurredFit { get; set; }
@@ -50,6 +55,7 @@ namespace DailyDesktop.Core
             DllPath = string.Empty,
             Enabled = true,
             UpdateTime = DateTime.Parse("12:00 AM"),
+            DoResize = true,
             DoBlurredFit = true,
             BlurStrength = 40,
         };

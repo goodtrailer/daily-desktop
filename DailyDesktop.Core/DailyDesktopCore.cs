@@ -119,6 +119,21 @@ namespace DailyDesktop.Core
         }
 
         /// <summary>
+        /// Gets or sets whether or not to apply resize to wallpaper images to screen resolution, if larger.
+        /// </summary>
+        public bool DoResize
+        {
+            get => settings.DoResize;
+            set
+            {
+                settings.DoResize = value;
+                SaveSettings();
+                if (AutoCreateTask)
+                    CreateTask();
+            }
+        }
+
+        /// <summary>
         /// Gets or sets whether or not to apply blurred-fit to wallpaper images.
         /// </summary>
         public bool DoBlurredFit
@@ -256,6 +271,8 @@ namespace DailyDesktop.Core
             }
 
             string args = $"\"{settings.DllPath}\" --json \"{WallpaperInfoJsonPath}\"";
+            if (settings.DoResize)
+                args += " --resize";
             if (settings.DoBlurredFit)
                 args += $" --blur {settings.BlurStrength}";
             ExecAction execAction = new ExecAction

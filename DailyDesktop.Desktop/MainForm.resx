@@ -57,6 +57,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="mainToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <data name="optionsBlurredFitCheckBox.ToolTip" xml:space="preserve">
     <value>Sizes wallpaper to fit within the display's dimensions,
 but the leftover background is filled with an enlarged
@@ -68,8 +71,8 @@ Turning on this option may cause wallpapers to take a bit
 longer to update, especially for higher resolution images.
 </value>
   </data>
-  <assembly alias="System.Drawing.Common" name="System.Drawing.Common, Version=4.0.2.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
-  <data name="bannerPicture.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="bannerPicture.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAACL4AAAQACAYAAADlOALOAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         vAAADrwBlbxySQAA/7JJREFUeF7s/QecLHte1/+viChJwAgsSDT8MJAVRFwkixiQKDkjSSQISM7gckBJ
@@ -2842,7 +2845,10 @@ longer to update, especially for higher resolution images.
         5/8H24gfvKsP2DsAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <metadata name="stateBackgroundWorker.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>158, 17</value>
+  </metadata>
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAA0AAAAAAAEAIACMJQAA1gAAAICAAAABACAAKAgBAGImAACAgAAAAQAIAChMAACKLgEAQEAAAAEA
         IAAoQgAAsnoBAEBAAAABAAgAKBYAANq8AQAwMAAAAQAgAKglAAAC0wEAMDAAAAEACACoDgAAqvgBACAg

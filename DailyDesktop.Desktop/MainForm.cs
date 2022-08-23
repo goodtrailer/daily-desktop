@@ -67,6 +67,8 @@ namespace DailyDesktop.Desktop
             optionsUpdateTimePicker.Value = core.UpdateTime;
             optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked;
 
+            optionsResizeCheckBox.Checked = core.DoResize;
+
             optionsBlurredFitCheckBox.Checked = core.DoBlurredFit;
             optionsBlurStrengthTrackBar.Value = core.BlurStrength;
             optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked;
@@ -135,25 +137,25 @@ namespace DailyDesktop.Desktop
 
         private void providerSourceLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => openUri(providerSourceLinkLabel.Text);
 
-        private void updateTimePicker_ValueChanged(object sender, EventArgs e)
+        private void optionsUpdateTimePicker_ValueChanged(object sender, EventArgs e)
         {
             core.UpdateTime = optionsUpdateTimePicker.Value;
         }
 
-        private void enabledCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void optionsEnabledCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             core.Enabled = optionsEnabledCheckBox.Checked;
             optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked;
         }
 
-        private void updateWallpaperButton_Click(object sender, EventArgs e)
+        private void optionsUpdateWallpaperButton_Click(object sender, EventArgs e)
         {
             core.UpdateWallpaper();
         }
 
-        private void providersDirectoryButton_Click(object sender, EventArgs e) => openUri(core.ProvidersDirectory);
+        private void optionsProvidersDirectoryButton_Click(object sender, EventArgs e) => openUri(core.ProvidersDirectory);
 
-        private void blurStrengthTrackBar_Scroll(object sender, EventArgs e)
+        private void optionsBlurStrengthTrackBar_Scroll(object sender, EventArgs e)
         {
             core.BlurStrength = optionsBlurStrengthTrackBar.Value;
             updateBlurStrengthToolTip();
@@ -165,10 +167,15 @@ namespace DailyDesktop.Desktop
             mainToolTip.SetToolTip(optionsBlurStrengthTrackBar, strength);
         }
 
-        private void blurredFitCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void optionsBlurredFitCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             core.DoBlurredFit = optionsBlurredFitCheckBox.Checked;
             optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked;
+        }
+
+        private void optionsResizeCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            core.DoResize = optionsResizeCheckBox.Checked;
         }
 
         private void wallpaperTitleLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => openUri(wallpaper.TitleUri);
@@ -194,20 +201,15 @@ namespace DailyDesktop.Desktop
                 wallpaperAuthorLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.AuthorUri, UriKind.Absolute, out temp);
                 wallpaperAuthorLinkLabel.TabStop = wallpaperAuthorLinkLabel.Links[0].Enabled;
             }
-            catch (Exception e)
+            catch (Exception e) when (e is JsonException or FileNotFoundException)
             {
-                if (e is JsonException || e is FileNotFoundException)
-                {
-                    Console.WriteLine(e.StackTrace);
-                    wallpaperUpdatedLabel.Text = FETCHED_TEXT + "null";
-                    wallpaperTitleLinkLabel.Text = "null";
-                    wallpaperAuthorLinkLabel.Text = "null";
-                    wallpaperDescriptionTextBox.Text = NULL_DESCRIPTION;
-                    wallpaperTitleLinkLabel.Links[0].Enabled = false;
-                    wallpaperAuthorLinkLabel.Links[0].Enabled = false;
-                }
-                else
-                    throw e;
+                Console.WriteLine(e.StackTrace);
+                wallpaperUpdatedLabel.Text = FETCHED_TEXT + "null";
+                wallpaperTitleLinkLabel.Text = "null";
+                wallpaperAuthorLinkLabel.Text = "null";
+                wallpaperDescriptionTextBox.Text = NULL_DESCRIPTION;
+                wallpaperTitleLinkLabel.Links[0].Enabled = false;
+                wallpaperAuthorLinkLabel.Links[0].Enabled = false;
             }
         }
 
