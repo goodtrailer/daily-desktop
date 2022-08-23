@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
 // See the LICENSE file in the repository root for full licence text.
 
+using System.Threading.Tasks;
 using DailyDesktop.Core;
 using DailyDesktop.Providers.Bing;
 using DailyDesktop.Providers.CalvinAndHobbes;
@@ -21,10 +22,10 @@ namespace DailyDesktop.Tests
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        public void TestBing()
+        public async Task TestBing()
         {
             var provider = new BingProvider();
-            WallpaperInfo wallpaper = provider.GetWallpaperInfo();
+            WallpaperInfo wallpaper = await provider.GetWallpaperInfo();
 
             TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
             TestContext.WriteLine("Author: " + wallpaper.Author);
@@ -40,10 +41,10 @@ namespace DailyDesktop.Tests
         }
 
         [TestMethod]
-        public void TestCalvinAndHobbes()
+        public async Task TestCalvinAndHobbes()
         {
             var provider = new CalvinAndHobbesProvider();
-            WallpaperInfo wallpaper = provider.GetWallpaperInfo();
+            WallpaperInfo wallpaper = await provider.GetWallpaperInfo();
 
             TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
             TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
@@ -53,10 +54,10 @@ namespace DailyDesktop.Tests
         }
 
         [TestMethod]
-        public void TestDeviantArt()
+        public async Task TestDeviantArt()
         {
             var provider = new DeviantArtProvider();
-            WallpaperInfo wallpaper = provider.GetWallpaperInfo();
+            WallpaperInfo wallpaper = await provider.GetWallpaperInfo();
 
             TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
             TestContext.WriteLine("Author: " + wallpaper.Author);
@@ -74,10 +75,10 @@ namespace DailyDesktop.Tests
         }
 
         [TestMethod]
-        public void TestFalseKnees()
+        public async Task TestFalseKnees()
         {
             var provider = new FalseKneesProvider();
-            WallpaperInfo wallpaper = provider.GetWallpaperInfo();
+            WallpaperInfo wallpaper = await provider.GetWallpaperInfo();
 
             TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
             TestContext.WriteLine("Title: " + wallpaper.Title);
@@ -91,10 +92,10 @@ namespace DailyDesktop.Tests
         }
 
         [TestMethod]
-        public void TestMTG()
+        public async Task TestMTG()
         {
             var provider = new MTGProvider();
-            WallpaperInfo wallpaper = provider.GetWallpaperInfo();
+            WallpaperInfo wallpaper = await provider.GetWallpaperInfo();
 
             TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
             TestContext.WriteLine("Author: " + wallpaper.Author);
@@ -110,10 +111,10 @@ namespace DailyDesktop.Tests
         }
 
         [TestMethod]
-        public void TestPixiv()
+        public async Task TestPixiv()
         {
             var provider = new PixivProvider();
-            WallpaperInfo wallpaper = provider.GetWallpaperInfo();
+            WallpaperInfo wallpaper = await provider.GetWallpaperInfo();
 
             TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
             TestContext.WriteLine("Author: " + wallpaper.Author);
@@ -131,10 +132,10 @@ namespace DailyDesktop.Tests
         }
 
         [TestMethod]
-        public void TestRedditEarthPorn()
+        public async Task TestRedditEarthPorn()
         {
             var provider = new RedditEarthPornProvider();
-            WallpaperInfo wallpaper = provider.GetWallpaperInfo();
+            WallpaperInfo wallpaper = await provider.GetWallpaperInfo();
 
             TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
             TestContext.WriteLine("Author: " + wallpaper.Author);
@@ -150,10 +151,10 @@ namespace DailyDesktop.Tests
         }
 
         [TestMethod]
-        public void TestUnsplash()
+        public async Task TestUnsplash()
         {
             var provider = new UnsplashProvider();
-            WallpaperInfo wallpaper = provider.GetWallpaperInfo();
+            WallpaperInfo wallpaper = await provider.GetWallpaperInfo();
 
             TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
             TestContext.WriteLine("Author: " + wallpaper.Author);
@@ -171,10 +172,10 @@ namespace DailyDesktop.Tests
         }
 
         [TestMethod]
-        public void TestWikimediaCommons()
+        public async Task TestWikimediaCommons()
         {
             var provider = new WikimediaCommonsProvider();
-            WallpaperInfo wallpaper = provider.GetWallpaperInfo();
+            WallpaperInfo wallpaper = await provider.GetWallpaperInfo();
 
             TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
             TestContext.WriteLine("Author: " + wallpaper.Author);

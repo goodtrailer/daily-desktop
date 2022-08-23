@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using DailyDesktop.Core;
 using DailyDesktop.Core.Providers;
 
@@ -21,13 +22,13 @@ namespace DailyDesktop.Providers.MTG
         public string Description => "Grabs new weekly Magic: The Gathering wallpaper from the official Wizards of the Coast website and sets it as the desktop wallpaper.";
         public string SourceUri => "https://magic.wizards.com/en/articles/media/wallpapers";
 
-        public WallpaperInfo GetWallpaperInfo()
+        public async Task<WallpaperInfo> GetWallpaperInfo()
         {
             // Scrape info from wallpapers page
 
             string pageHtml;
-            using (WebClient client = this.CreateWebClient())
-                pageHtml = client.DownloadString(SourceUri);
+            using (var client = this.CreateHttpClient())
+                pageHtml = await client.GetStringAsync(SourceUri);
 
             string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
@@ -41,8 +42,8 @@ namespace DailyDesktop.Providers.MTG
             string cardText = null;
             try
             {
-                using (WebClient client = this.CreateWebClient())
-                    cardText = client.DownloadString("https://api.scryfall.com/cards/named?format=text&fuzzy=" + title);
+                using (var client = this.CreateHttpClient())
+                    cardText = await client.GetStringAsync("https://api.scryfall.com/cards/named?format=text&fuzzy=" + title);
             }
             catch (WebException e)
             {

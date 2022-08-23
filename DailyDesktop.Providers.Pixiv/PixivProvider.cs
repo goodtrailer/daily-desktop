@@ -3,7 +3,9 @@
 
 using System;
 using System.Net;
+using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using DailyDesktop.Core;
 using DailyDesktop.Core.Providers;
 
@@ -23,18 +25,18 @@ namespace DailyDesktop.Providers.Pixiv
             "Using blurred-fit mode is highly recommended due to the large variety of aspect ratios of illustrations found on pixiv.";
         public string SourceUri => "https://www.pixiv.net/ranking.php?content=illust";
 
-        public void ConfigureWebClient(WebClient client)
+        public void ConfigureHttpClient(HttpClient client)
         {
-            client.Headers.Add("Referer", "https://www.pixiv.net");
+            client.DefaultRequestHeaders.Referrer = new Uri("https://www.pixiv.net");
         }
 
-        public WallpaperInfo GetWallpaperInfo()
+        public async Task<WallpaperInfo> GetWallpaperInfo()
         {
             // Search for image ID of #1 illustration on daily rankings page
 
             string rankingHtml;
-            using (WebClient client = this.CreateWebClient())
-                rankingHtml = client.DownloadString(SourceUri);
+            using (var client = this.CreateHttpClient())
+                rankingHtml = await client.GetStringAsync(SourceUri);
 
             string imageId = Regex.Match(rankingHtml, IMAGE_ID_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageId))
@@ -45,8 +47,8 @@ namespace DailyDesktop.Providers.Pixiv
             // Search for wallpaper info on image page
 
             string imagePageHtml;
-            using (WebClient client = this.CreateWebClient())
-                imagePageHtml = client.DownloadString(imagePageUri);
+            using (var client = this.CreateHttpClient())
+                imagePageHtml = await client.GetStringAsync(imagePageUri);
 
             string imageUri = Regex.Match(imagePageHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))

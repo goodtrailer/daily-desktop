@@ -2,8 +2,8 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
-using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 using DailyDesktop.Core;
 using DailyDesktop.Core.Providers;
@@ -31,13 +31,13 @@ namespace DailyDesktop.Providers.WikimediaCommons
             "a collection of Featured picture candidates.";
         public string SourceUri => "https://commons.wikimedia.org/wiki/Commons:POTD";
 
-        public WallpaperInfo GetWallpaperInfo()
+        public async Task<WallpaperInfo> GetWallpaperInfo()
         {
             // Scrape info from POTD RSS feed
 
             string feedXml;
-            using (WebClient client = this.CreateWebClient())
-                feedXml = HttpUtility.HtmlDecode(client.DownloadString("https://commons.wikimedia.org/w/api.php?action=featuredfeed&feed=potd&feedformat=atom"));
+            using (var client = this.CreateHttpClient())
+                feedXml = HttpUtility.HtmlDecode(await client.GetStringAsync("https://commons.wikimedia.org/w/api.php?action=featuredfeed&feed=potd&feedformat=atom"));
 
             string title = HttpUtility.UrlDecode(Regex.Matches(feedXml, TITLE_RELATIVE_URI_PATTERN)[^1].Value);
             string titleUri = "https://commons.wikimedia.org/wiki/" + title;
@@ -46,8 +46,8 @@ namespace DailyDesktop.Providers.WikimediaCommons
             // Scrape info from API request
 
             string requestXml;
-            using (WebClient client = this.CreateWebClient())
-                requestXml = HttpUtility.HtmlDecode(client.DownloadString("https://magnus-toolserver.toolforge.org/commonsapi.php?image=" + title.Substring("File:".Length)));
+            using (var client = this.CreateHttpClient())
+                requestXml = HttpUtility.HtmlDecode(await client.GetStringAsync("https://magnus-toolserver.toolforge.org/commonsapi.php?image=" + title.Substring("File:".Length)));
 
             string imageUri = Regex.Match(requestXml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))

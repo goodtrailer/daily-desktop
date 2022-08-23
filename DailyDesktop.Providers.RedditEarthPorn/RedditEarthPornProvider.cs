@@ -2,8 +2,8 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
-using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using DailyDesktop.Core;
 using DailyDesktop.Core.Providers;
 
@@ -21,11 +21,11 @@ namespace DailyDesktop.Providers.RedditEarthPorn
         public string Description => "Looks at the top post in the last 24 hours in the well-known r/EarthPorn, reddit's premiere landscape photography subreddit.";
         public string SourceUri => "https://www.reddit.com/r/EarthPorn/top/?sort=top&t=day";
 
-        public WallpaperInfo GetWallpaperInfo()
+        public async Task<WallpaperInfo> GetWallpaperInfo()
         {
             string subredditHtml;
-            using (WebClient client = this.CreateWebClient())
-                subredditHtml = client.DownloadString(SourceUri);
+            using (var client = this.CreateHttpClient())
+                subredditHtml = await client.GetStringAsync(SourceUri);
 
             string imageUri = Regex.Match(subredditHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))

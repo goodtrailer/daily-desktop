@@ -2,8 +2,8 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
-using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using DailyDesktop.Core;
 using DailyDesktop.Core.Providers;
 
@@ -28,13 +28,13 @@ namespace DailyDesktop.Providers.Unsplash
         public string Description => "Nabs the Photo of the Day that is currently being displayed on the front page of the website Unsplash, an online source for high-quality and freely-usable images.";
         public string SourceUri => "https://unsplash.com/collections/1459961/photo-of-the-day-(archive)";
 
-        public WallpaperInfo GetWallpaperInfo()
+        public async Task<WallpaperInfo> GetWallpaperInfo()
         {
             // Scrape info from home page
 
             string homeHtml;
-            using (WebClient client = this.CreateWebClient())
-                homeHtml = client.DownloadString("https://unsplash.com/");
+            using (var client = this.CreateHttpClient())
+                homeHtml = await client.GetStringAsync("https://unsplash.com/");
 
             string imageUri = Regex.Match(homeHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
@@ -48,8 +48,8 @@ namespace DailyDesktop.Providers.Unsplash
             // Scrape camera specs from image page
 
             string pageHtml;
-            using (WebClient client = this.CreateWebClient())
-                pageHtml = client.DownloadString(titleUri);
+            using (var client = this.CreateHttpClient())
+                pageHtml = await client.GetStringAsync(titleUri);
 
             string description =
                 $"Camera Make: {Regex.Match(pageHtml, MAKE_PATTERN).Value}\r\n" +

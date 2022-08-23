@@ -2,7 +2,9 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
-using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace DailyDesktop.Core.Providers
 {
@@ -30,19 +32,19 @@ namespace DailyDesktop.Core.Providers
         string SourceUri { get; }
 
         /// <summary>
-        /// Configures a WebClient to be used for the
+        /// Configures an <see cref="HttpClient"/> to be used for the
         /// <see cref="WallpaperInfo.ImageUri"/> returned by
         /// <see cref="GetWallpaperInfo"/>. Used by
-        /// <see cref="IProviderExtensions.CreateWebClient(IProvider)"/>.
+        /// <see cref="IProviderExtensions.CreateHttpClient(IProvider)"/>.
         /// </summary>
-        /// <param name="client">The <see cref="WebClient"/> to configure.</param>
-        void ConfigureWebClient(WebClient client) { }
+        /// <param name="client">The <see cref="HttpClient"/> to configure.</param>
+        void ConfigureHttpClient(HttpClient client) { }
 
         /// <summary>
         /// Gets an up-to-date <see cref="WallpaperInfo"/>.
         /// </summary>
         /// <returns>The up-to-date <see cref="WallpaperInfo"/>.</returns>
-        WallpaperInfo GetWallpaperInfo();
+        Task<WallpaperInfo> GetWallpaperInfo();
 
         /// <summary>
         /// Instantiates an <see cref="IProvider"/> given a <see cref="Type"/>.
@@ -69,19 +71,19 @@ namespace DailyDesktop.Core.Providers
     public static class IProviderExtensions
     {
         /// <summary>
-        /// Creates a <see cref="WebClient"/> with a proper User-Agent header and
-        /// configured by <see cref="IProvider.ConfigureWebClient(WebClient)"/>.
+        /// Creates an <see cref="HttpClient"/> with a proper User-Agent header and
+        /// configured by <see cref="IProvider.ConfigureHttpClient(HttpClient)"/>.
         /// </summary>
         /// <param name="provider">
-        /// The <see cref="IProvider"/> configuring the returned
-        /// <see cref="WebClient"/>.
+        /// The <see cref="IProvider"/> configuring the returned <see cref="HttpClient"/>.
         /// </param>
         /// <returns></returns>
-        public static WebClient CreateWebClient(this IProvider provider)
+        public static HttpClient CreateHttpClient(this IProvider provider)
         {
-            WebClient client = new WebClient();
-            client.Headers.Add(HttpRequestHeader.UserAgent, "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
-            provider.ConfigureWebClient(client);
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("User-Agent", "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+            provider.ConfigureHttpClient(client);
+
             return client;
         }
     }

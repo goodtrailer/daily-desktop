@@ -8,9 +8,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using DailyDesktop.Core;
 using DailyDesktop.Core.Providers;
@@ -38,7 +38,7 @@ namespace DailyDesktop.Task
             return rootCommand.Invoke(args);
         }
 
-        private static int handleArguments(string dllPath, string json, bool resize, int? blur)
+        private static async Task<int> handleArguments(string dllPath, string json, bool resize, int? blur)
         {
             if (string.IsNullOrWhiteSpace(dllPath))
                 throw new ProviderException("Missing IProvider DLL module path");
@@ -47,7 +47,7 @@ namespace DailyDesktop.Task
             Type providerType = store.Add(dllPath);
             IProvider provider = IProvider.Instantiate(providerType);
 
-            string imagePath = downloadWallpaper(provider, json);
+            string imagePath = await downloadWallpaper(provider, json);
 
             SetProcessDPIAware();
 
@@ -69,11 +69,11 @@ namespace DailyDesktop.Task
         private static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
 
         // Downloads a wallpaper image from a provider and returns its path
-        private static string downloadWallpaper(IProvider provider, string jsonPath = null)
+        private static async Task<string> downloadWallpaper(IProvider provider, string jsonPath = null)
         {
             string imagePath = Path.Combine(Path.GetTempPath(), IMAGE_FILENAME);
 
-            WallpaperInfo info = provider.GetWallpaperInfo();
+            WallpaperInfo info = await provider.GetWallpaperInfo();
 
             if (!string.IsNullOrWhiteSpace(jsonPath))
             {
@@ -85,8 +85,12 @@ namespace DailyDesktop.Task
                 File.WriteAllText(jsonPath, jsonString);
             }
 
-            using (WebClient client = provider.CreateWebClient())
-                client.DownloadFile(info.ImageUri, imagePath);
+            using (var client = provider.CreateHttpClient())
+            {
+                var stream = await client.GetStreamAsync(info.ImageUri);
+                using (var fstream = new FileStream(imagePath, FileMode.OpenOrCreate))
+                    await stream.CopyToAsync(fstream);
+            }
 
             return imagePath;
         }
@@ -96,7 +100,7 @@ namespace DailyDesktop.Task
         {
             Size screenSize = SystemInformation.PrimaryMonitorSize;
             float screenAspectRatio = (float)screenSize.Width / screenSize.Height;
-            
+
             Bitmap image = new Bitmap(imagePath);
 
             float imageAspectRatio = (float)image.Width / image.Height;
