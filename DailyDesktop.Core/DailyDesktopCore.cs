@@ -360,7 +360,7 @@ namespace DailyDesktop.Core
 
         private string getTaskExecutablePath()
         {
-            string baseDir = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase)).LocalPath;
+            string baseDir = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).LocalPath;
 
             string[] paths = Directory.GetFiles(baseDir, TASK_EXECUTABLE_FILENAME, SearchOption.AllDirectories);
             if (paths.Length < 1)
