@@ -180,7 +180,7 @@ namespace DailyDesktop.Task
                 {
                     int x = (blurred.Width - image.Width) / 2;
                     int y = (blurred.Height - image.Height) / 2;
-                    graphics.DrawImageUnscaled(image, x, y);
+                    graphics.DrawImage(image, x, y, image.Width, image.Height);
                 }
 
                 image.Dispose();
