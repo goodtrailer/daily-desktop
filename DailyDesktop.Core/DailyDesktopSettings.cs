@@ -52,7 +52,7 @@ namespace DailyDesktop.Core
         /// </summary>
         public readonly static DailyDesktopSettings Default = new DailyDesktopSettings
         {
-            DllPath = string.Empty,
+            DllPath = "",
             Enabled = true,
             UpdateTime = DateTime.Parse("12:00 AM"),
             DoResize = true,

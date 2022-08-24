@@ -13,10 +13,8 @@ namespace DailyDesktop.Providers.CalvinAndHobbes
     {
         private const string IMAGE_URI_PATTERN = "https://assets.amuniversal.com/.*?(?=[ \"])";
         private const string AUTHOR = "Bill Watterson";
-        private const string AUTHOR_URI = null;
         private const string TITLE = "Comic strip";
         private const string TITLE_RELATIVE_URI_PATTERN = "(?<=/calvinandhobbes)[/0-9]+?(?=\")";
-        private const string DESCRIPTION = null;
 
         public string DisplayName => "Calvin and Hobbes";
         public string Description => "Fetches today's Calvin and Hobbes comic, a daily American comic strip created by cartoonist Bill Watterson from 1985 to 1995.";
@@ -36,10 +34,10 @@ namespace DailyDesktop.Providers.CalvinAndHobbes
                 ImageUri = imageUri,
                 Date = DateTime.Now,
                 Author = AUTHOR,
-                AuthorUri = AUTHOR_URI,
+                AuthorUri = null,
                 Title = TITLE,
                 TitleUri = titleUri,
-                Description = DESCRIPTION,
+                Description = null,
             };
         }
     }

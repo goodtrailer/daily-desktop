@@ -30,7 +30,7 @@ namespace DailyDesktop.Task
         {
             RootCommand rootCommand = new RootCommand("Daily Desktop task target executable");
             rootCommand.AddArgument(new Argument<string>("dllPath"));
-            rootCommand.AddOption(new Option<string>("--json", string.Empty, "Where to output the wallpaper info JSON file"));
+            rootCommand.AddOption(new Option<string>("--json", "", "Where to output the wallpaper info JSON file"));
             rootCommand.AddOption(new Option<bool>("--resize", false, "Resize to screen resolution if larger"));
             rootCommand.AddOption(new Option<int?>("--blur", () => null, "Use blurred-fit mode with the passed value for background blur strength"));
             rootCommand.Handler = CommandHandler.Create<string, string, bool, int?>(handleArguments);

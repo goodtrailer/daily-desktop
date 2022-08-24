@@ -2,10 +2,6 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DailyDesktop.Core;
