@@ -26,6 +26,9 @@ namespace DailyDesktop.Task
         [DllImport("user32.dll")]
         private static extern bool SetProcessDPIAware();
 
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+
         private static int Main(string[] args)
         {
             RootCommand rootCommand = new RootCommand("Daily Desktop task target executable");
@@ -64,11 +67,6 @@ namespace DailyDesktop.Task
             return SystemParametersInfo(0x14, 0, tiffPath, 0x1 | 0x2);
         }
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        // Can do a bunch of cool stuff, including setting the desktop wallpaper
-        private static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
-
-        // Downloads a wallpaper image from a provider and returns its path
         private static async Task<string> downloadWallpaper(IProvider provider, string jsonPath = null)
         {
             string imagePath = Path.Combine(Path.GetTempPath(), IMAGE_FILENAME);
@@ -95,7 +93,6 @@ namespace DailyDesktop.Task
             return imagePath;
         }
 
-        // Applies resize to an image (if larger than screen resolution)
         private static void applyResize(string imagePath)
         {
             Size screenSize = SystemInformation.PrimaryMonitorSize;
@@ -124,7 +121,6 @@ namespace DailyDesktop.Task
             }
         }
 
-        // Applies blurred-fit to an image, overriding it
         private static void applyBlurredFit(string imagePath, int blurStrength)
         {
             Size screenSize = SystemInformation.PrimaryMonitorSize;
@@ -188,7 +184,6 @@ namespace DailyDesktop.Task
             }
         }
 
-        // Creates a new TIFF from an image and returns its path
         private static string convertToTiff(string imagePath)
         {
             Bitmap image = new Bitmap(imagePath);
