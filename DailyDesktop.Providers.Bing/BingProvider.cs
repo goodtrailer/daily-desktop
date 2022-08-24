@@ -3,6 +3,7 @@
 
 using System;
 using System.Net;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DailyDesktop.Core;
@@ -22,11 +23,9 @@ namespace DailyDesktop.Providers.Bing
         public string Description => "Grabs Bing's featured Image of the Day, which can be found on Bing's home page.";
         public string SourceUri => "https://www.bing.com/";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo()
+        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
         {
-            string pageHtml;
-            using (var client = this.CreateHttpClient())
-                pageHtml = await client.GetStringAsync(SourceUri);
+            string pageHtml = await client.GetStringAsync(SourceUri);
 
             string imageRelativeUri = Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageRelativeUri))

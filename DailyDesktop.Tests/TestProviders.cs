@@ -3,6 +3,7 @@
 
 using System.Threading.Tasks;
 using DailyDesktop.Core;
+using DailyDesktop.Core.Providers;
 using DailyDesktop.Providers.Bing;
 using DailyDesktop.Providers.CalvinAndHobbes;
 using DailyDesktop.Providers.DeviantArt;

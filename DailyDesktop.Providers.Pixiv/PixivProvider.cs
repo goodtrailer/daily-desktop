@@ -30,13 +30,11 @@ namespace DailyDesktop.Providers.Pixiv
             client.DefaultRequestHeaders.Referrer = new Uri("https://www.pixiv.net");
         }
 
-        public async Task<WallpaperInfo> GetWallpaperInfo()
+        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
         {
             // Search for image ID of #1 illustration on daily rankings page
 
-            string rankingHtml;
-            using (var client = this.CreateHttpClient())
-                rankingHtml = await client.GetStringAsync(SourceUri);
+            string rankingHtml = await client.GetStringAsync(SourceUri);
 
             string imageId = Regex.Match(rankingHtml, IMAGE_ID_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageId))
@@ -46,9 +44,7 @@ namespace DailyDesktop.Providers.Pixiv
 
             // Search for wallpaper info on image page
 
-            string imagePageHtml;
-            using (var client = this.CreateHttpClient())
-                imagePageHtml = await client.GetStringAsync(imagePageUri);
+            string imagePageHtml = await client.GetStringAsync(imagePageUri);
 
             string imageUri = Regex.Match(imagePageHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))

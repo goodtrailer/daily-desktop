@@ -3,6 +3,7 @@
 
 using System;
 using System.Net;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DailyDesktop.Core;
@@ -26,13 +27,11 @@ namespace DailyDesktop.Providers.DeviantArt
             "highlight the best of DeviantArt from a wide variety of genres.";
         public string SourceUri => "https://www.deviantart.com/daily-deviations";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo()
+        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
         {
             // Search for image page URI from daily deviation page
 
-            string dailyDeviationHtml;
-            using (var client = this.CreateHttpClient())
-                dailyDeviationHtml = await client.GetStringAsync(SourceUri);
+            string dailyDeviationHtml = await client.GetStringAsync(SourceUri);
 
             string imagePageUri = Regex.Match(dailyDeviationHtml, IMAGE_PAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imagePageUri))
@@ -40,9 +39,7 @@ namespace DailyDesktop.Providers.DeviantArt
 
             // Scrape info from image page
 
-            string imagePageHtml;
-            using (var client = this.CreateHttpClient())
-                imagePageHtml = await client.GetStringAsync(imagePageUri);
+            string imagePageHtml = await client.GetStringAsync(imagePageUri);
 
             string imageUri = Regex.Match(imagePageHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))

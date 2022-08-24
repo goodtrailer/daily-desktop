@@ -2,6 +2,7 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -31,13 +32,11 @@ namespace DailyDesktop.Providers.WikimediaCommons
             "a collection of Featured picture candidates.";
         public string SourceUri => "https://commons.wikimedia.org/wiki/Commons:POTD";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo()
+        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
         {
             // Scrape info from POTD RSS feed
 
-            string feedXml;
-            using (var client = this.CreateHttpClient())
-                feedXml = HttpUtility.HtmlDecode(await client.GetStringAsync("https://commons.wikimedia.org/w/api.php?action=featuredfeed&feed=potd&feedformat=atom"));
+            string feedXml = HttpUtility.HtmlDecode(await client.GetStringAsync("https://commons.wikimedia.org/w/api.php?action=featuredfeed&feed=potd&feedformat=atom"));
 
             string title = HttpUtility.UrlDecode(Regex.Matches(feedXml, TITLE_RELATIVE_URI_PATTERN)[^1].Value);
             string titleUri = "https://commons.wikimedia.org/wiki/" + title;
@@ -45,9 +44,7 @@ namespace DailyDesktop.Providers.WikimediaCommons
 
             // Scrape info from API request
 
-            string requestXml;
-            using (var client = this.CreateHttpClient())
-                requestXml = HttpUtility.HtmlDecode(await client.GetStringAsync("https://magnus-toolserver.toolforge.org/commonsapi.php?image=" + title.Substring("File:".Length)));
+            string requestXml = HttpUtility.HtmlDecode(await client.GetStringAsync("https://magnus-toolserver.toolforge.org/commonsapi.php?image=" + title.Substring("File:".Length)));
 
             string imageUri = Regex.Match(requestXml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))

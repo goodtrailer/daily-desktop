@@ -2,6 +2,7 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DailyDesktop.Core;
@@ -19,13 +20,12 @@ namespace DailyDesktop.Providers.MTG
         public string Description => "Grabs new weekly Magic: The Gathering wallpaper from the official Wizards of the Coast website and sets it as the desktop wallpaper.";
         public string SourceUri => "https://magic.wizards.com/en/articles/media/wallpapers";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo()
+        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
         {
             // Scrape info from wallpapers page
 
             string pageHtml;
-            using (var client = this.CreateHttpClient())
-                pageHtml = await client.GetStringAsync(SourceUri);
+            pageHtml = await client.GetStringAsync(SourceUri);
 
             string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
@@ -36,12 +36,8 @@ namespace DailyDesktop.Providers.MTG
 
             // Get card text through Scryfall API
 
-            string cardText;
-            using (var client = this.CreateHttpClient())
-            {
-                var response = await client.GetAsync("https://api.scryfall.com/cards/named?format=text&fuzzy=" + title);
-                cardText = response.IsSuccessStatusCode ? await response.Content.ReadAsStringAsync() : response.ReasonPhrase;
-            }
+            var response = await client.GetAsync("https://api.scryfall.com/cards/named?format=text&fuzzy=" + title);
+            string cardText = response.IsSuccessStatusCode ? await response.Content.ReadAsStringAsync() : response.ReasonPhrase;
 
             return new WallpaperInfo
             {

@@ -2,6 +2,7 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DailyDesktop.Core;
@@ -22,13 +23,11 @@ namespace DailyDesktop.Providers.FalseKnees
         public string Description => "Gets the most recent False Knees comic! False Knees is a webcomic written by Joshua Barkman. He says, \"All silly nonsense is my own.\"";
         public string SourceUri => "https://falseknees.com";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo()
+        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
         {
             // Scrape info from front page
 
-            string pageHtml;
-            using (var client = this.CreateHttpClient())
-                pageHtml = await client.GetStringAsync(SourceUri);
+            string pageHtml = await client.GetStringAsync(SourceUri);
 
             string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
             string titleUri = SourceUri + "/" + Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value;
@@ -36,9 +35,7 @@ namespace DailyDesktop.Providers.FalseKnees
 
             // Scrape title from archive page
 
-            string archiveHtml;
-            using (var client = this.CreateHttpClient())
-                archiveHtml = await client.GetStringAsync("https://falseknees.com/archive.html");
+            string archiveHtml = await client.GetStringAsync("https://falseknees.com/archive.html");
 
             string title = Regex.Match(archiveHtml, TITLE_PATTERN).Value;
 
