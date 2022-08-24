@@ -11,11 +11,11 @@ namespace DailyDesktop.Providers.Unsplash
 {
     public class UnsplashProvider : IProvider
     {
+        private const string TITLE = "Photograph";
+
         private const string IMAGE_URI_PATTERN = "(?<=<source srcSet=\")(.*?)(?=\\?)";
-        private const string TITLE_PATTERN = "(?<=(itemProp=\"contentUrl\"(.*?)title=\"))(.*?)(?=(\"))";
-        private const string TITLE_RELATIVE_URI_PATTERN = "(?<=(itemProp=\"contentUrl\"(.*?)href=\"/))(.*?)(?=(\"))";
-        private const string AUTHOR_PATTERN = "(?<=(Photo of the Day(.*?)>))([^<]*?)(?=(</a>))";
-        private const string AUTHOR_RELATIVE_URI_PATTERN = "(?<=(Photo of the Day(.*?)href=\"/))([^<]*?)(?=(\">))";
+        private const string TITLE_RELATIVE_URI_PATTERN = "(?<=(contentUrl.*?href=\"/)).*?(?=\")";
+        private const string AUTHOR_RELATIVE_URI_PATTERN = "(?<=(contentUrl.*?href.*?href=\"/)).*?(?=\")";
 
         private const string MAKE_PATTERN = "(?<=(\\\\\"make\\\\\":\\\\\"))(.*?)(?=(\\\\\"))";
         private const string MODEL_MATCH = "(?<=(\\\\\"model\\\\\":\\\\\"))(.*?)(?=(\\\\\"))";
@@ -40,10 +40,13 @@ namespace DailyDesktop.Providers.Unsplash
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            string title = Regex.Match(homeHtml, TITLE_PATTERN).Value;
             string titleUri = "https://unsplash.com/" + Regex.Match(homeHtml, TITLE_RELATIVE_URI_PATTERN).Value;
-            string author = Regex.Match(homeHtml, AUTHOR_PATTERN).Value;
-            string authorUri = "https://unsplash.com/" + Regex.Match(homeHtml, AUTHOR_RELATIVE_URI_PATTERN).Value;
+
+            string authorRelativeUri = Regex.Match(homeHtml, AUTHOR_RELATIVE_URI_PATTERN).Value;
+            string authorPattern = $"(?<={authorRelativeUri}\">).*?(?=<)";
+
+            string author = Regex.Match(homeHtml, authorPattern).Value;
+            string authorUri = "https://unsplash.com/" + authorRelativeUri;
 
             // Scrape camera specs from image page
 
@@ -51,13 +54,29 @@ namespace DailyDesktop.Providers.Unsplash
             using (var client = this.CreateHttpClient())
                 pageHtml = await client.GetStringAsync(titleUri);
 
-            string description =
-                $"Camera Make: {Regex.Match(pageHtml, MAKE_PATTERN).Value}\r\n" +
-                $"Camera Model: {Regex.Match(pageHtml, MODEL_MATCH).Value}\r\n" +
-                $"Focal Length: {Regex.Match(pageHtml, FOCAL_LENGTH_PATTERN).Value}mm\r\n" +
-                $"Aperture: ƒ/{Regex.Match(pageHtml, APERTURE_PATTERN).Value}\r\n" +
-                $"Shutter Speed: {Regex.Match(pageHtml, SHUTTER_SPEED_PATTERN).Value}s\r\n" +
-                $"ISO: {Regex.Match(pageHtml, ISO_PATTERN).Value}";
+            string make = Regex.Match(pageHtml, MAKE_PATTERN).Value;
+            string model = Regex.Match(pageHtml, MODEL_MATCH).Value;
+            string focalLength = Regex.Match(pageHtml, FOCAL_LENGTH_PATTERN).Value;
+            string aperture = Regex.Match(pageHtml, APERTURE_PATTERN).Value;
+            string shutterSpeed = Regex.Match(pageHtml, SHUTTER_SPEED_PATTERN).Value;
+            string iso = Regex.Match(pageHtml, ISO_PATTERN).Value;
+
+            string description = "No camera specs. The image is probably a 3D render.";
+            if (!string.IsNullOrWhiteSpace(make)
+                || !string.IsNullOrWhiteSpace(model)
+                || !string.IsNullOrWhiteSpace(focalLength)
+                || !string.IsNullOrWhiteSpace(aperture)
+                || !string.IsNullOrWhiteSpace(shutterSpeed)
+                || !string.IsNullOrWhiteSpace(iso))
+            {
+                description =
+                    $"Camera Make: {make}\r\n" +
+                    $"Camera Model: {model}\r\n" +
+                    $"Focal Length: {focalLength}mm\r\n" +
+                    $"Aperture: ƒ/{aperture}\r\n" +
+                    $"Shutter Speed: {shutterSpeed}s\r\n" +
+                    $"ISO: {iso}";
+            }
 
             return new WallpaperInfo
             {
@@ -65,7 +84,7 @@ namespace DailyDesktop.Providers.Unsplash
                 Date = DateTime.Now,
                 Author = author,
                 AuthorUri = authorUri,
-                Title = title,
+                Title = TITLE,
                 TitleUri = titleUri,
                 Description = description,
             };
