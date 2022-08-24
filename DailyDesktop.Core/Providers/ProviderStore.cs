@@ -68,8 +68,14 @@ namespace DailyDesktop.Core.Providers
             if (Directory.Exists(directory))
             {
                 string[] paths = Directory.GetFiles(directory, PROVIDERS_SEARCH_PATTERN, SearchOption.AllDirectories);
-                foreach (string path in paths)
-                    Add(path);
+                foreach (var path in paths)
+                {
+                    try
+                    {
+                        Add(path);
+                    }
+                    catch (ReflectionTypeLoadException) { }
+                }
             }
         }
     }
