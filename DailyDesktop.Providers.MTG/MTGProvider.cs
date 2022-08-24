@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -39,17 +40,11 @@ namespace DailyDesktop.Providers.MTG
 
             // Get card text through Scryfall API
 
-            string cardText = null;
-            try
+            string cardText;
+            using (var client = this.CreateHttpClient())
             {
-                using (var client = this.CreateHttpClient())
-                    cardText = await client.GetStringAsync("https://api.scryfall.com/cards/named?format=text&fuzzy=" + title);
-            }
-            catch (WebException e)
-            {
-                JsonDocument response = JsonDocument.Parse(new StreamReader(e.Response.GetResponseStream()).ReadToEnd());
-                if (response.RootElement.GetProperty("status").GetInt32() == 404)
-                    cardText = response.RootElement.GetProperty("details").GetString();
+                var response = await client.GetAsync("https://api.scryfall.com/cards/named?format=text&fuzzy=" + title);
+                cardText = response.IsSuccessStatusCode ? await response.Content.ReadAsStringAsync() : response.ReasonPhrase;
             }
 
             return new WallpaperInfo
