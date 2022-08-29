@@ -104,7 +104,7 @@ namespace DailyDesktop.Task
             Size targetSize = new Size
             {
                 Width = imageAspectRatio > screenAspectRatio ? screenSize.Width : (int)(screenSize.Height * imageAspectRatio),
-                Height = imageAspectRatio > screenAspectRatio ? (int)(screenSize.Height / imageAspectRatio) : screenSize.Height,
+                Height = imageAspectRatio > screenAspectRatio ? (int)(screenSize.Width / imageAspectRatio) : screenSize.Height,
             };
 
             if (targetSize.Width < image.Width)
