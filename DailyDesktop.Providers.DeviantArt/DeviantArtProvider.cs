@@ -14,7 +14,7 @@ namespace DailyDesktop.Providers.DeviantArt
     public class DeviantArtProvider : IProvider
     {
         private const string IMAGE_PAGE_URI_PATTERN = "(?<=(<a(.*?)data-hook=\"deviation_link\" href=\"))(.*?)(?=(\"))";
-        private const string IMAGE_URI_PATTERN = "(?<=(<img alt=(.*?)src=\"))(.*?)(?=(\"/>))";
+        private const string IMAGE_URI_PATTERN = "(?<=(<img alt=(.*?)src=\"))(.*?)(?=(\"))";
         private const string CREDIT_PATTERN = "((?<=(<title data-rh=\"[truefalse]*\">))(.*?)(?=( on DeviantArt</title>)))";
         private const string AUTHOR_PATTERN = "(?<=(by ))(.(?!(by)))*$";
         private const string TITLE_PATTERN = "(.*)(?=( by))";
