@@ -14,7 +14,7 @@ namespace DailyDesktop.Providers.FalseKnees
     {
         private const string AUTHOR = "Joshua Barkman";
         private const string AUTHOR_URI = "https://falseknees.com/about.html";
-        private const string IMAGE_URI_PATTERN = "http://www\\.falseknees\\.com/imgs/[0-9]*?\\.png";
+        private const string IMAGE_RELATIVE_URI_PATTERN = "imgs/[0-9]*?\\.png";
         private const string TITLE_RELATIVE_URI_PATTERN = "(?<=URL=)[0-9]+\\.[a-zA-Z]+";
         private const string DESCRIPTION_PATTERN = "(?<=<img.*title=\").*?(?=\")";
         private const string TITLE_PATTERN = "(?<=index\\.html.*- ).*?(?=<)";
@@ -29,7 +29,7 @@ namespace DailyDesktop.Providers.FalseKnees
 
             string pageHtml = await client.GetStringAsync(SourceUri);
 
-            string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
+            string imageUri = SourceUri + "/" + Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN).Value;
             string titleUri = SourceUri + "/" + Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value;
             string description = Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value;
 
