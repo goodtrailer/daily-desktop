@@ -12,27 +12,28 @@ namespace DailyDesktop.Providers.MTG
 {
     public class MTGProvider : IProvider
     {
-        private const string IMAGE_URI_PATTERN = "(?<=(<a(.*?)href=\"))(.*?)(?=(\">1920x1080</a>))";
-        private const string TITLE_PATTERN = "(?<=(<h3>))(.*?)(?=(</h3))";
-        private const string AUTHOR_PATTERN = "(?<=(<p class=\"author\">By))(.*?)(?=(</p>))";
+        private const string IMAGE_URI_PATTERN = "(?<=//)[^\\s]*?1920x1080_wallpaper\\.jpg";
+        private const string RELEVANT_SOURCE_PATTERN = "(?<= )Wallpapers";
+        private const string TITLE_PATTERN = "(?<=<h3.*?>).*?(?=</h3>)";
+        private const string AUTHOR_PATTERN = "(?<=BY ).*?(?=<)";
 
         public string DisplayName => "Magic: The Gathering";
         public string Description => "Grabs new weekly Magic: The Gathering wallpaper from the official Wizards of the Coast website and sets it as the desktop wallpaper.";
-        public string SourceUri => "https://magic.wizards.com/en/articles/media/wallpapers";
+        public string SourceUri => "https://magic.wizards.com/en/news#wallpapers";
 
         public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
         {
             // Scrape info from wallpapers page
 
-            string pageHtml;
-            pageHtml = await client.GetStringAsync(SourceUri);
+            string pageHtml = await client.GetStringAsync(SourceUri);
 
-            string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
+            string imageUri = "https://" + Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            string author = Regex.Match(pageHtml, AUTHOR_PATTERN).Value.Trim();
-            string title = Regex.Match(pageHtml, TITLE_PATTERN).Value.Trim();
+            string relevantHtml = pageHtml.Substring(Regex.Match(pageHtml, RELEVANT_SOURCE_PATTERN).Index);
+            string author = Regex.Match(relevantHtml, AUTHOR_PATTERN).Value.Trim();
+            string title = Regex.Match(relevantHtml, TITLE_PATTERN).Value.Trim();
 
             // Get card text through Scryfall API
 
