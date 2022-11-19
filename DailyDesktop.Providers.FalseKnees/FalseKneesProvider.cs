@@ -21,7 +21,7 @@ namespace DailyDesktop.Providers.FalseKnees
 
         public string DisplayName => "False Knees";
         public string Description => "Gets the most recent False Knees comic! False Knees is a webcomic written by Joshua Barkman. He says, \"All silly nonsense is my own.\"";
-        public string SourceUri => "https://falseknees.com";
+        public string SourceUri => "https://falseknees.com/index.html";
 
         public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
         {
