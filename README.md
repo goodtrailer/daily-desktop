@@ -27,6 +27,7 @@ Wallpapers are actually downloaded/applied by DailyDesktop.Task. To debug a prov
 * False Knees @ [/DailyDesktop.Providers.FalseKnees/](/DailyDesktop.Providers.FalseKnees/)
 * Magic: The Gathering @ [/DailyDesktop.Providers.MTG/](/DailyDesktop.Providers.MTG/)
 * Pixiv @ [/DailyDesktop.Providers.Pixiv/](/DailyDesktop.Providers.Pixiv/)
+* Pokémon TCG @ [/DailyDesktop.Providers.Pokemon/](/DailyDesktop.Providers.Pokemon/)
 * r/EarthPorn (SFW) @ [/DailyDesktop.Providers.RedditEarthPorn/](/DailyDesktop.Providers.RedditEarthPorn/)
 * Unsplash @ [/DailyDesktop.Providers.Unsplash/](/DailyDesktop.Providers.Unsplash/)
 * Wikimedia Commons @ [/DailyDesktop.Providers.WikimediaCommons/](/DailyDesktop.Providers.WikimediaCommons/)
