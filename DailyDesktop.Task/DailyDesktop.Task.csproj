@@ -25,4 +25,9 @@
   <ItemGroup Label="Project References">
     <ProjectReference Include="..\DailyDesktop.Core\DailyDesktop.Core.csproj" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if not &quot;$(SolutionDir)&quot; == &quot;*Undefined*&quot; mkdir &quot;$(SolutionDir)DailyDesktop.Desktop\bin&quot; &amp; copy &quot;$(ProjectDir)$(OutDir)$(TargetName).exe&quot; &quot;$(SolutionDir)DailyDesktop.Desktop\$(OutDir)\$(TargetName).exe&quot; &#xD;&#xA;" />
+  </Target>
+  
 </Project>

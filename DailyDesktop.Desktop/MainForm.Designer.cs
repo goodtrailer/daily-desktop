@@ -267,12 +267,11 @@ namespace DailyDesktop.Desktop
             this.wallpaperDescriptionRichTextBox.Location = new System.Drawing.Point(7, 64);
             this.wallpaperDescriptionRichTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.wallpaperDescriptionRichTextBox.Name = "wallpaperDescriptionRichTextBox";
-            this.wallpaperDescriptionRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.wallpaperDescriptionRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.wallpaperDescriptionRichTextBox.Size = new System.Drawing.Size(391, 206);
             this.wallpaperDescriptionRichTextBox.TabIndex = 1;
             this.wallpaperDescriptionRichTextBox.TabStop = false;
             this.wallpaperDescriptionRichTextBox.Text = "No description.";
-            this.wallpaperDescriptionRichTextBox.LinkClicked += wallpaperDescriptionRichTextBox_LinkClicked;
             // 
             // wallpaperCreditFlowLayout
             // 
@@ -541,11 +540,6 @@ namespace DailyDesktop.Desktop
             ((System.ComponentModel.ISupportInitialize)(this.bannerPicture)).EndInit();
             this.ResumeLayout(false);
 
-        }
-
-        private void WallpaperDescriptionRichTextBox_LinkClicked(object sender, System.Windows.Forms.LinkClickedEventArgs e)
-        {
-            throw new System.NotImplementedException();
         }
 
         #endregion

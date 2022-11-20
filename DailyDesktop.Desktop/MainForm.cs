@@ -41,6 +41,8 @@ namespace DailyDesktop.Desktop
 
             core = new DailyDesktopCore(providersDir, serializeJsonDir, taskName, true);
             InitializeComponent();
+
+            wallpaperDescriptionRichTextBox.LinkClicked += wallpaperDescriptionRichTextBox_LinkClicked;
         }
 
         private void openUri(string uri)
