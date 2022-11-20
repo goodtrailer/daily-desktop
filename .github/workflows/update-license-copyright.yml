@@ -15,3 +15,6 @@ jobs:
       - uses: FantasticFiasco/action-update-license-year@v2.2.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          commitTitle: 'Meta: Update LICENSE'
+          prTitle: 'Meta: Update LICENSE copyright'
+          labels: 'documentation'
