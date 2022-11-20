@@ -193,7 +193,7 @@ namespace DailyDesktop.Desktop
                 wallpaperTitleLinkLabel.Text = wallpaper.Title;
                 wallpaperAuthorLinkLabel.Text = wallpaper.Author;
                 string text = wallpaper.Description ?? NULL_DESCRIPTION;
-                wallpaperDescriptionTextBox.Text = Regex.Replace(text, "(?<=[^\r])\n", "\r\n");
+                wallpaperDescriptionRichTextBox.Text = Regex.Replace(text, "(?<=[^\r])\n", "\r\n");
 
                 Uri temp;
                 wallpaperTitleLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.TitleUri, UriKind.Absolute, out temp);
@@ -207,7 +207,7 @@ namespace DailyDesktop.Desktop
                 wallpaperUpdatedLabel.Text = FETCHED_TEXT + "null";
                 wallpaperTitleLinkLabel.Text = "null";
                 wallpaperAuthorLinkLabel.Text = "null";
-                wallpaperDescriptionTextBox.Text = NULL_DESCRIPTION;
+                wallpaperDescriptionRichTextBox.Text = NULL_DESCRIPTION;
                 wallpaperTitleLinkLabel.Links[0].Enabled = false;
                 wallpaperAuthorLinkLabel.Links[0].Enabled = false;
             }
