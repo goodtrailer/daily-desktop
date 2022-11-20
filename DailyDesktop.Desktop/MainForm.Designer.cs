@@ -559,9 +559,7 @@ namespace DailyDesktop.Desktop
             this.licenseRichTextBox.Size = new System.Drawing.Size(378, 299);
             this.licenseRichTextBox.TabIndex = 1;
             this.licenseRichTextBox.TabStop = false;
-            this.licenseRichTextBox.Text = "Copyright (c) Alden Wu <aldenwu0@gmail.com>.\n\nThis software is licensed under the" +
-    " MIT License.\nFull license text: {0}\n\nThis software uses open-source third-party" +
-    " libraries.\nFull EULA text: {1}\n";
+            this.licenseRichTextBox.Text = resources.GetString("licenseRichTextBox.Text");
             // 
             // overviewGroupBox
             // 
