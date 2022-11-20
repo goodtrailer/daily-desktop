@@ -555,7 +555,7 @@ namespace DailyDesktop.Desktop
             this.licenseRichTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.licenseRichTextBox.Name = "licenseRichTextBox";
             this.licenseRichTextBox.ReadOnly = true;
-            this.licenseRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.licenseRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.licenseRichTextBox.Size = new System.Drawing.Size(378, 299);
             this.licenseRichTextBox.TabIndex = 1;
             this.licenseRichTextBox.TabStop = false;
@@ -586,7 +586,7 @@ namespace DailyDesktop.Desktop
             this.overviewRichTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.overviewRichTextBox.Name = "overviewRichTextBox";
             this.overviewRichTextBox.ReadOnly = true;
-            this.overviewRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.overviewRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.overviewRichTextBox.Size = new System.Drawing.Size(378, 184);
             this.overviewRichTextBox.TabIndex = 0;
             this.overviewRichTextBox.TabStop = false;
