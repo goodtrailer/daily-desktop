@@ -44,6 +44,7 @@ namespace DailyDesktop.Desktop
             this.providerSourceLinkLabel = new System.Windows.Forms.LinkLabel();
             this.providerComboBox = new System.Windows.Forms.ComboBox();
             this.wallpaperGroupBox = new System.Windows.Forms.GroupBox();
+            this.wallpaperDescriptionRichTextBox = new System.Windows.Forms.RichTextBox();
             this.wallpaperCreditFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.wallpaperTitleLinkLabel = new System.Windows.Forms.LinkLabel();
             this.wallpaperCreditLabel = new System.Windows.Forms.Label();
@@ -63,7 +64,6 @@ namespace DailyDesktop.Desktop
             this.bannerPicture = new System.Windows.Forms.PictureBox();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.stateBackgroundWorker = new System.ComponentModel.BackgroundWorker();
-            this.wallpaperDescriptionRichTextBox = new System.Windows.Forms.RichTextBox();
             this.mainTableLayout.SuspendLayout();
             this.bottomPanel.SuspendLayout();
             this.mainTabControl.SuspendLayout();
@@ -257,6 +257,22 @@ namespace DailyDesktop.Desktop
             this.wallpaperGroupBox.TabIndex = 2;
             this.wallpaperGroupBox.TabStop = false;
             this.wallpaperGroupBox.Text = "Wallpaper";
+            // 
+            // wallpaperDescriptionRichTextBox
+            // 
+            this.wallpaperDescriptionRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.wallpaperDescriptionRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.wallpaperDescriptionRichTextBox.Location = new System.Drawing.Point(7, 64);
+            this.wallpaperDescriptionRichTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.wallpaperDescriptionRichTextBox.Name = "wallpaperDescriptionRichTextBox";
+            this.wallpaperDescriptionRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.wallpaperDescriptionRichTextBox.Size = new System.Drawing.Size(391, 206);
+            this.wallpaperDescriptionRichTextBox.TabIndex = 1;
+            this.wallpaperDescriptionRichTextBox.TabStop = false;
+            this.wallpaperDescriptionRichTextBox.Text = "No description.";
+            this.wallpaperDescriptionRichTextBox.LinkClicked += wallpaperDescriptionRichTextBox_LinkClicked;
             // 
             // wallpaperCreditFlowLayout
             // 
@@ -492,21 +508,6 @@ namespace DailyDesktop.Desktop
             this.stateBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.stateBackgroundWorker_DoWork);
             this.stateBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.stateBackgroundWorker_ProgressChanged);
             // 
-            // wallpaperDescriptionRichTextBox
-            // 
-            this.wallpaperDescriptionRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.wallpaperDescriptionRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.wallpaperDescriptionRichTextBox.Location = new System.Drawing.Point(7, 64);
-            this.wallpaperDescriptionRichTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.wallpaperDescriptionRichTextBox.Name = "wallpaperDescriptionRichTextBox";
-            this.wallpaperDescriptionRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.wallpaperDescriptionRichTextBox.Size = new System.Drawing.Size(391, 206);
-            this.wallpaperDescriptionRichTextBox.TabIndex = 1;
-            this.wallpaperDescriptionRichTextBox.TabStop = false;
-            this.wallpaperDescriptionRichTextBox.Text = "No description.";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -540,6 +541,11 @@ namespace DailyDesktop.Desktop
             ((System.ComponentModel.ISupportInitialize)(this.bannerPicture)).EndInit();
             this.ResumeLayout(false);
 
+        }
+
+        private void WallpaperDescriptionRichTextBox_LinkClicked(object sender, System.Windows.Forms.LinkClickedEventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion

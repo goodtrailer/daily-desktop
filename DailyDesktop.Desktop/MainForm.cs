@@ -238,5 +238,7 @@ namespace DailyDesktop.Desktop
         {
             Application.Exit();
         }
+
+        private void wallpaperDescriptionRichTextBox_LinkClicked(object sender, LinkClickedEventArgs e) => openUri(e.LinkText);
     }
 }
