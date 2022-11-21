@@ -20,6 +20,7 @@
     <ProjectReference Include="..\DailyDesktop.Providers.FalseKnees\DailyDesktop.Providers.FalseKnees.csproj" />
     <ProjectReference Include="..\DailyDesktop.Providers.MTG\DailyDesktop.Providers.MTG.csproj" />
     <ProjectReference Include="..\DailyDesktop.Providers.Pixiv\DailyDesktop.Providers.Pixiv.csproj" />
+    <ProjectReference Include="..\DailyDesktop.Providers.Pokemon\DailyDesktop.Providers.Pokemon.csproj" />
     <ProjectReference Include="..\DailyDesktop.Providers.RedditEarthPorn\DailyDesktop.Providers.RedditEarthPorn.csproj" />
     <ProjectReference Include="..\DailyDesktop.Providers.Unsplash\DailyDesktop.Providers.Unsplash.csproj" />
     <ProjectReference Include="..\DailyDesktop.Providers.WikimediaCommons\DailyDesktop.Providers.WikimediaCommons.csproj" />
