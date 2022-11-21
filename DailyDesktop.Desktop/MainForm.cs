@@ -7,8 +7,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Windows.Forms;
 using DailyDesktop.Core;
 using DailyDesktop.Core.Providers;
@@ -19,12 +21,15 @@ namespace DailyDesktop.Desktop
     public partial class MainForm : Form
     {
         private const string APP_DATA_DIR = "Daily Desktop";
-        private const string TASK_NAME_PREFIX = "Daily Desktop";
-        private const string NULL_DESCRIPTION = "No description.";
-        private const string FETCHED_TEXT = "fetched on ";
         private const string PROVIDERS_DIR = "providers";
         private const string SERIALIZE_JSON_DIR = "";
-        private const string NULL_TEXT = "null";
+        private const string LICENSE_FILENAME = "LICENSE";
+        private const string EULA_FILENAME = "EULA";
+
+        private const string TASK_NAME_PREFIX = "Daily Desktop";
+
+        private const string NULL_DESCRIPTION = "No description.";
+        private const string FETCHED_TEXT = "fetched on ";
 
         private DailyDesktopCore core;
         private WallpaperInfo wallpaper;
@@ -42,15 +47,25 @@ namespace DailyDesktop.Desktop
 
             core = new DailyDesktopCore(providersDir, serializeJsonDir, taskName, true);
             InitializeComponent();
+
+            overviewRichTextBox.LinkClicked += overviewRichTextBox_LinkClicked;
+            licenseRichTextBox.LinkClicked += licenseRichTextBox_LinkClicked;
+
+            string baseDir = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).AbsolutePath;
+            string licenseUri = $"file://{baseDir}/{LICENSE_FILENAME}";
+            string eulaUri = $"file://{baseDir}/{EULA_FILENAME}";
+            licenseRichTextBox.Text = string.Format(licenseRichTextBox.Text, licenseUri, eulaUri);
         }
 
         private void openUri(string uri)
         {
             if (string.IsNullOrWhiteSpace(uri))
                 return;
+
             ProcessStartInfo psi = new ProcessStartInfo
             {
-                FileName = uri,
+                FileName = "explorer.exe",
+                Arguments = $"\"{HttpUtility.UrlDecode(uri)}\"",
                 UseShellExecute = true,
             };
             Process.Start(psi);
@@ -239,5 +254,9 @@ namespace DailyDesktop.Desktop
         {
             Application.Exit();
         }
+
+        private void overviewRichTextBox_LinkClicked(object sender, LinkClickedEventArgs e) => openUri(e.LinkText);
+
+        private void licenseRichTextBox_LinkClicked(object sender, LinkClickedEventArgs e) => openUri(e.LinkText);
     }
 }

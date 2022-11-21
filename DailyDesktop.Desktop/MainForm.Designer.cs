@@ -38,11 +38,6 @@ namespace DailyDesktop.Desktop
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.mainTabPage = new System.Windows.Forms.TabPage();
             this.mainTableLayout2 = new System.Windows.Forms.TableLayoutPanel();
-            this.providerGroupBox = new System.Windows.Forms.GroupBox();
-            this.providerDescriptionTableLayout = new System.Windows.Forms.TableLayoutPanel();
-            this.providerDescriptionLabel = new System.Windows.Forms.Label();
-            this.providerSourceLinkLabel = new System.Windows.Forms.LinkLabel();
-            this.providerComboBox = new System.Windows.Forms.ComboBox();
             this.wallpaperGroupBox = new System.Windows.Forms.GroupBox();
             this.wallpaperDescriptionTextBox = new System.Windows.Forms.TextBox();
             this.wallpaperCreditFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
@@ -50,6 +45,11 @@ namespace DailyDesktop.Desktop
             this.wallpaperCreditLabel = new System.Windows.Forms.Label();
             this.wallpaperAuthorLinkLabel = new System.Windows.Forms.LinkLabel();
             this.wallpaperUpdatedLabel = new System.Windows.Forms.Label();
+            this.providerGroupBox = new System.Windows.Forms.GroupBox();
+            this.providerDescriptionTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.providerSourceLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.providerDescriptionLabel = new System.Windows.Forms.Label();
+            this.providerComboBox = new System.Windows.Forms.ComboBox();
             this.optionsTabPage = new System.Windows.Forms.TabPage();
             this.optionsPanel = new System.Windows.Forms.Panel();
             this.optionsResizeCheckBox = new System.Windows.Forms.CheckBox();
@@ -61,6 +61,12 @@ namespace DailyDesktop.Desktop
             this.optionsUpdateTimeLabel = new System.Windows.Forms.Label();
             this.optionsProvidersDirectoryButton = new System.Windows.Forms.Button();
             this.optionsUpdateWallpaperButton = new System.Windows.Forms.Button();
+            this.aboutTabPage = new System.Windows.Forms.TabPage();
+            this.aboutTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.licenseGroupBox = new System.Windows.Forms.GroupBox();
+            this.licenseRichTextBox = new System.Windows.Forms.RichTextBox();
+            this.overviewGroupBox = new System.Windows.Forms.GroupBox();
+            this.overviewRichTextBox = new System.Windows.Forms.RichTextBox();
             this.bannerPicture = new System.Windows.Forms.PictureBox();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.stateBackgroundWorker = new System.ComponentModel.BackgroundWorker();
@@ -69,13 +75,17 @@ namespace DailyDesktop.Desktop
             this.mainTabControl.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.mainTableLayout2.SuspendLayout();
-            this.providerGroupBox.SuspendLayout();
-            this.providerDescriptionTableLayout.SuspendLayout();
             this.wallpaperGroupBox.SuspendLayout();
             this.wallpaperCreditFlowLayout.SuspendLayout();
+            this.providerGroupBox.SuspendLayout();
+            this.providerDescriptionTableLayout.SuspendLayout();
             this.optionsTabPage.SuspendLayout();
             this.optionsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.optionsBlurStrengthTrackBar)).BeginInit();
+            this.aboutTabPage.SuspendLayout();
+            this.aboutTableLayout.SuspendLayout();
+            this.licenseGroupBox.SuspendLayout();
+            this.overviewGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bannerPicture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -137,6 +147,7 @@ namespace DailyDesktop.Desktop
             // 
             this.mainTabControl.Controls.Add(this.mainTabPage);
             this.mainTabControl.Controls.Add(this.optionsTabPage);
+            this.mainTabControl.Controls.Add(this.aboutTabPage);
             this.mainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTabControl.HotTrack = true;
             this.mainTabControl.Location = new System.Drawing.Point(0, 0);
@@ -160,9 +171,9 @@ namespace DailyDesktop.Desktop
             // mainTableLayout2
             // 
             this.mainTableLayout2.ColumnCount = 1;
-            this.mainTableLayout2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.mainTableLayout2.Controls.Add(this.providerGroupBox, 0, 0);
+            this.mainTableLayout2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainTableLayout2.Controls.Add(this.wallpaperGroupBox, 0, 1);
+            this.mainTableLayout2.Controls.Add(this.providerGroupBox, 0, 0);
             this.mainTableLayout2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTableLayout2.Location = new System.Drawing.Point(0, 0);
             this.mainTableLayout2.Margin = new System.Windows.Forms.Padding(0);
@@ -170,80 +181,9 @@ namespace DailyDesktop.Desktop
             this.mainTableLayout2.RowCount = 2;
             this.mainTableLayout2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mainTableLayout2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.mainTableLayout2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.mainTableLayout2.Size = new System.Drawing.Size(410, 571);
             this.mainTableLayout2.TabIndex = 0;
-            // 
-            // providerGroupBox
-            // 
-            this.providerGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.providerGroupBox.Controls.Add(this.providerDescriptionTableLayout);
-            this.providerGroupBox.Controls.Add(this.providerComboBox);
-            this.providerGroupBox.Location = new System.Drawing.Point(3, 4);
-            this.providerGroupBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.providerGroupBox.Name = "providerGroupBox";
-            this.providerGroupBox.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.providerGroupBox.Size = new System.Drawing.Size(404, 277);
-            this.providerGroupBox.TabIndex = 1;
-            this.providerGroupBox.TabStop = false;
-            this.providerGroupBox.Text = "Provider";
-            // 
-            // providerDescriptionTableLayout
-            // 
-            this.providerDescriptionTableLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.providerDescriptionTableLayout.ColumnCount = 1;
-            this.providerDescriptionTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.providerDescriptionTableLayout.Controls.Add(this.providerDescriptionLabel, 0, 0);
-            this.providerDescriptionTableLayout.Controls.Add(this.providerSourceLinkLabel, 0, 1);
-            this.providerDescriptionTableLayout.Location = new System.Drawing.Point(7, 68);
-            this.providerDescriptionTableLayout.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.providerDescriptionTableLayout.Name = "providerDescriptionTableLayout";
-            this.providerDescriptionTableLayout.RowCount = 2;
-            this.providerDescriptionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.providerDescriptionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-            this.providerDescriptionTableLayout.Size = new System.Drawing.Size(391, 201);
-            this.providerDescriptionTableLayout.TabIndex = 2;
-            // 
-            // providerDescriptionLabel
-            // 
-            this.providerDescriptionLabel.AutoEllipsis = true;
-            this.providerDescriptionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.providerDescriptionLabel.Location = new System.Drawing.Point(3, 4);
-            this.providerDescriptionLabel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.providerDescriptionLabel.Name = "providerDescriptionLabel";
-            this.providerDescriptionLabel.Size = new System.Drawing.Size(385, 166);
-            this.providerDescriptionLabel.TabIndex = 0;
-            // 
-            // providerSourceLinkLabel
-            // 
-            this.providerSourceLinkLabel.AutoEllipsis = true;
-            this.providerSourceLinkLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.providerSourceLinkLabel.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.providerSourceLinkLabel.LinkColor = System.Drawing.SystemColors.HotTrack;
-            this.providerSourceLinkLabel.Location = new System.Drawing.Point(0, 174);
-            this.providerSourceLinkLabel.Margin = new System.Windows.Forms.Padding(0);
-            this.providerSourceLinkLabel.Name = "providerSourceLinkLabel";
-            this.providerSourceLinkLabel.Size = new System.Drawing.Size(391, 27);
-            this.providerSourceLinkLabel.TabIndex = 2;
-            this.providerSourceLinkLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.providerSourceLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.providerSourceLinkLabel_LinkClicked);
-            // 
-            // providerComboBox
-            // 
-            this.providerComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.providerComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.providerComboBox.FormattingEnabled = true;
-            this.providerComboBox.Location = new System.Drawing.Point(7, 29);
-            this.providerComboBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.providerComboBox.Name = "providerComboBox";
-            this.providerComboBox.Size = new System.Drawing.Size(390, 28);
-            this.providerComboBox.TabIndex = 1;
-            this.providerComboBox.DropDown += new System.EventHandler(this.providerComboBox_DropDown);
-            this.providerComboBox.SelectedIndexChanged += new System.EventHandler(this.providerComboBox_SelectedIndexChanged);
             // 
             // wallpaperGroupBox
             // 
@@ -266,13 +206,13 @@ namespace DailyDesktop.Desktop
             | System.Windows.Forms.AnchorStyles.Right)));
             this.wallpaperDescriptionTextBox.BackColor = System.Drawing.SystemColors.Window;
             this.wallpaperDescriptionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.wallpaperDescriptionTextBox.Location = new System.Drawing.Point(7, 64);
+            this.wallpaperDescriptionTextBox.Location = new System.Drawing.Point(10, 64);
             this.wallpaperDescriptionTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.wallpaperDescriptionTextBox.Multiline = true;
             this.wallpaperDescriptionTextBox.Name = "wallpaperDescriptionTextBox";
             this.wallpaperDescriptionTextBox.ReadOnly = true;
             this.wallpaperDescriptionTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.wallpaperDescriptionTextBox.Size = new System.Drawing.Size(391, 206);
+            this.wallpaperDescriptionTextBox.Size = new System.Drawing.Size(384, 206);
             this.wallpaperDescriptionTextBox.TabIndex = 1;
             this.wallpaperDescriptionTextBox.TabStop = false;
             this.wallpaperDescriptionTextBox.Text = "No description.";
@@ -285,10 +225,10 @@ namespace DailyDesktop.Desktop
             this.wallpaperCreditFlowLayout.Controls.Add(this.wallpaperCreditLabel);
             this.wallpaperCreditFlowLayout.Controls.Add(this.wallpaperAuthorLinkLabel);
             this.wallpaperCreditFlowLayout.Controls.Add(this.wallpaperUpdatedLabel);
-            this.wallpaperCreditFlowLayout.Location = new System.Drawing.Point(7, 29);
+            this.wallpaperCreditFlowLayout.Location = new System.Drawing.Point(10, 29);
             this.wallpaperCreditFlowLayout.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.wallpaperCreditFlowLayout.Name = "wallpaperCreditFlowLayout";
-            this.wallpaperCreditFlowLayout.Size = new System.Drawing.Size(391, 27);
+            this.wallpaperCreditFlowLayout.Size = new System.Drawing.Size(384, 27);
             this.wallpaperCreditFlowLayout.TabIndex = 0;
             this.wallpaperCreditFlowLayout.WrapContents = false;
             // 
@@ -301,16 +241,16 @@ namespace DailyDesktop.Desktop
             this.wallpaperTitleLinkLabel.Location = new System.Drawing.Point(0, 0);
             this.wallpaperTitleLinkLabel.Margin = new System.Windows.Forms.Padding(0);
             this.wallpaperTitleLinkLabel.Name = "wallpaperTitleLinkLabel";
-            this.wallpaperTitleLinkLabel.Size = new System.Drawing.Size(33, 20);
+            this.wallpaperTitleLinkLabel.Size = new System.Drawing.Size(36, 20);
             this.wallpaperTitleLinkLabel.TabIndex = 3;
             this.wallpaperTitleLinkLabel.TabStop = true;
-            this.wallpaperTitleLinkLabel.Text = "null";
+            this.wallpaperTitleLinkLabel.Text = "Null";
             this.wallpaperTitleLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.wallpaperTitleLinkLabel_LinkClicked);
             // 
             // wallpaperCreditLabel
             // 
             this.wallpaperCreditLabel.AutoSize = true;
-            this.wallpaperCreditLabel.Location = new System.Drawing.Point(33, 0);
+            this.wallpaperCreditLabel.Location = new System.Drawing.Point(36, 0);
             this.wallpaperCreditLabel.Margin = new System.Windows.Forms.Padding(0);
             this.wallpaperCreditLabel.Name = "wallpaperCreditLabel";
             this.wallpaperCreditLabel.Size = new System.Drawing.Size(25, 20);
@@ -323,7 +263,7 @@ namespace DailyDesktop.Desktop
             this.wallpaperAuthorLinkLabel.DisabledLinkColor = System.Drawing.SystemColors.ControlText;
             this.wallpaperAuthorLinkLabel.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.wallpaperAuthorLinkLabel.LinkColor = System.Drawing.SystemColors.HotTrack;
-            this.wallpaperAuthorLinkLabel.Location = new System.Drawing.Point(58, 0);
+            this.wallpaperAuthorLinkLabel.Location = new System.Drawing.Point(61, 0);
             this.wallpaperAuthorLinkLabel.Margin = new System.Windows.Forms.Padding(0);
             this.wallpaperAuthorLinkLabel.Name = "wallpaperAuthorLinkLabel";
             this.wallpaperAuthorLinkLabel.Size = new System.Drawing.Size(33, 20);
@@ -335,13 +275,83 @@ namespace DailyDesktop.Desktop
             // wallpaperUpdatedLabel
             // 
             this.wallpaperUpdatedLabel.AutoSize = true;
-            this.wallpaperUpdatedLabel.Location = new System.Drawing.Point(91, 0);
+            this.wallpaperUpdatedLabel.Location = new System.Drawing.Point(94, 0);
             this.wallpaperUpdatedLabel.Margin = new System.Windows.Forms.Padding(0);
             this.wallpaperUpdatedLabel.Name = "wallpaperUpdatedLabel";
             this.wallpaperUpdatedLabel.Size = new System.Drawing.Size(108, 20);
             this.wallpaperUpdatedLabel.TabIndex = 3;
             this.wallpaperUpdatedLabel.Text = "fetched on null";
             this.wallpaperUpdatedLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // providerGroupBox
+            // 
+            this.providerGroupBox.Controls.Add(this.providerDescriptionTableLayout);
+            this.providerGroupBox.Controls.Add(this.providerComboBox);
+            this.providerGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.providerGroupBox.Location = new System.Drawing.Point(3, 4);
+            this.providerGroupBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.providerGroupBox.Name = "providerGroupBox";
+            this.providerGroupBox.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.providerGroupBox.Size = new System.Drawing.Size(404, 277);
+            this.providerGroupBox.TabIndex = 1;
+            this.providerGroupBox.TabStop = false;
+            this.providerGroupBox.Text = "Provider";
+            // 
+            // providerDescriptionTableLayout
+            // 
+            this.providerDescriptionTableLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.providerDescriptionTableLayout.ColumnCount = 1;
+            this.providerDescriptionTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.providerDescriptionTableLayout.Controls.Add(this.providerSourceLinkLabel, 0, 1);
+            this.providerDescriptionTableLayout.Controls.Add(this.providerDescriptionLabel, 0, 0);
+            this.providerDescriptionTableLayout.Location = new System.Drawing.Point(10, 68);
+            this.providerDescriptionTableLayout.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.providerDescriptionTableLayout.Name = "providerDescriptionTableLayout";
+            this.providerDescriptionTableLayout.RowCount = 2;
+            this.providerDescriptionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.providerDescriptionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+            this.providerDescriptionTableLayout.Size = new System.Drawing.Size(384, 201);
+            this.providerDescriptionTableLayout.TabIndex = 2;
+            // 
+            // providerSourceLinkLabel
+            // 
+            this.providerSourceLinkLabel.AutoEllipsis = true;
+            this.providerSourceLinkLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.providerSourceLinkLabel.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.providerSourceLinkLabel.LinkColor = System.Drawing.SystemColors.HotTrack;
+            this.providerSourceLinkLabel.Location = new System.Drawing.Point(0, 178);
+            this.providerSourceLinkLabel.Margin = new System.Windows.Forms.Padding(0, 4, 0, 4);
+            this.providerSourceLinkLabel.Name = "providerSourceLinkLabel";
+            this.providerSourceLinkLabel.Size = new System.Drawing.Size(384, 19);
+            this.providerSourceLinkLabel.TabIndex = 2;
+            this.providerSourceLinkLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.providerSourceLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.providerSourceLinkLabel_LinkClicked);
+            // 
+            // providerDescriptionLabel
+            // 
+            this.providerDescriptionLabel.AutoEllipsis = true;
+            this.providerDescriptionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.providerDescriptionLabel.Location = new System.Drawing.Point(0, 4);
+            this.providerDescriptionLabel.Margin = new System.Windows.Forms.Padding(0, 4, 0, 4);
+            this.providerDescriptionLabel.Name = "providerDescriptionLabel";
+            this.providerDescriptionLabel.Size = new System.Drawing.Size(384, 166);
+            this.providerDescriptionLabel.TabIndex = 0;
+            // 
+            // providerComboBox
+            // 
+            this.providerComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.providerComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.providerComboBox.FormattingEnabled = true;
+            this.providerComboBox.Location = new System.Drawing.Point(10, 29);
+            this.providerComboBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.providerComboBox.Name = "providerComboBox";
+            this.providerComboBox.Size = new System.Drawing.Size(384, 28);
+            this.providerComboBox.TabIndex = 1;
+            this.providerComboBox.DropDown += new System.EventHandler(this.providerComboBox_DropDown);
+            this.providerComboBox.SelectedIndexChanged += new System.EventHandler(this.providerComboBox_SelectedIndexChanged);
             // 
             // optionsTabPage
             // 
@@ -376,7 +386,7 @@ namespace DailyDesktop.Desktop
             // optionsResizeCheckBox
             // 
             this.optionsResizeCheckBox.AutoSize = true;
-            this.optionsResizeCheckBox.Location = new System.Drawing.Point(2, 62);
+            this.optionsResizeCheckBox.Location = new System.Drawing.Point(10, 74);
             this.optionsResizeCheckBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.optionsResizeCheckBox.Name = "optionsResizeCheckBox";
             this.optionsResizeCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -393,11 +403,11 @@ namespace DailyDesktop.Desktop
             this.optionsBlurStrengthTrackBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.optionsBlurStrengthTrackBar.LargeChange = 10;
-            this.optionsBlurStrengthTrackBar.Location = new System.Drawing.Point(173, 119);
+            this.optionsBlurStrengthTrackBar.Location = new System.Drawing.Point(183, 138);
             this.optionsBlurStrengthTrackBar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.optionsBlurStrengthTrackBar.Maximum = 100;
             this.optionsBlurStrengthTrackBar.Name = "optionsBlurStrengthTrackBar";
-            this.optionsBlurStrengthTrackBar.Size = new System.Drawing.Size(234, 56);
+            this.optionsBlurStrengthTrackBar.Size = new System.Drawing.Size(220, 56);
             this.optionsBlurStrengthTrackBar.TabIndex = 5;
             this.optionsBlurStrengthTrackBar.TickFrequency = 10;
             this.optionsBlurStrengthTrackBar.Scroll += new System.EventHandler(this.optionsBlurStrengthTrackBar_Scroll);
@@ -405,7 +415,7 @@ namespace DailyDesktop.Desktop
             // optionsBlurStrengthLabel
             // 
             this.optionsBlurStrengthLabel.AutoSize = true;
-            this.optionsBlurStrengthLabel.Location = new System.Drawing.Point(3, 123);
+            this.optionsBlurStrengthLabel.Location = new System.Drawing.Point(10, 138);
             this.optionsBlurStrengthLabel.Name = "optionsBlurStrengthLabel";
             this.optionsBlurStrengthLabel.Size = new System.Drawing.Size(176, 20);
             this.optionsBlurStrengthLabel.TabIndex = 9;
@@ -416,7 +426,7 @@ namespace DailyDesktop.Desktop
             // optionsBlurredFitCheckBox
             // 
             this.optionsBlurredFitCheckBox.AutoSize = true;
-            this.optionsBlurredFitCheckBox.Location = new System.Drawing.Point(2, 94);
+            this.optionsBlurredFitCheckBox.Location = new System.Drawing.Point(10, 106);
             this.optionsBlurredFitCheckBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.optionsBlurredFitCheckBox.Name = "optionsBlurredFitCheckBox";
             this.optionsBlurredFitCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -432,7 +442,7 @@ namespace DailyDesktop.Desktop
             this.optionsUpdateTimePicker.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.optionsUpdateTimePicker.CustomFormat = "h:mm tt";
             this.optionsUpdateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.optionsUpdateTimePicker.Location = new System.Drawing.Point(93, 27);
+            this.optionsUpdateTimePicker.Location = new System.Drawing.Point(103, 39);
             this.optionsUpdateTimePicker.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.optionsUpdateTimePicker.Name = "optionsUpdateTimePicker";
             this.optionsUpdateTimePicker.ShowUpDown = true;
@@ -444,7 +454,7 @@ namespace DailyDesktop.Desktop
             // optionsEnabledCheckBox
             // 
             this.optionsEnabledCheckBox.AutoSize = true;
-            this.optionsEnabledCheckBox.Location = new System.Drawing.Point(2, 4);
+            this.optionsEnabledCheckBox.Location = new System.Drawing.Point(10, 10);
             this.optionsEnabledCheckBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.optionsEnabledCheckBox.Name = "optionsEnabledCheckBox";
             this.optionsEnabledCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -459,7 +469,7 @@ namespace DailyDesktop.Desktop
             // optionsUpdateTimeLabel
             // 
             this.optionsUpdateTimeLabel.AutoSize = true;
-            this.optionsUpdateTimeLabel.Location = new System.Drawing.Point(3, 33);
+            this.optionsUpdateTimeLabel.Location = new System.Drawing.Point(10, 42);
             this.optionsUpdateTimeLabel.Name = "optionsUpdateTimeLabel";
             this.optionsUpdateTimeLabel.Size = new System.Drawing.Size(92, 20);
             this.optionsUpdateTimeLabel.TabIndex = 1;
@@ -471,10 +481,10 @@ namespace DailyDesktop.Desktop
             // 
             this.optionsProvidersDirectoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.optionsProvidersDirectoryButton.Location = new System.Drawing.Point(3, 226);
+            this.optionsProvidersDirectoryButton.Location = new System.Drawing.Point(10, 241);
             this.optionsProvidersDirectoryButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.optionsProvidersDirectoryButton.Name = "optionsProvidersDirectoryButton";
-            this.optionsProvidersDirectoryButton.Size = new System.Drawing.Size(403, 31);
+            this.optionsProvidersDirectoryButton.Size = new System.Drawing.Size(390, 31);
             this.optionsProvidersDirectoryButton.TabIndex = 7;
             this.optionsProvidersDirectoryButton.Text = "Open providers folder";
             this.optionsProvidersDirectoryButton.UseVisualStyleBackColor = true;
@@ -484,14 +494,103 @@ namespace DailyDesktop.Desktop
             // 
             this.optionsUpdateWallpaperButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.optionsUpdateWallpaperButton.Location = new System.Drawing.Point(3, 187);
+            this.optionsUpdateWallpaperButton.Location = new System.Drawing.Point(10, 202);
             this.optionsUpdateWallpaperButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.optionsUpdateWallpaperButton.Name = "optionsUpdateWallpaperButton";
-            this.optionsUpdateWallpaperButton.Size = new System.Drawing.Size(403, 31);
+            this.optionsUpdateWallpaperButton.Size = new System.Drawing.Size(390, 31);
             this.optionsUpdateWallpaperButton.TabIndex = 6;
             this.optionsUpdateWallpaperButton.Text = "Update desktop wallpaper";
             this.optionsUpdateWallpaperButton.UseVisualStyleBackColor = true;
             this.optionsUpdateWallpaperButton.Click += new System.EventHandler(this.optionsUpdateWallpaperButton_Click);
+            // 
+            // aboutTabPage
+            // 
+            this.aboutTabPage.BackColor = System.Drawing.SystemColors.Window;
+            this.aboutTabPage.Controls.Add(this.aboutTableLayout);
+            this.aboutTabPage.Location = new System.Drawing.Point(4, 29);
+            this.aboutTabPage.Margin = new System.Windows.Forms.Padding(0);
+            this.aboutTabPage.Name = "aboutTabPage";
+            this.aboutTabPage.Size = new System.Drawing.Size(410, 571);
+            this.aboutTabPage.TabIndex = 2;
+            this.aboutTabPage.Text = "About";
+            // 
+            // aboutTableLayout
+            // 
+            this.aboutTableLayout.ColumnCount = 1;
+            this.aboutTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.aboutTableLayout.Controls.Add(this.licenseGroupBox, 0, 1);
+            this.aboutTableLayout.Controls.Add(this.overviewGroupBox, 0, 0);
+            this.aboutTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.aboutTableLayout.Location = new System.Drawing.Point(0, 0);
+            this.aboutTableLayout.Margin = new System.Windows.Forms.Padding(0);
+            this.aboutTableLayout.Name = "aboutTableLayout";
+            this.aboutTableLayout.RowCount = 2;
+            this.aboutTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.aboutTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.aboutTableLayout.Size = new System.Drawing.Size(410, 571);
+            this.aboutTableLayout.TabIndex = 3;
+            // 
+            // licenseGroupBox
+            // 
+            this.licenseGroupBox.Controls.Add(this.licenseRichTextBox);
+            this.licenseGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.licenseGroupBox.Location = new System.Drawing.Point(3, 232);
+            this.licenseGroupBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.licenseGroupBox.Name = "licenseGroupBox";
+            this.licenseGroupBox.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.licenseGroupBox.Size = new System.Drawing.Size(404, 335);
+            this.licenseGroupBox.TabIndex = 2;
+            this.licenseGroupBox.TabStop = false;
+            this.licenseGroupBox.Text = "License";
+            // 
+            // licenseRichTextBox
+            // 
+            this.licenseRichTextBox.AcceptsTab = true;
+            this.licenseRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.licenseRichTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.licenseRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.licenseRichTextBox.Location = new System.Drawing.Point(13, 28);
+            this.licenseRichTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.licenseRichTextBox.Name = "licenseRichTextBox";
+            this.licenseRichTextBox.ReadOnly = true;
+            this.licenseRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.licenseRichTextBox.Size = new System.Drawing.Size(378, 299);
+            this.licenseRichTextBox.TabIndex = 1;
+            this.licenseRichTextBox.TabStop = false;
+            this.licenseRichTextBox.Text = resources.GetString("licenseRichTextBox.Text");
+            // 
+            // overviewGroupBox
+            // 
+            this.overviewGroupBox.Controls.Add(this.overviewRichTextBox);
+            this.overviewGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.overviewGroupBox.Location = new System.Drawing.Point(3, 4);
+            this.overviewGroupBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.overviewGroupBox.Name = "overviewGroupBox";
+            this.overviewGroupBox.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.overviewGroupBox.Size = new System.Drawing.Size(404, 220);
+            this.overviewGroupBox.TabIndex = 1;
+            this.overviewGroupBox.TabStop = false;
+            this.overviewGroupBox.Text = "Overview";
+            // 
+            // overviewRichTextBox
+            // 
+            this.overviewRichTextBox.AcceptsTab = true;
+            this.overviewRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.overviewRichTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.overviewRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.overviewRichTextBox.Location = new System.Drawing.Point(13, 28);
+            this.overviewRichTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.overviewRichTextBox.Name = "overviewRichTextBox";
+            this.overviewRichTextBox.ReadOnly = true;
+            this.overviewRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.overviewRichTextBox.Size = new System.Drawing.Size(378, 184);
+            this.overviewRichTextBox.TabIndex = 0;
+            this.overviewRichTextBox.TabStop = false;
+            this.overviewRichTextBox.Text = resources.GetString("overviewRichTextBox.Text");
             // 
             // bannerPicture
             // 
@@ -534,16 +633,20 @@ namespace DailyDesktop.Desktop
             this.mainTabControl.ResumeLayout(false);
             this.mainTabPage.ResumeLayout(false);
             this.mainTableLayout2.ResumeLayout(false);
-            this.providerGroupBox.ResumeLayout(false);
-            this.providerDescriptionTableLayout.ResumeLayout(false);
             this.wallpaperGroupBox.ResumeLayout(false);
             this.wallpaperGroupBox.PerformLayout();
             this.wallpaperCreditFlowLayout.ResumeLayout(false);
             this.wallpaperCreditFlowLayout.PerformLayout();
+            this.providerGroupBox.ResumeLayout(false);
+            this.providerDescriptionTableLayout.ResumeLayout(false);
             this.optionsTabPage.ResumeLayout(false);
             this.optionsPanel.ResumeLayout(false);
             this.optionsPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.optionsBlurStrengthTrackBar)).EndInit();
+            this.aboutTabPage.ResumeLayout(false);
+            this.aboutTableLayout.ResumeLayout(false);
+            this.licenseGroupBox.ResumeLayout(false);
+            this.overviewGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.bannerPicture)).EndInit();
             this.ResumeLayout(false);
 
@@ -583,6 +686,12 @@ namespace DailyDesktop.Desktop
         private System.Windows.Forms.Label wallpaperUpdatedLabel;
         private System.Windows.Forms.TextBox wallpaperDescriptionTextBox;
         private System.Windows.Forms.CheckBox optionsResizeCheckBox;
+        private System.Windows.Forms.TabPage aboutTabPage;
+        private System.Windows.Forms.RichTextBox overviewRichTextBox;
+        private System.Windows.Forms.TableLayoutPanel aboutTableLayout;
+        private System.Windows.Forms.GroupBox licenseGroupBox;
+        private System.Windows.Forms.GroupBox overviewGroupBox;
+        private System.Windows.Forms.RichTextBox licenseRichTextBox;
     }
 }
 
