@@ -74,6 +74,22 @@ Turning on this option may cause wallpapers to take a bit
 longer to update, especially for higher resolution images.
 </value>
   </data>
+  <data name="licenseRichTextBox.Text" xml:space="preserve">
+    <value>Copyright (c) Alden Wu &lt;aldenwu0@gmail.com&gt;.
+
+This software is licensed under the MIT License.
+Full license text: {0}
+
+This software uses open-source third-party libraries.
+Full EULA text: {1}
+
+https://github.com/mdymel/superfastblur</value>
+  </data>
+  <data name="overviewRichTextBox.Text" xml:space="preserve">
+    <value>Open-source modular Windows desktop wallpaper updater that works daily at a set time. Wallpapers are provided by IProvider classes that are implemented in DLL modules. Source code available on GitHub.
+
+Source: https://github.com/goodtrailer/daily-desktop</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="bannerPicture.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
