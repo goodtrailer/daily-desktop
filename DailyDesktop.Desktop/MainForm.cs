@@ -24,6 +24,7 @@ namespace DailyDesktop.Desktop
         private const string FETCHED_TEXT = "fetched on ";
         private const string PROVIDERS_DIR = "providers";
         private const string SERIALIZE_JSON_DIR = "";
+        private const string NULL_TEXT = "null";
 
         private DailyDesktopCore core;
         private WallpaperInfo wallpaper;
@@ -189,9 +190,9 @@ namespace DailyDesktop.Desktop
                 string jsonString = File.ReadAllText(core.WallpaperInfoJsonPath);
                 wallpaper = JsonSerializer.Deserialize<WallpaperInfo>(jsonString);
                 string updateDate = wallpaper.Date.ToString("dddd, MMMM d");
-                wallpaperUpdatedLabel.Text = FETCHED_TEXT + updateDate;
-                wallpaperTitleLinkLabel.Text = wallpaper.Title;
-                wallpaperAuthorLinkLabel.Text = wallpaper.Author;
+                wallpaperUpdatedLabel.Text = FETCHED_TEXT + (updateDate ?? NULL_TEXT);
+                wallpaperTitleLinkLabel.Text = wallpaper.Title ?? NULL_TEXT;
+                wallpaperAuthorLinkLabel.Text = wallpaper.Author ?? NULL_TEXT;
                 string text = wallpaper.Description ?? NULL_DESCRIPTION;
                 wallpaperDescriptionTextBox.Text = Regex.Replace(text, "(?<=[^\r])\n", "\r\n");
 
@@ -204,9 +205,9 @@ namespace DailyDesktop.Desktop
             catch (Exception e) when (e is JsonException or FileNotFoundException)
             {
                 Console.WriteLine(e.StackTrace);
-                wallpaperUpdatedLabel.Text = FETCHED_TEXT + "null";
-                wallpaperTitleLinkLabel.Text = "null";
-                wallpaperAuthorLinkLabel.Text = "null";
+                wallpaperUpdatedLabel.Text = FETCHED_TEXT + NULL_TEXT;
+                wallpaperTitleLinkLabel.Text = NULL_TEXT;
+                wallpaperAuthorLinkLabel.Text = NULL_TEXT;
                 wallpaperDescriptionTextBox.Text = NULL_DESCRIPTION;
                 wallpaperTitleLinkLabel.Links[0].Enabled = false;
                 wallpaperAuthorLinkLabel.Links[0].Enabled = false;
