@@ -39,7 +39,7 @@ namespace DailyDesktop.Desktop
             this.mainTabPage = new System.Windows.Forms.TabPage();
             this.mainTableLayout2 = new System.Windows.Forms.TableLayoutPanel();
             this.wallpaperGroupBox = new System.Windows.Forms.GroupBox();
-            this.wallpaperDescriptionTextBox = new System.Windows.Forms.TextBox();
+            this.wallpaperDescriptionRichTextBox = new System.Windows.Forms.RichTextBox();
             this.wallpaperCreditFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.wallpaperTitleLinkLabel = new System.Windows.Forms.LinkLabel();
             this.wallpaperCreditLabel = new System.Windows.Forms.Label();
@@ -187,7 +187,7 @@ namespace DailyDesktop.Desktop
             // 
             // wallpaperGroupBox
             // 
-            this.wallpaperGroupBox.Controls.Add(this.wallpaperDescriptionTextBox);
+            this.wallpaperGroupBox.Controls.Add(this.wallpaperDescriptionRichTextBox);
             this.wallpaperGroupBox.Controls.Add(this.wallpaperCreditFlowLayout);
             this.wallpaperGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wallpaperGroupBox.Location = new System.Drawing.Point(3, 289);
@@ -199,23 +199,20 @@ namespace DailyDesktop.Desktop
             this.wallpaperGroupBox.TabStop = false;
             this.wallpaperGroupBox.Text = "Wallpaper";
             // 
-            // wallpaperDescriptionTextBox
+            // wallpaperDescriptionRichTextBox
             // 
-            this.wallpaperDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.wallpaperDescriptionRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.wallpaperDescriptionTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.wallpaperDescriptionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.wallpaperDescriptionTextBox.Location = new System.Drawing.Point(10, 64);
-            this.wallpaperDescriptionTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.wallpaperDescriptionTextBox.Multiline = true;
-            this.wallpaperDescriptionTextBox.Name = "wallpaperDescriptionTextBox";
-            this.wallpaperDescriptionTextBox.ReadOnly = true;
-            this.wallpaperDescriptionTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.wallpaperDescriptionTextBox.Size = new System.Drawing.Size(384, 206);
-            this.wallpaperDescriptionTextBox.TabIndex = 1;
-            this.wallpaperDescriptionTextBox.TabStop = false;
-            this.wallpaperDescriptionTextBox.Text = "No description.";
+            this.wallpaperDescriptionRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.wallpaperDescriptionRichTextBox.Location = new System.Drawing.Point(13, 64);
+            this.wallpaperDescriptionRichTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.wallpaperDescriptionRichTextBox.Name = "wallpaperDescriptionRichTextBox";
+            this.wallpaperDescriptionRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.wallpaperDescriptionRichTextBox.Size = new System.Drawing.Size(378, 206);
+            this.wallpaperDescriptionRichTextBox.TabIndex = 1;
+            this.wallpaperDescriptionRichTextBox.TabStop = false;
+            this.wallpaperDescriptionRichTextBox.Text = "No description.";
             // 
             // wallpaperCreditFlowLayout
             // 
@@ -525,8 +522,8 @@ namespace DailyDesktop.Desktop
             this.aboutTableLayout.Margin = new System.Windows.Forms.Padding(0);
             this.aboutTableLayout.Name = "aboutTableLayout";
             this.aboutTableLayout.RowCount = 2;
-            this.aboutTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.aboutTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.aboutTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.45454F));
+            this.aboutTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 54.54546F));
             this.aboutTableLayout.Size = new System.Drawing.Size(410, 571);
             this.aboutTableLayout.TabIndex = 3;
             // 
@@ -534,11 +531,11 @@ namespace DailyDesktop.Desktop
             // 
             this.licenseGroupBox.Controls.Add(this.licenseRichTextBox);
             this.licenseGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.licenseGroupBox.Location = new System.Drawing.Point(3, 232);
+            this.licenseGroupBox.Location = new System.Drawing.Point(3, 263);
             this.licenseGroupBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.licenseGroupBox.Name = "licenseGroupBox";
             this.licenseGroupBox.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.licenseGroupBox.Size = new System.Drawing.Size(404, 335);
+            this.licenseGroupBox.Size = new System.Drawing.Size(404, 304);
             this.licenseGroupBox.TabIndex = 2;
             this.licenseGroupBox.TabStop = false;
             this.licenseGroupBox.Text = "License";
@@ -556,7 +553,7 @@ namespace DailyDesktop.Desktop
             this.licenseRichTextBox.Name = "licenseRichTextBox";
             this.licenseRichTextBox.ReadOnly = true;
             this.licenseRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.licenseRichTextBox.Size = new System.Drawing.Size(378, 299);
+            this.licenseRichTextBox.Size = new System.Drawing.Size(378, 268);
             this.licenseRichTextBox.TabIndex = 1;
             this.licenseRichTextBox.TabStop = false;
             this.licenseRichTextBox.Text = resources.GetString("licenseRichTextBox.Text");
@@ -569,7 +566,7 @@ namespace DailyDesktop.Desktop
             this.overviewGroupBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.overviewGroupBox.Name = "overviewGroupBox";
             this.overviewGroupBox.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.overviewGroupBox.Size = new System.Drawing.Size(404, 220);
+            this.overviewGroupBox.Size = new System.Drawing.Size(404, 251);
             this.overviewGroupBox.TabIndex = 1;
             this.overviewGroupBox.TabStop = false;
             this.overviewGroupBox.Text = "Overview";
@@ -587,7 +584,7 @@ namespace DailyDesktop.Desktop
             this.overviewRichTextBox.Name = "overviewRichTextBox";
             this.overviewRichTextBox.ReadOnly = true;
             this.overviewRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.overviewRichTextBox.Size = new System.Drawing.Size(378, 184);
+            this.overviewRichTextBox.Size = new System.Drawing.Size(378, 215);
             this.overviewRichTextBox.TabIndex = 0;
             this.overviewRichTextBox.TabStop = false;
             this.overviewRichTextBox.Text = resources.GetString("overviewRichTextBox.Text");
@@ -634,7 +631,6 @@ namespace DailyDesktop.Desktop
             this.mainTabPage.ResumeLayout(false);
             this.mainTableLayout2.ResumeLayout(false);
             this.wallpaperGroupBox.ResumeLayout(false);
-            this.wallpaperGroupBox.PerformLayout();
             this.wallpaperCreditFlowLayout.ResumeLayout(false);
             this.wallpaperCreditFlowLayout.PerformLayout();
             this.providerGroupBox.ResumeLayout(false);
@@ -684,8 +680,8 @@ namespace DailyDesktop.Desktop
         private System.Windows.Forms.Label wallpaperCreditLabel;
         private System.Windows.Forms.LinkLabel wallpaperAuthorLinkLabel;
         private System.Windows.Forms.Label wallpaperUpdatedLabel;
-        private System.Windows.Forms.TextBox wallpaperDescriptionTextBox;
         private System.Windows.Forms.CheckBox optionsResizeCheckBox;
+        private System.Windows.Forms.RichTextBox wallpaperDescriptionRichTextBox;
         private System.Windows.Forms.TabPage aboutTabPage;
         private System.Windows.Forms.RichTextBox overviewRichTextBox;
         private System.Windows.Forms.TableLayoutPanel aboutTableLayout;

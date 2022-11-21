@@ -29,7 +29,8 @@ namespace DailyDesktop.Desktop
         private const string TASK_NAME_PREFIX = "Daily Desktop";
 
         private const string NULL_DESCRIPTION = "No description.";
-        private const string FETCHED_TEXT = "fetched on ";
+        private const string NULL_TEXT = "null";
+        private const string FETCHED_TEXT = "fetched on";
 
         private DailyDesktopCore core;
         private WallpaperInfo wallpaper;
@@ -48,6 +49,7 @@ namespace DailyDesktop.Desktop
             core = new DailyDesktopCore(providersDir, serializeJsonDir, taskName, true);
             InitializeComponent();
 
+            wallpaperDescriptionRichTextBox.LinkClicked += wallpaperDescriptionRichTextBox_LinkClicked;
             overviewRichTextBox.LinkClicked += overviewRichTextBox_LinkClicked;
             licenseRichTextBox.LinkClicked += licenseRichTextBox_LinkClicked;
 
@@ -209,7 +211,7 @@ namespace DailyDesktop.Desktop
                 wallpaperTitleLinkLabel.Text = wallpaper.Title ?? NULL_TEXT;
                 wallpaperAuthorLinkLabel.Text = wallpaper.Author ?? NULL_TEXT;
                 string text = wallpaper.Description ?? NULL_DESCRIPTION;
-                wallpaperDescriptionTextBox.Text = Regex.Replace(text, "(?<=[^\r])\n", "\r\n");
+                wallpaperDescriptionRichTextBox.Text = Regex.Replace(text, "(?<=[^\r])\n", "\r\n");
 
                 Uri temp;
                 wallpaperTitleLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.TitleUri, UriKind.Absolute, out temp);
@@ -220,10 +222,12 @@ namespace DailyDesktop.Desktop
             catch (Exception e) when (e is JsonException or FileNotFoundException)
             {
                 Console.WriteLine(e.StackTrace);
-                wallpaperUpdatedLabel.Text = FETCHED_TEXT + NULL_TEXT;
+                
+                wallpaperUpdatedLabel.Text = $"{FETCHED_TEXT} {NULL_TEXT}";
                 wallpaperTitleLinkLabel.Text = NULL_TEXT;
                 wallpaperAuthorLinkLabel.Text = NULL_TEXT;
-                wallpaperDescriptionTextBox.Text = NULL_DESCRIPTION;
+                wallpaperDescriptionRichTextBox.Text = NULL_DESCRIPTION;
+                
                 wallpaperTitleLinkLabel.Links[0].Enabled = false;
                 wallpaperAuthorLinkLabel.Links[0].Enabled = false;
             }
@@ -255,6 +259,8 @@ namespace DailyDesktop.Desktop
             Application.Exit();
         }
 
+        private void wallpaperDescriptionRichTextBox_LinkClicked(object sender, LinkClickedEventArgs e) => openUri(e.LinkText);
+        
         private void overviewRichTextBox_LinkClicked(object sender, LinkClickedEventArgs e) => openUri(e.LinkText);
 
         private void licenseRichTextBox_LinkClicked(object sender, LinkClickedEventArgs e) => openUri(e.LinkText);
