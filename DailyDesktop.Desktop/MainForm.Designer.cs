@@ -222,6 +222,7 @@ namespace DailyDesktop.Desktop
             this.providerSourceLinkLabel.AutoEllipsis = true;
             this.providerSourceLinkLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.providerSourceLinkLabel.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.providerSourceLinkLabel.LinkColor = System.Drawing.SystemColors.HotTrack;
             this.providerSourceLinkLabel.Location = new System.Drawing.Point(0, 174);
             this.providerSourceLinkLabel.Margin = new System.Windows.Forms.Padding(0);
             this.providerSourceLinkLabel.Name = "providerSourceLinkLabel";
@@ -296,6 +297,7 @@ namespace DailyDesktop.Desktop
             this.wallpaperTitleLinkLabel.AutoSize = true;
             this.wallpaperTitleLinkLabel.DisabledLinkColor = System.Drawing.SystemColors.ControlText;
             this.wallpaperTitleLinkLabel.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.wallpaperTitleLinkLabel.LinkColor = System.Drawing.SystemColors.HotTrack;
             this.wallpaperTitleLinkLabel.Location = new System.Drawing.Point(0, 0);
             this.wallpaperTitleLinkLabel.Margin = new System.Windows.Forms.Padding(0);
             this.wallpaperTitleLinkLabel.Name = "wallpaperTitleLinkLabel";
@@ -320,6 +322,7 @@ namespace DailyDesktop.Desktop
             this.wallpaperAuthorLinkLabel.AutoSize = true;
             this.wallpaperAuthorLinkLabel.DisabledLinkColor = System.Drawing.SystemColors.ControlText;
             this.wallpaperAuthorLinkLabel.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.wallpaperAuthorLinkLabel.LinkColor = System.Drawing.SystemColors.HotTrack;
             this.wallpaperAuthorLinkLabel.Location = new System.Drawing.Point(58, 0);
             this.wallpaperAuthorLinkLabel.Margin = new System.Windows.Forms.Padding(0);
             this.wallpaperAuthorLinkLabel.Name = "wallpaperAuthorLinkLabel";
