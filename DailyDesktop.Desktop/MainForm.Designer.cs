@@ -522,8 +522,8 @@ namespace DailyDesktop.Desktop
             this.aboutTableLayout.Margin = new System.Windows.Forms.Padding(0);
             this.aboutTableLayout.Name = "aboutTableLayout";
             this.aboutTableLayout.RowCount = 2;
-            this.aboutTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.aboutTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.aboutTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.45454F));
+            this.aboutTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 54.54546F));
             this.aboutTableLayout.Size = new System.Drawing.Size(410, 571);
             this.aboutTableLayout.TabIndex = 3;
             // 
@@ -531,11 +531,11 @@ namespace DailyDesktop.Desktop
             // 
             this.licenseGroupBox.Controls.Add(this.licenseRichTextBox);
             this.licenseGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.licenseGroupBox.Location = new System.Drawing.Point(3, 232);
+            this.licenseGroupBox.Location = new System.Drawing.Point(3, 263);
             this.licenseGroupBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.licenseGroupBox.Name = "licenseGroupBox";
             this.licenseGroupBox.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.licenseGroupBox.Size = new System.Drawing.Size(404, 335);
+            this.licenseGroupBox.Size = new System.Drawing.Size(404, 304);
             this.licenseGroupBox.TabIndex = 2;
             this.licenseGroupBox.TabStop = false;
             this.licenseGroupBox.Text = "License";
@@ -553,7 +553,7 @@ namespace DailyDesktop.Desktop
             this.licenseRichTextBox.Name = "licenseRichTextBox";
             this.licenseRichTextBox.ReadOnly = true;
             this.licenseRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.licenseRichTextBox.Size = new System.Drawing.Size(378, 299);
+            this.licenseRichTextBox.Size = new System.Drawing.Size(378, 268);
             this.licenseRichTextBox.TabIndex = 1;
             this.licenseRichTextBox.TabStop = false;
             this.licenseRichTextBox.Text = resources.GetString("licenseRichTextBox.Text");
@@ -566,7 +566,7 @@ namespace DailyDesktop.Desktop
             this.overviewGroupBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.overviewGroupBox.Name = "overviewGroupBox";
             this.overviewGroupBox.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.overviewGroupBox.Size = new System.Drawing.Size(404, 220);
+            this.overviewGroupBox.Size = new System.Drawing.Size(404, 251);
             this.overviewGroupBox.TabIndex = 1;
             this.overviewGroupBox.TabStop = false;
             this.overviewGroupBox.Text = "Overview";
@@ -584,7 +584,7 @@ namespace DailyDesktop.Desktop
             this.overviewRichTextBox.Name = "overviewRichTextBox";
             this.overviewRichTextBox.ReadOnly = true;
             this.overviewRichTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.overviewRichTextBox.Size = new System.Drawing.Size(378, 184);
+            this.overviewRichTextBox.Size = new System.Drawing.Size(378, 215);
             this.overviewRichTextBox.TabIndex = 0;
             this.overviewRichTextBox.TabStop = false;
             this.overviewRichTextBox.Text = resources.GetString("overviewRichTextBox.Text");

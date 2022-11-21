@@ -30,7 +30,7 @@ namespace DailyDesktop.Desktop
 
         private const string NULL_DESCRIPTION = "No description.";
         private const string NULL_TEXT = "null";
-        private const string FETCHED_TEXT = "fetched on ";
+        private const string FETCHED_TEXT = "fetched on";
 
         private DailyDesktopCore core;
         private WallpaperInfo wallpaper;
@@ -223,7 +223,7 @@ namespace DailyDesktop.Desktop
             {
                 Console.WriteLine(e.StackTrace);
                 
-                wallpaperUpdatedLabel.Text = FETCHED_TEXT + NULL_TEXT;
+                wallpaperUpdatedLabel.Text = $"{FETCHED_TEXT} {NULL_TEXT}";
                 wallpaperTitleLinkLabel.Text = NULL_TEXT;
                 wallpaperAuthorLinkLabel.Text = NULL_TEXT;
                 wallpaperDescriptionRichTextBox.Text = NULL_DESCRIPTION;
