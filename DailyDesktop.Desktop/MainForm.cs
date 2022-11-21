@@ -29,6 +29,7 @@ namespace DailyDesktop.Desktop
         private const string TASK_NAME_PREFIX = "Daily Desktop";
 
         private const string NULL_DESCRIPTION = "No description.";
+        private const string NULL_TEXT = "null";
         private const string FETCHED_TEXT = "fetched on ";
 
         private DailyDesktopCore core;
