@@ -16,7 +16,7 @@ namespace DailyDesktop.Providers.RedditEarthPorn
         private const string AUTHOR_PATTERN = "(?<=(\"author\":\"))(.*?)(?=\")";
         private const string TITLE = "Photograph";
         private const string TITLE_URI_PATTERN = "(?<=(Posted by(.*?)href=\"))(.*?)(?=\")";
-        private const string DESCRIPTION_PATTERN = "(?<=(},\"title\":\"))(.*?)(?=\",\"author\")";
+        private const string DESCRIPTION_PATTERN = "(?<=(<h3 class=.*?>))(.*?)(?=</h3>)";
 
         public string DisplayName => "r/EarthPorn";
         public string Description => "Looks at the top post in the last 24 hours in the well-known r/EarthPorn, reddit's premiere landscape photography subreddit.";
@@ -32,7 +32,7 @@ namespace DailyDesktop.Providers.RedditEarthPorn
 
             string author = "u/" + Regex.Match(subredditHtml, AUTHOR_PATTERN).Value;
             string authorUri = "https://www.reddit.com/" + author;
-            string titleUri = Regex.Match(subredditHtml, TITLE_URI_PATTERN).Value;
+            string titleUri = "https://www.reddit.com" + Regex.Match(subredditHtml, TITLE_URI_PATTERN).Value;
             string description = Regex.Match(subredditHtml, DESCRIPTION_PATTERN).Value;
 
             return new WallpaperInfo
