@@ -4,6 +4,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DailyDesktop.Core;
@@ -16,12 +17,12 @@ namespace DailyDesktop.Providers.Bing
         private const string IMAGE_RELATIVE_URI_PATTERN = "(/th\\?id=)([^\"/>]*?)1920x1080.[a-z]*";
         private const string AUTHOR_PATTERN = "(?<=(<div class=\"copyright\" id=\"copyright\">))(.*?)(?=(</div>))";
         private const string TITLE_PATTERN = "(?<=(<meta property=\"og:title\" content=\"))(.*?)(?=(\" />))";
-        private const string TITLE_RELATIVE_URI_PATTERN = "(?<=(<a href=\"/))search(.*?)(?=(\"(.*?)class=\"learn_more\">))";
+        private const string TITLE_RELATIVE_URI_PATTERN = "(?<=(\"BackstageUrl\":\"))(.*?)(?=(\"))";
         private const string DESCRIPTION_PATTERN = "(?<=(<span(.*?)id=\"iotd_desc\">))(.*?)(?=(</span>))";
 
         public string DisplayName => "Bing";
         public string Description => "Grabs Bing's featured Image of the Day, which can be found on Bing's home page.";
-        public string SourceUri => "https://www.bing.com/";
+        public string SourceUri => "https://www.bing.com";
 
         public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
         {
@@ -34,7 +35,8 @@ namespace DailyDesktop.Providers.Bing
             string imageUri = SourceUri + imageRelativeUri;
             string author = Regex.Match(pageHtml, AUTHOR_PATTERN).Value;
             string title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
-            string titleUri = SourceUri + WebUtility.HtmlDecode(Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value).Replace("\"", "%22");
+            
+            string titleUri = SourceUri + WebUtility.HtmlDecode(Regex.Unescape(Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value)).Replace("\"", "%22");
             string description = "TODAY ON BING\r\n" + Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value;
 
             return new WallpaperInfo
