@@ -54,8 +54,8 @@ namespace DailyDesktop.Desktop
             licenseRichTextBox.LinkClicked += licenseRichTextBox_LinkClicked;
 
             string baseDir = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).AbsolutePath;
-            string licenseUri = $"file://{baseDir}/{LICENSE_FILENAME}";
-            string eulaUri = $"file://{baseDir}/{EULA_FILENAME}";
+            string licenseUri = $"file:///{baseDir}/{LICENSE_FILENAME}";
+            string eulaUri = $"file:///{baseDir}/{EULA_FILENAME}";
             licenseRichTextBox.Text = string.Format(licenseRichTextBox.Text, licenseUri, eulaUri);
         }
 
