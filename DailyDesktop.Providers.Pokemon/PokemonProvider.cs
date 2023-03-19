@@ -22,7 +22,7 @@ namespace DailyDesktop.Providers.Pokemon
 
         public string DisplayName => "Pokémon TCG";
 
-        public string Description => "Weekly Pokémon TCG wallpaper from the official Pokémon website.";
+        public string Description => "Gets occasionally new Pokémon TCG wallpaper from the official Pokémon website.";
 
         public string SourceUri => "https://tcg.pokemon.com/en-us/wallpapers/";
 
