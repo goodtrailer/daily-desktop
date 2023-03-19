@@ -32,14 +32,6 @@ Wallpapers are actually downloaded/applied by DailyDesktop.Task. To debug a prov
 * Unsplash @ [/DailyDesktop.Providers.Unsplash/](/DailyDesktop.Providers.Unsplash/)
 * Wikimedia Commons @ [/DailyDesktop.Providers.WikimediaCommons/](/DailyDesktop.Providers.WikimediaCommons/)
 
-#### Planned
-* ~~National Geographic~~
-    * *No longer planned. Writing a provider wouldn't be very hard, but on their website Nat Geo make it pretty blatantly clear they don't want people downloading these images. It's a shame, but it's understandable.*
-* NASA Astronomy
-* NASA Earth Observatory
-* The New York Times: What's Going On in This Picture?
-* TIME
-
 ## Blurred-fit Mode
 Daily Desktop has an optional "blurred-fit" mode that fits the entire image within the wallpaper, then fills in the background with a blurred and enlarged version of the image itself, instead of using a solid color like Windows does. This is useful if a provider's source contains images that are of a vastly different aspect ratio to your primary display.
 
