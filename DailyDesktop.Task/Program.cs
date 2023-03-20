@@ -46,9 +46,9 @@ namespace DailyDesktop.Task
             if (string.IsNullOrWhiteSpace(dllPath))
                 throw new ProviderException("Missing IProvider DLL module path");
 
-            ProviderStore store = new ProviderStore();
-            Type providerType = store.Add(dllPath);
-            IProvider provider = IProvider.Instantiate(providerType);
+            var store = new ProviderStore();
+            var providerType = store.Add(dllPath) ?? throw new NullReferenceException("Null provider type");
+            var provider = IProvider.Instantiate(providerType);
 
             string imagePath = await downloadWallpaper(provider, json);
 
@@ -67,7 +67,7 @@ namespace DailyDesktop.Task
             return SystemParametersInfo(0x14, 0, tiffPath, 0x1 | 0x2);
         }
 
-        private static async Task<string> downloadWallpaper(IProvider provider, string jsonPath = null)
+        private static async Task<string> downloadWallpaper(IProvider provider, string? jsonPath = null)
         {
             string imagePath = Path.Combine(Path.GetTempPath(), IMAGE_FILENAME);
 
