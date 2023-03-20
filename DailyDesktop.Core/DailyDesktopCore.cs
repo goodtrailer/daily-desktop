@@ -27,11 +27,11 @@ namespace DailyDesktop.Core
 
         private readonly ProviderStore store;
 
-        private Task task;
+        private Task? task;
         private string taskName;
         private string providersDirectory;
         private string serializeJsonDirectory;
-        private IProvider currentProvider;
+        private IProvider? currentProvider;
         private DailyDesktopSettings settings;
 
         //--------------------------------------------------------------PROPERTIES
@@ -219,7 +219,7 @@ namespace DailyDesktop.Core
         /// <summary>
         /// Gets the state of the desktop wallpaper update task.
         /// </summary>
-        public TaskState TaskState => task.State;
+        public TaskState TaskState => task?.State ?? throw new InvalidOperationException("Task has not been created yet.");
 
         //-----------------------------------------------------------------METHODS
 
@@ -227,19 +227,24 @@ namespace DailyDesktop.Core
         /// Constructs a <see cref="DailyDesktopCore"/> and calls
         /// <see cref="LoadSettings()"/>.
         /// </summary>
-        /// <param name="providersDir">The directory to automatically scan <see cref="IProvider"/> DLL modules from.</param>
-        /// <param name="serializeJsonDir">The directory to save JSON serializations in.</param>
+        /// <param name="providersDirectory">The directory to automatically scan <see cref="IProvider"/> DLL modules from.</param>
+        /// <param name="serializeJsonDirectory">The directory to save JSON serializations in.</param>
         /// <param name="taskName">The name of the task registered in the Windows Task Scheduler.</param>
         /// <param name="autoCreateTask">Whether or not to automatically create the task when settings are changed or loaded.</param>
-        public DailyDesktopCore(string providersDir, string serializeJsonDir, string taskName, bool autoCreateTask)
+        public DailyDesktopCore(string providersDirectory, string serializeJsonDirectory, string taskName, bool autoCreateTask)
         {
-            ProvidersDirectory = providersDir;
-            SerializeJsonDirectory = serializeJsonDir;
+            this.providersDirectory = null!;
+            ProvidersDirectory = providersDirectory;
+
+            this.serializeJsonDirectory = null!;
+            SerializeJsonDirectory = serializeJsonDirectory;
 
             store = new ProviderStore();
 
             LoadSettings();
             AutoCreateTask = autoCreateTask;
+
+            this.taskName = null!;
             TaskName = taskName;
         }
 
@@ -275,6 +280,7 @@ namespace DailyDesktop.Core
                 args += " --resize";
             if (settings.DoBlurredFit)
                 args += $" --blur {settings.BlurStrength}";
+
             ExecAction execAction = new ExecAction
             {
                 Path = getTaskExecutablePath(),
@@ -302,6 +308,9 @@ namespace DailyDesktop.Core
         /// </summary>
         public void UpdateWallpaper()
         {
+            if (task == null)
+                throw new InvalidOperationException("Task has not been created yet.");
+
             task.Run();
         }
 
@@ -350,8 +359,10 @@ namespace DailyDesktop.Core
             settings = newSettings;
             if (File.Exists(settings.DllPath))
             {
-                Type providerType = store.Add(settings.DllPath);
-                currentProvider = IProvider.Instantiate(providerType);
+                var providerType = store.Add(settings.DllPath);
+
+                if (providerType != null)
+                    currentProvider = IProvider.Instantiate(providerType);
             }
 
             if (AutoCreateTask)
@@ -360,7 +371,10 @@ namespace DailyDesktop.Core
 
         private string getTaskExecutablePath()
         {
-            string baseDir = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).LocalPath;
+            string baseDirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                ?? throw new NullReferenceException("Assembly directory could not be found.");
+
+            string baseDir = new Uri(baseDirName).LocalPath;
 
             string[] paths = Directory.GetFiles(baseDir, TASK_EXECUTABLE_FILENAME, SearchOption.AllDirectories);
             if (paths.Length < 1)
