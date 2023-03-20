@@ -45,11 +45,11 @@ namespace DailyDesktop.Providers.DeviantArt
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            string credit = Regex.Match(imagePageHtml, CREDIT_PATTERN).Value ?? null;
+            string credit = Regex.Match(imagePageHtml, CREDIT_PATTERN).Value;
             string author = Regex.Match(credit, AUTHOR_PATTERN).Value;
             string authorUri = "https://www.deviantart.com/" + WebUtility.UrlEncode(author);
             string title = Regex.Match(credit, TITLE_PATTERN).Value;
-            string description = Regex.Replace(WebUtility.HtmlDecode(Regex.Match(imagePageHtml, DESCRIPTION_PATTERN).Value), "<([^<>]*?)>", "");
+            string? description = Regex.Replace(WebUtility.HtmlDecode(Regex.Match(imagePageHtml, DESCRIPTION_PATTERN).Value), "<([^<>]*?)>", "");
             if (string.IsNullOrWhiteSpace(description))
                 description = null;
 
