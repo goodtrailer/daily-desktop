@@ -12,7 +12,6 @@ using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DailyDesktop.Core;
 using DailyDesktop.Core.Providers;
 using SuperfastBlur;
 
