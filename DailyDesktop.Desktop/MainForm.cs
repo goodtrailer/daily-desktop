@@ -222,12 +222,12 @@ namespace DailyDesktop.Desktop
             catch (Exception e) when (e is JsonException or FileNotFoundException)
             {
                 Console.WriteLine(e.StackTrace);
-                
+
                 wallpaperUpdatedLabel.Text = $"{FETCHED_TEXT} {NULL_TEXT}";
                 wallpaperTitleLinkLabel.Text = NULL_TEXT;
                 wallpaperAuthorLinkLabel.Text = NULL_TEXT;
                 wallpaperDescriptionRichTextBox.Text = NULL_DESCRIPTION;
-                
+
                 wallpaperTitleLinkLabel.Links[0].Enabled = false;
                 wallpaperAuthorLinkLabel.Links[0].Enabled = false;
             }
@@ -260,7 +260,7 @@ namespace DailyDesktop.Desktop
         }
 
         private void wallpaperDescriptionRichTextBox_LinkClicked(object sender, LinkClickedEventArgs e) => openUri(e.LinkText);
-        
+
         private void overviewRichTextBox_LinkClicked(object sender, LinkClickedEventArgs e) => openUri(e.LinkText);
 
         private void licenseRichTextBox_LinkClicked(object sender, LinkClickedEventArgs e) => openUri(e.LinkText);

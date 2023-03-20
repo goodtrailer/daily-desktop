@@ -4,7 +4,6 @@
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DailyDesktop.Core;
@@ -35,7 +34,7 @@ namespace DailyDesktop.Providers.Bing
             string imageUri = SourceUri + imageRelativeUri;
             string author = Regex.Match(pageHtml, AUTHOR_PATTERN).Value;
             string title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
-            
+
             string titleUri = SourceUri + WebUtility.HtmlDecode(Regex.Unescape(Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value)).Replace("\"", "%22");
             string description = "TODAY ON BING\r\n" + Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value;
 

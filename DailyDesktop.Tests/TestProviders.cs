@@ -6,7 +6,6 @@ using DailyDesktop.Core;
 using DailyDesktop.Core.Providers;
 using DailyDesktop.Providers.Bing;
 using DailyDesktop.Providers.CalvinAndHobbes;
-using DailyDesktop.Providers.DeviantArt;
 using DailyDesktop.Providers.FalseKnees;
 using DailyDesktop.Providers.Pixiv;
 using DailyDesktop.Providers.Pokemon;
@@ -59,14 +58,14 @@ namespace DailyDesktop.Tests
         // {
         //     var provider = new DeviantArtProvider();
         //     WallpaperInfo wallpaper = await provider.GetWallpaperInfo();
-           
+
         //     TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
         //     TestContext.WriteLine("Author: " + wallpaper.Author);
         //     TestContext.WriteLine("Author URI: " + wallpaper.AuthorUri);
         //     TestContext.WriteLine("Title: " + wallpaper.Title);
         //     TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
         //     TestContext.WriteLine("Description: " + wallpaper.Description);
-           
+
         //     Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
         //     Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
         //     Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.AuthorUri), "Null/whitespace author URI.");
@@ -98,13 +97,13 @@ namespace DailyDesktop.Tests
         // {
         //     var provider = new MTGProvider();
         //     WallpaperInfo wallpaper = await provider.GetWallpaperInfo();
-           
+
         //     TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
         //     TestContext.WriteLine("Author: " + wallpaper.Author);
         //     TestContext.WriteLine("Title: " + wallpaper.Title);
         //     TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
         //     TestContext.WriteLine("Description: " + wallpaper.Description);
-           
+
         //     Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
         //     Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
         //     Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Title), "Null/whitespace title.");
