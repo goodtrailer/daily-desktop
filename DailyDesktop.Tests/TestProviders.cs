@@ -22,16 +22,7 @@ namespace DailyDesktop.Tests
     {
         public TestContext? TestContext { get; set; }
 
-        private TestContext context
-        {
-            get
-            {
-                if (TestContext == null)
-                    throw new NullReferenceException("Null test context");
-
-                return TestContext;
-            }
-        }
+        private TestContext testContext => TestContext ?? throw new NullReferenceException("Null test context");
 
         [TestMethod]
         public async Task TestBing()
@@ -39,11 +30,11 @@ namespace DailyDesktop.Tests
             var provider = new BingProvider();
             var wallpaper = await provider.GetWallpaperInfo();
 
-            context.WriteLine("Author: " + wallpaper.Author);
-            context.WriteLine("Description: " + wallpaper.Description);
-            context.WriteLine("Image URI: " + wallpaper.ImageUri);
-            context.WriteLine("Title: " + wallpaper.Title);
-            context.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            testContext.WriteLine("Author: " + wallpaper.Author);
+            testContext.WriteLine("Description: " + wallpaper.Description);
+            testContext.WriteLine("Image URI: " + wallpaper.ImageUri);
+            testContext.WriteLine("Title: " + wallpaper.Title);
+            testContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
 
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Description), "Null/whitespace description.");
@@ -58,8 +49,8 @@ namespace DailyDesktop.Tests
             var provider = new CalvinAndHobbesProvider();
             var wallpaper = await provider.GetWallpaperInfo();
 
-            context.WriteLine("Image URI: " + wallpaper.ImageUri);
-            context.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            testContext.WriteLine("Image URI: " + wallpaper.ImageUri);
+            testContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
 
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.TitleUri), "Null/whitespace title URI.");
@@ -92,10 +83,10 @@ namespace DailyDesktop.Tests
             var provider = new FalseKneesProvider();
             var wallpaper = await provider.GetWallpaperInfo();
 
-            context.WriteLine("Description: " + wallpaper.Description);
-            context.WriteLine("Image URI: " + wallpaper.ImageUri);
-            context.WriteLine("Title: " + wallpaper.Title);
-            context.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            testContext.WriteLine("Description: " + wallpaper.Description);
+            testContext.WriteLine("Image URI: " + wallpaper.ImageUri);
+            testContext.WriteLine("Title: " + wallpaper.Title);
+            testContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
 
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Description), "Null/whitespace description.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
@@ -129,12 +120,12 @@ namespace DailyDesktop.Tests
             var provider = new PixivProvider();
             var wallpaper = await provider.GetWallpaperInfo();
 
-            context.WriteLine("Author: " + wallpaper.Author);
-            context.WriteLine("Author URI: " + wallpaper.AuthorUri);
-            context.WriteLine("Description: " + wallpaper.Description);
-            context.WriteLine("Image URI: " + wallpaper.ImageUri);
-            context.WriteLine("Title: " + wallpaper.Title);
-            context.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            testContext.WriteLine("Author: " + wallpaper.Author);
+            testContext.WriteLine("Author URI: " + wallpaper.AuthorUri);
+            testContext.WriteLine("Description: " + wallpaper.Description);
+            testContext.WriteLine("Image URI: " + wallpaper.ImageUri);
+            testContext.WriteLine("Title: " + wallpaper.Title);
+            testContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
 
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.AuthorUri), "Null/whitespace author URI.");
@@ -150,10 +141,10 @@ namespace DailyDesktop.Tests
             var provider = new PokemonProvider();
             var wallpaper = await provider.GetWallpaperInfo();
 
-            context.WriteLine("Description: " + wallpaper.Description);
-            context.WriteLine("Image URI: " + wallpaper.ImageUri);
-            context.WriteLine("Title: " + wallpaper.Title);
-            context.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            testContext.WriteLine("Description: " + wallpaper.Description);
+            testContext.WriteLine("Image URI: " + wallpaper.ImageUri);
+            testContext.WriteLine("Title: " + wallpaper.Title);
+            testContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
 
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Description), "Null/whitespace description.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
@@ -167,11 +158,11 @@ namespace DailyDesktop.Tests
             var provider = new RedditEarthPornProvider();
             var wallpaper = await provider.GetWallpaperInfo();
 
-            context.WriteLine("Author: " + wallpaper.Author);
-            context.WriteLine("Author URI: " + wallpaper.AuthorUri);
-            context.WriteLine("Description: " + wallpaper.Description);
-            context.WriteLine("Image URI: " + wallpaper.ImageUri);
-            context.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            testContext.WriteLine("Author: " + wallpaper.Author);
+            testContext.WriteLine("Author URI: " + wallpaper.AuthorUri);
+            testContext.WriteLine("Description: " + wallpaper.Description);
+            testContext.WriteLine("Image URI: " + wallpaper.ImageUri);
+            testContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
 
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.AuthorUri), "Null/whitespace author URI.");
@@ -186,12 +177,12 @@ namespace DailyDesktop.Tests
             var provider = new UnsplashProvider();
             var wallpaper = await provider.GetWallpaperInfo();
 
-            context.WriteLine("Author: " + wallpaper.Author);
-            context.WriteLine("Author URI: " + wallpaper.AuthorUri);
-            context.WriteLine("Description: " + wallpaper.Description);
-            context.WriteLine("Image URI: " + wallpaper.ImageUri);
-            context.WriteLine("Title: " + wallpaper.Title);
-            context.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            testContext.WriteLine("Author: " + wallpaper.Author);
+            testContext.WriteLine("Author URI: " + wallpaper.AuthorUri);
+            testContext.WriteLine("Description: " + wallpaper.Description);
+            testContext.WriteLine("Image URI: " + wallpaper.ImageUri);
+            testContext.WriteLine("Title: " + wallpaper.Title);
+            testContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
 
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.AuthorUri), "Null/whitespace author URI.");
@@ -207,12 +198,12 @@ namespace DailyDesktop.Tests
             var provider = new WikimediaCommonsProvider();
             var wallpaper = await provider.GetWallpaperInfo();
 
-            context.WriteLine("Author: " + wallpaper.Author);
-            context.WriteLine("Author URI: " + wallpaper.AuthorUri);
-            context.WriteLine("Description: " + wallpaper.Description);
-            context.WriteLine("Image URI: " + wallpaper.ImageUri);
-            context.WriteLine("Title: " + wallpaper.Title);
-            context.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            testContext.WriteLine("Author: " + wallpaper.Author);
+            testContext.WriteLine("Author URI: " + wallpaper.AuthorUri);
+            testContext.WriteLine("Description: " + wallpaper.Description);
+            testContext.WriteLine("Image URI: " + wallpaper.ImageUri);
+            testContext.WriteLine("Title: " + wallpaper.Title);
+            testContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
 
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.AuthorUri), "Null/whitespace author URI.");
@@ -228,9 +219,9 @@ namespace DailyDesktop.Tests
             var provider = new XkcdProvider();
             var wallpaper = await provider.GetWallpaperInfo();
 
-            context.WriteLine("Image URI: " + wallpaper.ImageUri);
-            context.WriteLine("Title: " + wallpaper.Title);
-            context.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            testContext.WriteLine("Image URI: " + wallpaper.ImageUri);
+            testContext.WriteLine("Title: " + wallpaper.Title);
+            testContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
 
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Title), "Null/whitespace title.");
