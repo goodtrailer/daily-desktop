@@ -168,7 +168,7 @@ namespace DailyDesktop.Core
         /// Gets or sets the current provider to fetch wallpaper image URIs from
         /// in a <see cref="ProviderWrapper"/>.
         /// </summary>
-        public ProviderWrapper CurrentProvider
+        public ProviderWrapper? CurrentProvider
         {
             get
             {

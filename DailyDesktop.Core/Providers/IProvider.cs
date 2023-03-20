@@ -57,7 +57,7 @@ namespace DailyDesktop.Core.Providers
         /// <exception cref="ProviderException" />
         static IProvider Instantiate(Type type)
         {
-            IProvider provider = Activator.CreateInstance(type) as IProvider;
+            IProvider? provider = Activator.CreateInstance(type) as IProvider;
 
             if (provider == null)
                 throw new ProviderException("Failed to instantiate an IProvider from the assembly.");
