@@ -26,7 +26,7 @@ namespace DailyDesktop.Providers.FalseKnees
 
         public string SourceUri => "https://falseknees.com";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task<WallpaperInfo?> GetWallpaperInfo(HttpClient client)
         {
             // Scrape info from front page
 

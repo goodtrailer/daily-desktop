@@ -50,7 +50,9 @@ namespace DailyDesktop.Task
             Type providerType = store.Add(dllPath);
             IProvider provider = IProvider.Instantiate(providerType);
 
-            string imagePath = await downloadWallpaper(provider, json);
+            string? imagePathN = await downloadWallpaper(provider, json);
+            if (!(imagePathN is string imagePath))
+                return 0;
 
             SetProcessDPIAware();
 
@@ -67,11 +69,13 @@ namespace DailyDesktop.Task
             return SystemParametersInfo(0x14, 0, tiffPath, 0x1 | 0x2);
         }
 
-        private static async Task<string> downloadWallpaper(IProvider provider, string jsonPath = null)
+        private static async Task<string?> downloadWallpaper(IProvider provider, string? jsonPath = null)
         {
             string imagePath = Path.Combine(Path.GetTempPath(), IMAGE_FILENAME);
 
-            WallpaperInfo info = await provider.GetWallpaperInfo();
+            var infoN = await provider.TryGetWallpaperInfo();
+            if (!(infoN is WallpaperInfo info))
+                return null;
 
             if (!string.IsNullOrWhiteSpace(jsonPath))
             {

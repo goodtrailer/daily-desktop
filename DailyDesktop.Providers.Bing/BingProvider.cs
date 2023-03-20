@@ -23,7 +23,7 @@ namespace DailyDesktop.Providers.Bing
         public string Description => "Grabs Bing's featured Image of the Day, which can be found on Bing's home page.";
         public string SourceUri => "https://www.bing.com";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task<WallpaperInfo?> GetWallpaperInfo(HttpClient client)
         {
             string pageHtml = await client.GetStringAsync(SourceUri);
 

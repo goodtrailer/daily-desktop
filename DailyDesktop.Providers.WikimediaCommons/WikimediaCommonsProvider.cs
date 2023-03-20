@@ -32,7 +32,7 @@ namespace DailyDesktop.Providers.WikimediaCommons
             "a collection of Featured picture candidates.";
         public string SourceUri => "https://commons.wikimedia.org/wiki/Commons:POTD";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task<WallpaperInfo?> GetWallpaperInfo(HttpClient client)
         {
             // Scrape info from POTD RSS feed
 

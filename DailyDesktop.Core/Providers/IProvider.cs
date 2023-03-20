@@ -45,7 +45,7 @@ namespace DailyDesktop.Core.Providers
         /// </summary>
         /// <param name="client">A pre-configured <see cref="HttpClient"/>.</param>
         /// <returns>The up-to-date <see cref="WallpaperInfo"/>.</returns>
-        Task<WallpaperInfo> GetWallpaperInfo(HttpClient client);
+        Task<WallpaperInfo?> GetWallpaperInfo(HttpClient client);
 
         /// <summary>
         /// Instantiates an <see cref="IProvider"/> given a <see cref="Type"/>.
@@ -91,6 +91,7 @@ namespace DailyDesktop.Core.Providers
         /// <summary>
         /// Gets an up-to-date <see cref="WallpaperInfo"/> using a pre-configured
         /// <see cref="HttpClient"/> created by <see cref="CreateHttpClient(IProvider)"/>.
+        /// If the <see cref="WallpaperInfo"/> is null, then this function throws.
         /// </summary>
         /// <param name="provider">
         /// The <see cref="IProvider"/> getting the up-to-date <see cref="WallpaperInfo"/>.
@@ -98,8 +99,30 @@ namespace DailyDesktop.Core.Providers
         /// <returns>The up-to-date <see cref="WallpaperInfo"/>.</returns>
         public static async Task<WallpaperInfo> GetWallpaperInfo(this IProvider provider)
         {
+            var wallpaperN = await provider.TryGetWallpaperInfo();
+            if (!(wallpaperN is WallpaperInfo wallpaper))
+                throw new ProviderException("Null wallpaper info.");
+
+            return wallpaper;
+        }
+
+        /// <summary>
+        /// Tries to get an up-to-date <see cref="WallpaperInfo"/> using a pre-configured
+        /// <see cref="HttpClient"/> created by <see cref="CreateHttpClient(IProvider)"/>.
+        /// If the <see cref="WallpaperInfo"/> is null, then it instead returns the given
+        /// fallback.
+        /// </summary>
+        /// <param name="provider">
+        /// The <see cref="IProvider"/> getting the up-to-date <see cref="WallpaperInfo"/>.
+        /// </param>
+        /// <param name="fallback">
+        /// The <see cref="WallpaperInfo"/> to return if the retrieved <see cref="WallpaperInfo"/> is null.
+        /// </param>
+        /// <returns>The up-to-date <see cref="WallpaperInfo"/>.</returns>
+        public static async Task<WallpaperInfo?> TryGetWallpaperInfo(this IProvider provider, WallpaperInfo? fallback = null)
+        {
             using (var client = provider.CreateHttpClient())
-                return await provider.GetWallpaperInfo(client);
+                return await provider.GetWallpaperInfo(client) ?? fallback;
         }
     }
 }

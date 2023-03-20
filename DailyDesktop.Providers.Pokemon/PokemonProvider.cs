@@ -26,7 +26,7 @@ namespace DailyDesktop.Providers.Pokemon
 
         public string SourceUri => "https://tcg.pokemon.com/en-us/wallpapers/";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task<WallpaperInfo?> GetWallpaperInfo(HttpClient client)
         {
             // Scrape info from wallpapers page
 

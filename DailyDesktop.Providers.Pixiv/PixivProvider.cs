@@ -30,7 +30,7 @@ namespace DailyDesktop.Providers.Pixiv
             client.DefaultRequestHeaders.Referrer = new Uri("https://www.pixiv.net");
         }
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task<WallpaperInfo?> GetWallpaperInfo(HttpClient client)
         {
             // Search for image ID of #1 illustration on daily rankings page
 

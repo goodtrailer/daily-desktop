@@ -23,7 +23,7 @@ namespace DailyDesktop.Providers.Xkcd
         public string Description => "\"A webcomic of romance, sarcasm, math, and language.\"";
         public string SourceUri => "https://xkcd.com";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task<WallpaperInfo?> GetWallpaperInfo(HttpClient client)
         {
             string pageHtml = await client.GetStringAsync(SourceUri);
 
