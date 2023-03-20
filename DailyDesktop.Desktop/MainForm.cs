@@ -53,9 +53,8 @@ namespace DailyDesktop.Desktop
             overviewRichTextBox.LinkClicked += overviewRichTextBox_LinkClicked;
             licenseRichTextBox.LinkClicked += licenseRichTextBox_LinkClicked;
 
-            string? baseDirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            if (string.IsNullOrWhiteSpace(baseDirName))
-                throw new InvalidOperationException("Assembly directory could not be found.");
+            string baseDirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                ?? throw new NullReferenceException("Assembly directory could not be found.");
 
             string baseDir = new Uri(baseDirName).AbsolutePath;
             string licenseUri = $"file:///{baseDir}/{LICENSE_FILENAME}";
