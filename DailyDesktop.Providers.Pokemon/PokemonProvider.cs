@@ -42,7 +42,7 @@ namespace DailyDesktop.Providers.Pokemon
 
             var response = await client.GetAsync("https://api.pokemontcg.io/v2/cards?q=name:\"" + title + "\"");
 
-            string description;
+            string? description;
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();

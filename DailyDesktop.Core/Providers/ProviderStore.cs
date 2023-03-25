@@ -38,7 +38,7 @@ namespace DailyDesktop.Core.Providers
         /// </summary>
         /// <param name="dllPath">The path of the <see cref="IProvider"/> DLL module to add</param>
         /// <returns>The <see cref="IProvider"/> implementation <see cref="Type"/>.</returns>
-        public Type Add(string dllPath)
+        public Type? Add(string dllPath)
         {
             if (Providers.ContainsKey(dllPath))
                 return Providers[dllPath];

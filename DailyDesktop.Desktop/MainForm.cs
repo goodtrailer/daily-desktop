@@ -53,13 +53,16 @@ namespace DailyDesktop.Desktop
             overviewRichTextBox.LinkClicked += overviewRichTextBox_LinkClicked;
             licenseRichTextBox.LinkClicked += licenseRichTextBox_LinkClicked;
 
-            string baseDir = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).AbsolutePath;
+            string baseDirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                ?? throw new NullReferenceException("Assembly directory could not be found.");
+
+            string baseDir = new Uri(baseDirName).AbsolutePath;
             string licenseUri = $"file:///{baseDir}/{LICENSE_FILENAME}";
             string eulaUri = $"file:///{baseDir}/{EULA_FILENAME}";
             licenseRichTextBox.Text = string.Format(licenseRichTextBox.Text, licenseUri, eulaUri);
         }
 
-        private void openUri(string uri)
+        private void openUri(string? uri)
         {
             if (string.IsNullOrWhiteSpace(uri))
                 return;
@@ -73,7 +76,7 @@ namespace DailyDesktop.Desktop
             Process.Start(psi);
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private void MainForm_Load(object? _, EventArgs e)
         {
             repopulateProviderComboBox();
             if (core.CurrentProvider != null)
@@ -95,15 +98,14 @@ namespace DailyDesktop.Desktop
             stateBackgroundWorker.RunWorkerAsync();
         }
 
-        private void MainForm_FormClosing(object sender, EventArgs e)
+        private void MainForm_FormClosing(object? _, EventArgs e)
         {
             stateBackgroundWorker.CancelAsync();
         }
 
-        private void providerComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void providerComboBox_SelectedIndexChanged(object? _, EventArgs e)
         {
-            ProviderWrapper item = providerComboBox.SelectedItem as ProviderWrapper;
-            core.CurrentProvider = item;
+            core.CurrentProvider = providerComboBox.SelectedItem as ProviderWrapper;
             updateProviderInfo();
         }
 
@@ -120,13 +122,15 @@ namespace DailyDesktop.Desktop
         // tbh idek why i did this O(n^2) isn't even that unreasonable...
         private void repopulateProviderComboBox()
         {
-            Dictionary<string, int> items = new Dictionary<string, int>();
-            Dictionary<string, Type> providers = core.Providers;
+            var items = new Dictionary<string, int>();
+            var providers = core.Providers;
 
             for (int i = 0; i < providerComboBox.Items.Count; i++)
             {
-                ProviderWrapper provider = providerComboBox.Items[i] as ProviderWrapper;
-                items.Add(provider.DllPath, i);
+                var provider = providerComboBox.Items[i] as ProviderWrapper;
+
+                if (provider != null)
+                    items.Add(provider.DllPath, i);
             }
 
             foreach (var keyVal in providers)
@@ -134,8 +138,8 @@ namespace DailyDesktop.Desktop
                 if (!items.ContainsKey(keyVal.Key))
                     try
                     {
-                        IProvider provider = IProvider.Instantiate(keyVal.Value);
-                        ProviderWrapper item = new ProviderWrapper(keyVal.Key, provider);
+                        var provider = IProvider.Instantiate(keyVal.Value);
+                        var item = new ProviderWrapper(keyVal.Key, provider);
                         providerComboBox.Items.Add(item);
                     }
                     catch (ProviderException ex)
@@ -151,29 +155,29 @@ namespace DailyDesktop.Desktop
             }
         }
 
-        private void providerComboBox_DropDown(object sender, EventArgs e) => repopulateProviderComboBox();
+        private void providerComboBox_DropDown(object? _, EventArgs e) => repopulateProviderComboBox();
 
-        private void providerSourceLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => openUri(providerSourceLinkLabel.Text);
+        private void providerSourceLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(providerSourceLinkLabel.Text);
 
-        private void optionsUpdateTimePicker_ValueChanged(object sender, EventArgs e)
+        private void optionsUpdateTimePicker_ValueChanged(object? _, EventArgs e)
         {
             core.UpdateTime = optionsUpdateTimePicker.Value;
         }
 
-        private void optionsEnabledCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void optionsEnabledCheckBox_CheckedChanged(object? _, EventArgs e)
         {
             core.Enabled = optionsEnabledCheckBox.Checked;
             optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked;
         }
 
-        private void optionsUpdateWallpaperButton_Click(object sender, EventArgs e)
+        private void optionsUpdateWallpaperButton_Click(object? _, EventArgs e)
         {
             core.UpdateWallpaper();
         }
 
-        private void optionsProvidersDirectoryButton_Click(object sender, EventArgs e) => openUri(core.ProvidersDirectory);
+        private void optionsProvidersDirectoryButton_Click(object? _, EventArgs e) => openUri(core.ProvidersDirectory);
 
-        private void optionsBlurStrengthTrackBar_Scroll(object sender, EventArgs e)
+        private void optionsBlurStrengthTrackBar_Scroll(object? _, EventArgs e)
         {
             core.BlurStrength = optionsBlurStrengthTrackBar.Value;
             updateBlurStrengthToolTip();
@@ -185,20 +189,20 @@ namespace DailyDesktop.Desktop
             mainToolTip.SetToolTip(optionsBlurStrengthTrackBar, strength);
         }
 
-        private void optionsBlurredFitCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void optionsBlurredFitCheckBox_CheckedChanged(object? _, EventArgs e)
         {
             core.DoBlurredFit = optionsBlurredFitCheckBox.Checked;
             optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked;
         }
 
-        private void optionsResizeCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void optionsResizeCheckBox_CheckedChanged(object? _, EventArgs e)
         {
             core.DoResize = optionsResizeCheckBox.Checked;
         }
 
-        private void wallpaperTitleLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => openUri(wallpaper.TitleUri);
+        private void wallpaperTitleLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(wallpaper.TitleUri);
 
-        private void wallpaperAuthorLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => openUri(wallpaper.AuthorUri);
+        private void wallpaperAuthorLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(wallpaper.AuthorUri);
 
         private void updateWallpaperInfo()
         {
@@ -213,10 +217,9 @@ namespace DailyDesktop.Desktop
                 string text = wallpaper.Description ?? NULL_DESCRIPTION;
                 wallpaperDescriptionRichTextBox.Text = Regex.Replace(text, "(?<=[^\r])\n", "\r\n");
 
-                Uri temp;
-                wallpaperTitleLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.TitleUri, UriKind.Absolute, out temp);
+                wallpaperTitleLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.TitleUri, UriKind.Absolute, out _);
                 wallpaperTitleLinkLabel.TabStop = wallpaperTitleLinkLabel.Links[0].Enabled;
-                wallpaperAuthorLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.AuthorUri, UriKind.Absolute, out temp);
+                wallpaperAuthorLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.AuthorUri, UriKind.Absolute, out _);
                 wallpaperAuthorLinkLabel.TabStop = wallpaperAuthorLinkLabel.Links[0].Enabled;
             }
             catch (Exception e) when (e is JsonException or FileNotFoundException)
@@ -233,7 +236,7 @@ namespace DailyDesktop.Desktop
             }
         }
 
-        private void stateBackgroundWorker_DoWork(object sender, EventArgs e)
+        private void stateBackgroundWorker_DoWork(object? _, EventArgs e)
         {
             while (!stateBackgroundWorker.CancellationPending)
             {
@@ -245,7 +248,7 @@ namespace DailyDesktop.Desktop
             }
         }
 
-        private void stateBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void stateBackgroundWorker_ProgressChanged(object? _, ProgressChangedEventArgs e)
         {
             TaskState state = (TaskState)e.ProgressPercentage;
             stateLabel.Text = state.ToString();
@@ -254,15 +257,15 @@ namespace DailyDesktop.Desktop
                 updateWallpaperInfo();
         }
 
-        private void okButton_Click(object sender, EventArgs e)
+        private void okButton_Click(object? _, EventArgs e)
         {
             Application.Exit();
         }
 
-        private void wallpaperDescriptionRichTextBox_LinkClicked(object sender, LinkClickedEventArgs e) => openUri(e.LinkText);
+        private void wallpaperDescriptionRichTextBox_LinkClicked(object? _, LinkClickedEventArgs e) => openUri(e.LinkText);
 
-        private void overviewRichTextBox_LinkClicked(object sender, LinkClickedEventArgs e) => openUri(e.LinkText);
+        private void overviewRichTextBox_LinkClicked(object? _, LinkClickedEventArgs e) => openUri(e.LinkText);
 
-        private void licenseRichTextBox_LinkClicked(object sender, LinkClickedEventArgs e) => openUri(e.LinkText);
+        private void licenseRichTextBox_LinkClicked(object? _, LinkClickedEventArgs e) => openUri(e.LinkText);
     }
 }

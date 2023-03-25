@@ -15,7 +15,7 @@ namespace DailyDesktop.Core
         /// <summary>
         /// Gets or sets the path of the <see cref="IProvider"/> DLL module.
         /// </summary>
-        public string DllPath { get; set; }
+        public string? DllPath { get; set; }
 
         /// <summary>
         /// Gets or sets whether wallpaper update <see cref="Microsoft.Win32.TaskScheduler.Task"/> triggers are

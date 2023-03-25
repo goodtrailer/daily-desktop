@@ -19,7 +19,7 @@ namespace DailyDesktop.Tests
     [TestClass]
     public class TestProviders
     {
-        public TestContext TestContext { get; set; }
+        public TestContext TestContext { get; set; } = null!;
 
         [TestMethod]
         public async Task TestBing()
@@ -59,12 +59,12 @@ namespace DailyDesktop.Tests
         //     var provider = new DeviantArtProvider();
         //     var wallpaper = await provider.GetWallpaperInfo();
 
-        //     TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
-        //     TestContext.WriteLine("Author: " + wallpaper.Author);
-        //     TestContext.WriteLine("Author URI: " + wallpaper.AuthorUri);
-        //     TestContext.WriteLine("Title: " + wallpaper.Title);
-        //     TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
-        //     TestContext.WriteLine("Description: " + wallpaper.Description);
+        //     context.WriteLine("Image URI: " + wallpaper.ImageUri);
+        //     context.WriteLine("Author: " + wallpaper.Author);
+        //     context.WriteLine("Author URI: " + wallpaper.AuthorUri);
+        //     context.WriteLine("Title: " + wallpaper.Title);
+        //     context.WriteLine("Title Uri: " + wallpaper.TitleUri);
+        //     context.WriteLine("Description: " + wallpaper.Description);
 
         //     Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
         //     Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
@@ -98,11 +98,11 @@ namespace DailyDesktop.Tests
         //     var provider = new MTGProvider();
         //     var wallpaper = await provider.GetWallpaperInfo();
 
-        //     TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
-        //     TestContext.WriteLine("Author: " + wallpaper.Author);
-        //     TestContext.WriteLine("Title: " + wallpaper.Title);
-        //     TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
-        //     TestContext.WriteLine("Description: " + wallpaper.Description);
+        //     context.WriteLine("Image URI: " + wallpaper.ImageUri);
+        //     context.WriteLine("Author: " + wallpaper.Author);
+        //     context.WriteLine("Title: " + wallpaper.Title);
+        //     context.WriteLine("Title Uri: " + wallpaper.TitleUri);
+        //     context.WriteLine("Description: " + wallpaper.Description);
 
         //     Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
         //     Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
