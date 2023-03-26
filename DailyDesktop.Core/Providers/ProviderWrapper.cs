@@ -5,7 +5,7 @@ namespace DailyDesktop.Core.Providers
 {
     /// <summary>
     /// Wrapper for an <see cref="IProvider"/> that additionally stores
-    /// <see cref="DllPath"/> and implements <see cref="ToString"/>.
+    /// <see cref="Dll"/> and implements <see cref="ToString"/>.
     /// </summary>
     public class ProviderWrapper
     {
@@ -18,19 +18,19 @@ namespace DailyDesktop.Core.Providers
         /// The path of the DLL module containing the <see cref="IProvider"/>
         /// implementation for <see cref="Provider"/>.
         /// </summary>
-        public readonly string DllPath;
+        public readonly string Dll;
 
         /// <summary>
         /// Constructs a <see cref="ProviderWrapper"/>.
         /// </summary>
-        /// <param name="dllPath">The path of the DLL module containing the
+        /// <param name="dll">The path of the DLL module containing the
         /// <see cref="IProvider"/> implementation.</param>
         /// <param name="provider">An instance of the <see cref="IProvider"/>
         /// implementation found in the DLL module.</param>
-        public ProviderWrapper(string dllPath, IProvider provider)
+        public ProviderWrapper(string dll, IProvider provider)
         {
             Provider = provider;
-            DllPath = dllPath;
+            Dll= dll;
         }
 
         /// <summary>
@@ -39,9 +39,6 @@ namespace DailyDesktop.Core.Providers
         /// </summary>
         /// <returns><see cref="Provider"/>'s <see cref="IProvider.DisplayName"/>
         /// member.</returns>
-        public override string ToString()
-        {
-            return Provider.DisplayName;
-        }
+        public override string ToString() => Provider.DisplayName;
     }
 }

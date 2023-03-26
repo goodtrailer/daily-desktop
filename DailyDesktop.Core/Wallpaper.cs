@@ -8,7 +8,7 @@ namespace DailyDesktop.Core
     /// <summary>
     /// Contains information about a downloaded wallpaper.
     /// </summary>
-    public struct WallpaperInfo
+    public struct Wallpaper
     {
         /// <summary>
         /// Gets or sets the URI of the image file.

@@ -22,7 +22,7 @@ namespace DailyDesktop.Providers.RedditEarthPorn
         public string Description => "Looks at the top post in the last 24 hours in the well-known r/EarthPorn, reddit's premiere landscape photography subreddit.";
         public string SourceUri => "https://www.reddit.com/r/EarthPorn/top/?sort=top&t=day";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task<Wallpaper> GetWallpaperInfo(HttpClient client)
         {
             string subredditHtml = await client.GetStringAsync(SourceUri);
 
@@ -35,7 +35,7 @@ namespace DailyDesktop.Providers.RedditEarthPorn
             string titleUri = "https://www.reddit.com" + Regex.Match(subredditHtml, TITLE_URI_PATTERN).Value;
             string description = Regex.Match(subredditHtml, DESCRIPTION_PATTERN).Value;
 
-            return new WallpaperInfo
+            return new Wallpaper
             {
                 ImageUri = imageUri,
                 Date = DateTime.Now,

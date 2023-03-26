@@ -26,7 +26,7 @@ namespace DailyDesktop.Providers.FalseKnees
 
         public string SourceUri => "https://falseknees.com";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task<Wallpaper> GetWallpaperInfo(HttpClient client)
         {
             // Scrape info from front page
 
@@ -42,7 +42,7 @@ namespace DailyDesktop.Providers.FalseKnees
 
             string title = Regex.Match(archiveHtml, TITLE_PATTERN).Value;
 
-            return new WallpaperInfo
+            return new Wallpaper
             {
                 ImageUri = imageUri,
                 Date = DateTime.Now,

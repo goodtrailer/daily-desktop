@@ -23,7 +23,7 @@ namespace DailyDesktop.Providers.Bing
         public string Description => "Grabs Bing's featured Image of the Day, which can be found on Bing's home page.";
         public string SourceUri => "https://www.bing.com";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task<Wallpaper> GetWallpaperInfo(HttpClient client)
         {
             string pageHtml = await client.GetStringAsync(SourceUri);
 
@@ -38,7 +38,7 @@ namespace DailyDesktop.Providers.Bing
             string titleUri = SourceUri + WebUtility.HtmlDecode(Regex.Unescape(Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value)).Replace("\"", "%22");
             string description = "TODAY ON BING\r\n" + Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value;
 
-            return new WallpaperInfo
+            return new Wallpaper
             {
                 ImageUri = imageUri,
                 Date = DateTime.Now,

@@ -21,14 +21,14 @@ namespace DailyDesktop.Providers.CalvinAndHobbes
         public string Description => "Fetches today's Calvin and Hobbes comic, a daily American comic strip created by cartoonist Bill Watterson from 1985 to 1995.";
         public string SourceUri => "https://www.gocomics.com/calvinandhobbes";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task<Wallpaper> GetWallpaperInfo(HttpClient client)
         {
             string pageHtml = await client.GetStringAsync(SourceUri);
 
             string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
             string titleUri = SourceUri + Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value;
 
-            return new WallpaperInfo
+            return new Wallpaper
             {
                 ImageUri = imageUri,
                 Date = DateTime.Now,

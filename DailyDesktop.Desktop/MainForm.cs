@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Windows.Forms;
 using DailyDesktop.Core;
+using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 using Microsoft.Win32.TaskScheduler;
 
@@ -20,45 +21,57 @@ namespace DailyDesktop.Desktop
 {
     public partial class MainForm : Form
     {
-        private const string APP_DATA_DIR = "Daily Desktop";
-        private const string PROVIDERS_DIR = "providers";
-        private const string SERIALIZE_JSON_DIR = "";
-        private const string LICENSE_FILENAME = "LICENSE";
-        private const string EULA_FILENAME = "EULA";
+        private const string app_data_dir = "Daily Desktop";
+        private const string providers_dir = "providers";
+        private const string serialization_dir = "";
 
-        private const string TASK_NAME_PREFIX = "Daily Desktop";
+        private const string path_config_filename = "path.json";
+        private const string license_filename = "LICENSE";
+        private const string eula_filename = "EULA";
 
-        private const string NULL_DESCRIPTION = "No description.";
-        private const string NULL_TEXT = "null";
-        private const string FETCHED_TEXT = "fetched on";
+        private const string task_name_prefix = "Daily Desktop";
+
+        private const string null_description = "No description.";
+        private const string null_text = "null";
+        private const string fetched_text = "fetched on";
 
         private DailyDesktopCore core;
-        private WallpaperInfo wallpaper;
+        private ITaskConfiguration taskConfig => core.TaskConfig;
+
+        private Wallpaper wallpaper;
         private TaskState previousState;
 
         public MainForm()
         {
-            string appDataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), APP_DATA_DIR);
-            string providersDir = Path.Combine(appDataDir, PROVIDERS_DIR);
-            string serializeJsonDir = Path.Combine(appDataDir, SERIALIZE_JSON_DIR);
-
             string userId = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             string userName = userId.Split('\\').Last();
-            string taskName = $"{TASK_NAME_PREFIX}_{userName}";
+            string taskName = $"{task_name_prefix}_{userName}";
 
-            core = new DailyDesktopCore(providersDir, serializeJsonDir, taskName, true);
+            string assemblyDirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                ?? throw new NullReferenceException("Assembly directory could not be found.");
+            string assemblyDir = Uri.UnescapeDataString(new Uri(assemblyDirName).AbsolutePath);
+            
+
+            string appDataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), app_data_dir);
+            string providersDir = Path.Combine(appDataDir, providers_dir);
+            
+            string serializationDir = Path.Combine(appDataDir, serialization_dir);
+
+            core = new DailyDesktopCore(new PathConfiguration(Path.Combine(assemblyDir, path_config_filename))
+            {
+                AssemblyDir = assemblyDir,
+                ProvidersDir = providersDir,
+                SerializationDir = serializationDir,
+            }, taskName, true);
+
             InitializeComponent();
 
             wallpaperDescriptionRichTextBox.LinkClicked += wallpaperDescriptionRichTextBox_LinkClicked;
             overviewRichTextBox.LinkClicked += overviewRichTextBox_LinkClicked;
             licenseRichTextBox.LinkClicked += licenseRichTextBox_LinkClicked;
 
-            string baseDirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-                ?? throw new NullReferenceException("Assembly directory could not be found.");
-
-            string baseDir = new Uri(baseDirName).AbsolutePath;
-            string licenseUri = $"file:///{baseDir}/{LICENSE_FILENAME}";
-            string eulaUri = $"file:///{baseDir}/{EULA_FILENAME}";
+            string licenseUri = $"file:///{assemblyDir}/{license_filename}";
+            string eulaUri = $"file:///{assemblyDir}/{eula_filename}";
             licenseRichTextBox.Text = string.Format(licenseRichTextBox.Text, licenseUri, eulaUri);
         }
 
@@ -80,18 +93,18 @@ namespace DailyDesktop.Desktop
         {
             repopulateProviderComboBox();
             if (core.CurrentProvider != null)
-                providerComboBox.SelectedIndex = providerComboBox.FindString(core.CurrentProvider.ToString());
+                providerComboBox.SelectedIndex = providerComboBox.FindString(core.CurrentProvider.DisplayName);
             updateProviderInfo();
 
-            optionsEnabledCheckBox.Checked = core.Enabled;
+            optionsEnabledCheckBox.Checked = taskConfig.IsEnabled;
 
-            optionsUpdateTimePicker.Value = core.UpdateTime;
+            optionsUpdateTimePicker.Value = taskConfig.UpdateTime;
             optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked;
 
-            optionsResizeCheckBox.Checked = core.DoResize;
+            optionsResizeCheckBox.Checked = taskConfig.DoResize;
 
-            optionsBlurredFitCheckBox.Checked = core.DoBlurredFit;
-            optionsBlurStrengthTrackBar.Value = core.BlurStrength;
+            optionsBlurredFitCheckBox.Checked = taskConfig.DoBlurredFit;
+            optionsBlurStrengthTrackBar.Value = taskConfig.BlurStrength;
             optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked;
             updateBlurStrengthToolTip();
 
@@ -105,14 +118,14 @@ namespace DailyDesktop.Desktop
 
         private void providerComboBox_SelectedIndexChanged(object? _, EventArgs e)
         {
-            core.CurrentProvider = providerComboBox.SelectedItem as ProviderWrapper;
+            taskConfig.Dll = (providerComboBox.SelectedItem as ProviderWrapper)?.Dll ?? "";
             updateProviderInfo();
         }
 
         private void updateProviderInfo()
         {
-            providerDescriptionLabel.Text = core.CurrentProvider?.Provider.Description ?? NULL_DESCRIPTION;
-            providerSourceLinkLabel.Text = core.CurrentProvider?.Provider.SourceUri;
+            providerDescriptionLabel.Text = core.CurrentProvider?.Description;
+            providerSourceLinkLabel.Text = core.CurrentProvider?.SourceUri;
         }
 
         // The most over-engineered vaguely O(n) algorithm of all time that will
@@ -130,7 +143,7 @@ namespace DailyDesktop.Desktop
                 var provider = providerComboBox.Items[i] as ProviderWrapper;
 
                 if (provider != null)
-                    items.Add(provider.DllPath, i);
+                    items.Add(provider.Dll, i);
             }
 
             foreach (var keyVal in providers)
@@ -161,12 +174,12 @@ namespace DailyDesktop.Desktop
 
         private void optionsUpdateTimePicker_ValueChanged(object? _, EventArgs e)
         {
-            core.UpdateTime = optionsUpdateTimePicker.Value;
+            taskConfig.UpdateTime = optionsUpdateTimePicker.Value;
         }
 
         private void optionsEnabledCheckBox_CheckedChanged(object? _, EventArgs e)
         {
-            core.Enabled = optionsEnabledCheckBox.Checked;
+            taskConfig.IsEnabled = optionsEnabledCheckBox.Checked;
             optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked;
         }
 
@@ -175,11 +188,11 @@ namespace DailyDesktop.Desktop
             core.UpdateWallpaper();
         }
 
-        private void optionsProvidersDirectoryButton_Click(object? _, EventArgs e) => openUri(core.ProvidersDirectory);
+        private void optionsProvidersDirectoryButton_Click(object? _, EventArgs e) => openUri(core.PathConfig.ProvidersDir);
 
         private void optionsBlurStrengthTrackBar_Scroll(object? _, EventArgs e)
         {
-            core.BlurStrength = optionsBlurStrengthTrackBar.Value;
+            taskConfig.BlurStrength = optionsBlurStrengthTrackBar.Value;
             updateBlurStrengthToolTip();
         }
 
@@ -191,13 +204,13 @@ namespace DailyDesktop.Desktop
 
         private void optionsBlurredFitCheckBox_CheckedChanged(object? _, EventArgs e)
         {
-            core.DoBlurredFit = optionsBlurredFitCheckBox.Checked;
+            taskConfig.DoBlurredFit = optionsBlurredFitCheckBox.Checked;
             optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked;
         }
 
         private void optionsResizeCheckBox_CheckedChanged(object? _, EventArgs e)
         {
-            core.DoResize = optionsResizeCheckBox.Checked;
+            taskConfig.DoResize = optionsResizeCheckBox.Checked;
         }
 
         private void wallpaperTitleLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(wallpaper.TitleUri);
@@ -208,13 +221,13 @@ namespace DailyDesktop.Desktop
         {
             try
             {
-                string jsonString = File.ReadAllText(core.WallpaperInfoJsonPath);
-                wallpaper = JsonSerializer.Deserialize<WallpaperInfo>(jsonString);
+                string jsonString = File.ReadAllText(core.PathConfig.WallpaperJson);
+                wallpaper = JsonSerializer.Deserialize<Wallpaper>(jsonString);
                 string updateDate = wallpaper.Date.ToString("dddd, MMMM d");
-                wallpaperUpdatedLabel.Text = FETCHED_TEXT + (updateDate ?? NULL_TEXT);
-                wallpaperTitleLinkLabel.Text = wallpaper.Title ?? NULL_TEXT;
-                wallpaperAuthorLinkLabel.Text = wallpaper.Author ?? NULL_TEXT;
-                string text = wallpaper.Description ?? NULL_DESCRIPTION;
+                wallpaperUpdatedLabel.Text = $"{fetched_text} {updateDate ?? null_text}";
+                wallpaperTitleLinkLabel.Text = wallpaper.Title ?? null_text;
+                wallpaperAuthorLinkLabel.Text = wallpaper.Author ?? null_text;
+                string text = wallpaper.Description ?? null_description;
                 wallpaperDescriptionRichTextBox.Text = Regex.Replace(text, "(?<=[^\r])\n", "\r\n");
 
                 wallpaperTitleLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.TitleUri, UriKind.Absolute, out _);
@@ -226,10 +239,10 @@ namespace DailyDesktop.Desktop
             {
                 Console.WriteLine(e.StackTrace);
 
-                wallpaperUpdatedLabel.Text = $"{FETCHED_TEXT} {NULL_TEXT}";
-                wallpaperTitleLinkLabel.Text = NULL_TEXT;
-                wallpaperAuthorLinkLabel.Text = NULL_TEXT;
-                wallpaperDescriptionRichTextBox.Text = NULL_DESCRIPTION;
+                wallpaperUpdatedLabel.Text = $"{fetched_text} {null_text}";
+                wallpaperTitleLinkLabel.Text = null_text;
+                wallpaperAuthorLinkLabel.Text = null_text;
+                wallpaperDescriptionRichTextBox.Text = null_description;
 
                 wallpaperTitleLinkLabel.Links[0].Enabled = false;
                 wallpaperAuthorLinkLabel.Links[0].Enabled = false;

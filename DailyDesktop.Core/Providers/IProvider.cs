@@ -32,7 +32,7 @@ namespace DailyDesktop.Core.Providers
 
         /// <summary>
         /// Configures an <see cref="HttpClient"/> to be used for the
-        /// <see cref="WallpaperInfo.ImageUri"/> returned by
+        /// <see cref="Wallpaper.ImageUri"/> returned by
         /// <see cref="GetWallpaperInfo"/>. Used by
         /// <see cref="IProviderExtensions.CreateHttpClient(IProvider)"/>.
         /// </summary>
@@ -40,12 +40,12 @@ namespace DailyDesktop.Core.Providers
         void ConfigureHttpClient(HttpClient client) { }
 
         /// <summary>
-        /// Gets an up-to-date <see cref="WallpaperInfo"/> using a given
+        /// Gets an up-to-date <see cref="Wallpaper"/> using a given
         /// pre-configured <see cref="HttpClient"/>.
         /// </summary>
         /// <param name="client">A pre-configured <see cref="HttpClient"/>.</param>
-        /// <returns>The up-to-date <see cref="WallpaperInfo"/>.</returns>
-        Task<WallpaperInfo> GetWallpaperInfo(HttpClient client);
+        /// <returns>The up-to-date <see cref="Wallpaper"/>.</returns>
+        Task<Wallpaper> GetWallpaperInfo(HttpClient client);
 
         /// <summary>
         /// Instantiates an <see cref="IProvider"/> given a <see cref="Type"/>.
@@ -89,14 +89,14 @@ namespace DailyDesktop.Core.Providers
         }
 
         /// <summary>
-        /// Gets an up-to-date <see cref="WallpaperInfo"/> using a pre-configured
+        /// Gets an up-to-date <see cref="Wallpaper"/> using a pre-configured
         /// <see cref="HttpClient"/> created by <see cref="CreateHttpClient(IProvider)"/>.
         /// </summary>
         /// <param name="provider">
-        /// The <see cref="IProvider"/> getting the up-to-date <see cref="WallpaperInfo"/>.
+        /// The <see cref="IProvider"/> getting the up-to-date <see cref="Wallpaper"/>.
         /// </param>
-        /// <returns>The up-to-date <see cref="WallpaperInfo"/>.</returns>
-        public static async Task<WallpaperInfo> GetWallpaperInfo(this IProvider provider)
+        /// <returns>The up-to-date <see cref="Wallpaper"/>.</returns>
+        public static async Task<Wallpaper> GetWallpaperInfo(this IProvider provider)
         {
             using (var client = provider.CreateHttpClient())
                 return await provider.GetWallpaperInfo(client);

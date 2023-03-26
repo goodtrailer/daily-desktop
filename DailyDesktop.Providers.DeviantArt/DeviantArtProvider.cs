@@ -27,7 +27,7 @@ namespace DailyDesktop.Providers.DeviantArt
             "highlight the best of DeviantArt from a wide variety of genres.";
         public string SourceUri => "https://www.deviantart.com/daily-deviations";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task<Wallpaper> GetWallpaperInfo(HttpClient client)
         {
             // Search for image page URI from daily deviation page
 
@@ -53,7 +53,7 @@ namespace DailyDesktop.Providers.DeviantArt
             if (string.IsNullOrWhiteSpace(description))
                 description = null;
 
-            return new WallpaperInfo
+            return new Wallpaper
             {
                 ImageUri = imageUri,
                 Date = DateTime.Now,

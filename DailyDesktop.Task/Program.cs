@@ -71,7 +71,7 @@ namespace DailyDesktop.Task
         {
             string imagePath = Path.Combine(Path.GetTempPath(), IMAGE_FILENAME);
 
-            WallpaperInfo info = await provider.GetWallpaperInfo();
+            Wallpaper info = await provider.GetWallpaperInfo();
 
             if (!string.IsNullOrWhiteSpace(jsonPath))
             {

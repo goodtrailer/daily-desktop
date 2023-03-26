@@ -29,7 +29,7 @@ namespace DailyDesktop.Providers.Unsplash
         public string Description => "Nabs the Photo of the Day that is currently being displayed on the front page of the website Unsplash, an online source for high-quality and freely-usable images.";
         public string SourceUri => "https://unsplash.com/collections/1459961/photo-of-the-day-(archive)";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task<Wallpaper> GetWallpaperInfo(HttpClient client)
         {
             // Scrape info from home page
 
@@ -75,7 +75,7 @@ namespace DailyDesktop.Providers.Unsplash
                     $"ISO: {iso}";
             }
 
-            return new WallpaperInfo
+            return new Wallpaper
             {
                 ImageUri = imageUri,
                 Date = DateTime.Now,

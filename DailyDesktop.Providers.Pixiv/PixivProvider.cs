@@ -30,7 +30,7 @@ namespace DailyDesktop.Providers.Pixiv
             client.DefaultRequestHeaders.Referrer = new Uri("https://www.pixiv.net");
         }
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task<Wallpaper> GetWallpaperInfo(HttpClient client)
         {
             // Search for image ID of #1 illustration on daily rankings page
 
@@ -55,7 +55,7 @@ namespace DailyDesktop.Providers.Pixiv
             string authorUri = "https://www.pixiv.net/users/" + Regex.Match(imagePageHtml, AUTHOR_ID_PATTERN).Value;
             string description = WebUtility.HtmlDecode(Regex.Match(imagePageHtml, DESCRIPTION_PATTERN).Value);
 
-            return new WallpaperInfo
+            return new Wallpaper
             {
                 ImageUri = imageUri,
                 Date = DateTime.Now,
