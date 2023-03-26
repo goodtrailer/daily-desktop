@@ -25,10 +25,19 @@ namespace DailyDesktop.Core.Configuration
         /// </summary>
         public string SerializationDir { get; }
 
+        /// <summary>
+        /// Gets the task executable path.
+        /// </summary>
         public string TaskExecutable { get; }
 
+        /// <summary>
+        /// Gets the task configuration JSON file (serialization output) path.
+        /// </summary>
         public string TaskConfigJson { get; }
 
+        /// <summary>
+        /// Gets the wallpaper JSON file path.
+        /// </summary>
         public string WallpaperJson { get; }
     }
 }
