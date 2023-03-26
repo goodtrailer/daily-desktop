@@ -8,9 +8,18 @@ using System.Text.Json.Serialization;
 
 namespace DailyDesktop.Core.Configuration
 {
+    /// <summary>
+    /// Abstract base class to ease implementation of <see cref="IReadOnlyConfiguration"/>,
+    /// mainly with respect to serialization/deserialization.
+    /// </summary>
+    /// <typeparam name="T">The type of the implementor (somewhat like CRTP).</typeparam>
     public abstract class AbstractConfiguration<T> : IReadOnlyConfiguration
         where T : IReadOnlyConfiguration
     {
+        /// <summary>
+        /// Sets the JSON path.
+        /// </summary>
+        /// <param name="jsonPath">The path of the JSON file to serialize to.</param>
         public AbstractConfiguration(string jsonPath)
         {
             JsonPath = jsonPath;
@@ -24,8 +33,14 @@ namespace DailyDesktop.Core.Configuration
         [JsonIgnore]
         public virtual bool IsAutoSerializing { get; set; }
 
+        /// <summary>
+        /// Published on calls to <see cref="Update"/>.
+        /// </summary>
         public event EventHandler? OnUpdate;
 
+        /// <summary>
+        /// Published on successful calls to <see cref="Serialize"/>.
+        /// </summary>
         public event EventHandler? OnSerialize;
 
         /// <inheritdoc/>
@@ -40,6 +55,11 @@ namespace DailyDesktop.Core.Configuration
             Load(newConfig ?? throw new NullReferenceException("Deserialized config was null."));
         }
         
+        /// <summary>
+        /// Loads options from another configuration instance. Basically like
+        /// a copy constructor/method.
+        /// </summary>
+        /// <param name="other">The other configuration instance to copy options from.</param>
         public abstract void Load(T other);
 
         /// <inheritdoc/>
@@ -69,11 +89,19 @@ namespace DailyDesktop.Core.Configuration
             OnSerialize?.Invoke(this, new EventArgs());
         }
 
+        /// <summary>
+        /// Configures the serializer options.
+        /// </summary>
+        /// <param name="options">The options instance to configure.</param>
         protected virtual void ConfigureSerializer(JsonSerializerOptions options)
         {
             options.WriteIndented = true;
         }
 
+        /// <summary>
+        /// Configures the deserializer options.
+        /// </summary>
+        /// <param name="options">The options instance to configure.</param>
         protected virtual void ConfigureDeserializer(JsonSerializerOptions options)
         {
             options.AllowTrailingCommas = true;
