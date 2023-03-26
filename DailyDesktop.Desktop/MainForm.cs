@@ -50,7 +50,6 @@ namespace DailyDesktop.Desktop
             string assemblyDirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
                 ?? throw new NullReferenceException("Assembly directory could not be found.");
             string assemblyDir = Uri.UnescapeDataString(new Uri(assemblyDirName).AbsolutePath);
-            
 
             string appDataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), app_data_dir);
             string providersDir = Path.Combine(appDataDir, providers_dir);

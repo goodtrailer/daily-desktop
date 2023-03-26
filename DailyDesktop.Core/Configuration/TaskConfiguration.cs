@@ -27,7 +27,6 @@ namespace DailyDesktop.Core.Configuration
         
         /// <inheritdoc/>
         new int BlurStrength { get; set; }
-
     }
 
     /// <summary>
