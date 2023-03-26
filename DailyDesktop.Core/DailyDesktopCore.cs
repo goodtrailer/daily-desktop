@@ -23,9 +23,15 @@ namespace DailyDesktop.Core
         private Task? task;
         private string taskName;
 
+        /// <summary>
+        /// Gets a read-only interface for the path configuration.
+        /// </summary>
         public IReadOnlyPathConfiguration PathConfig => pathConfig;
         private readonly PathConfiguration pathConfig;
 
+        /// <summary>
+        /// Gets a limited read-write interface for the task configuration.
+        /// </summary>
         public ITaskConfiguration TaskConfig => taskConfig;
         private readonly TaskConfiguration taskConfig;
         
@@ -188,6 +194,9 @@ namespace DailyDesktop.Core
                 CreateTask();
         }
 
+        /// <summary>
+        /// Disposal method (e.g. event unsubscription).
+        /// </summary>
         public void Dispose()
         {
             taskConfig.OnUpdate -= onTaskConfigUpdate;
