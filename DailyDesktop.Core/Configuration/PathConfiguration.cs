@@ -26,6 +26,7 @@ namespace DailyDesktop.Core.Configuration
     /// </summary>
     public class PathConfiguration : AbstractConfiguration<PathConfiguration>, IPathConfiguration
     {
+        /// <inheritdoc/>
         public PathConfiguration(string jsonPath)
             : base(jsonPath)
         {

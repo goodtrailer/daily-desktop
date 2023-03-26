@@ -37,6 +37,7 @@ namespace DailyDesktop.Core.Configuration
     /// </summary>
     public class TaskConfiguration : AbstractConfiguration<TaskConfiguration>, ITaskConfiguration
     {
+        /// <inheritdoc/>
         public TaskConfiguration(string jsonPath)
             : base(jsonPath)
         {
