@@ -33,14 +33,10 @@ namespace DailyDesktop.Core.Configuration
         [JsonIgnore]
         public virtual bool IsAutoSerializing { get; set; }
 
-        /// <summary>
-        /// Published on calls to <see cref="Update"/>.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler? OnUpdate;
 
-        /// <summary>
-        /// Published on successful calls to <see cref="Serialize"/>.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler? OnSerialize;
 
         /// <inheritdoc/>
@@ -54,13 +50,6 @@ namespace DailyDesktop.Core.Configuration
 
             Load(newConfig ?? throw new NullReferenceException("Deserialized config was null."));
         }
-        
-        /// <summary>
-        /// Loads options from another configuration instance. Basically like
-        /// a copy constructor/method.
-        /// </summary>
-        /// <param name="other">The other configuration instance to copy options from.</param>
-        public abstract void Load(T other);
 
         /// <inheritdoc/>
         public void Update()
@@ -88,6 +77,13 @@ namespace DailyDesktop.Core.Configuration
 
             OnSerialize?.Invoke(this, new EventArgs());
         }
+        
+        /// <summary>
+        /// Loads options from another configuration instance. Basically like
+        /// a copy constructor/method.
+        /// </summary>
+        /// <param name="other">The other configuration instance to copy options from.</param>
+        public abstract void Load(T other);
 
         /// <summary>
         /// Configures the serializer options.

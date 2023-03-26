@@ -6,8 +6,7 @@ using System;
 namespace DailyDesktop.Core.Configuration
 {
     /// <summary>
-    /// Interface for task settings for <see cref="DailyDesktopCore"/> that is meant to be
-    /// serialized.
+    /// Interface to task settings for <see cref="DailyDesktopCore"/> that is meant to be serialized.
     /// </summary>
     public interface ITaskConfiguration : IReadOnlyTaskConfiguration
     {
@@ -32,8 +31,7 @@ namespace DailyDesktop.Core.Configuration
     }
 
     /// <summary>
-    /// Contains task settings for <see cref="DailyDesktopCore"/> that is meant to be
-    /// serialized.
+    /// Contains task settings for <see cref="DailyDesktopCore"/> that is meant to be serialized.
     /// </summary>
     public class TaskConfiguration : AbstractConfiguration<TaskConfiguration>, ITaskConfiguration
     {

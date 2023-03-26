@@ -24,26 +24,24 @@ namespace DailyDesktop.Core
         private string taskName;
 
         /// <summary>
-        /// Gets a read-only interface for the path configuration.
+        /// Read-only interface to the path configuration.
         /// </summary>
         public IReadOnlyPathConfiguration PathConfig => pathConfig;
         private readonly PathConfiguration pathConfig;
 
         /// <summary>
-        /// Gets a limited read-write interface for the task configuration.
+        /// Read-and-limited-write interface to the task configuration.
         /// </summary>
         public ITaskConfiguration TaskConfig => taskConfig;
         private readonly TaskConfiguration taskConfig;
         
         /// <summary>
-        /// Gets or sets whether or not to automatically create the task on
-        /// when settings are changed or loaded.
+        /// Whether or not to automatically create the task on when settings are changed or loaded.
         /// </summary>
         public bool IsAutoCreatingTask { get; set; }
 
         /// <summary>
-        /// Gets or sets name of the task registered in the Windows Task
-        /// Scheduler.
+        /// Name of the task registered in the Windows Task Scheduler.
         /// </summary>
         public string TaskName
         {
@@ -59,15 +57,13 @@ namespace DailyDesktop.Core
         }
 
         /// <summary>
-        /// Gets or sets the current provider to fetch wallpaper image URIs from
-        /// in a <see cref="ProviderWrapper"/>.
+        /// The currently selected provider corresponding to <see cref="TaskConfiguration.Dll"/>.
         /// </summary>
         public IProvider? CurrentProvider => currentProvider;
         private IProvider? currentProvider;
 
         /// <summary>
-        /// Gets a freshly scanned dictionary of <see cref="IProvider"/>
-        /// <see cref="Type"/> values and DLL module path keys.
+        /// Freshly scanned dictionary of <see cref="IProvider"/> <see cref="Type"/> values and DLL module path keys.
         /// </summary>
         public Dictionary<string, Type> Providers
         {
@@ -79,7 +75,7 @@ namespace DailyDesktop.Core
         }
 
         /// <summary>
-        /// Gets the state of the desktop wallpaper update task.
+        /// The state of the desktop wallpaper update task.
         /// </summary>
         public TaskState TaskState => task?.State ?? throw new InvalidOperationException("Task has not been created yet.");
 

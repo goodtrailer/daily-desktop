@@ -7,7 +7,7 @@ using System.Web;
 namespace DailyDesktop.Core.Configuration
 {
     /// <summary>
-    /// Interface for path settings for <see cref="DailyDesktopCore"/>.
+    /// Interface to path settings for <see cref="DailyDesktopCore"/>.
     /// </summary>
     public interface IPathConfiguration : IReadOnlyPathConfiguration
     {
