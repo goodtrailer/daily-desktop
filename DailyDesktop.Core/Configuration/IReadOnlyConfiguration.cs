@@ -2,6 +2,7 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
+using System.Threading.Tasks;
 
 namespace DailyDesktop.Core.Configuration
 {
@@ -16,7 +17,7 @@ namespace DailyDesktop.Core.Configuration
         string JsonPath { get; }
 
         /// <summary>
-        /// Whether or not serialization should occur automatically (e.g. on update).
+        /// Whether or not serialization should occur automatically (e.g. on update). Note that automatic serialization is synchronous.
         /// </summary>
         bool IsAutoSerializing { get; }
 
@@ -31,21 +32,21 @@ namespace DailyDesktop.Core.Configuration
         event EventHandler OnSerialize;
 
         /// <summary>
-        /// Automatically called upon setting properties (can be called manually to serialize in case <see cref="IsAutoSerializing"/> is true).
+        /// Automatically called upon setting properties (can be called manually to synchronously serialize in case <see cref="IsAutoSerializing"/> is true).
         /// </summary>
         void Update();
 
         /// <summary>
-        /// Serialize configuration to a JSON file (located at <see cref="JsonPath"/>).
+        /// Asynchronously serialize configuration to a JSON file (located at <see cref="JsonPath"/>).
         /// </summary>
-        void Serialize();
+        Task Serialize();
 
         /// <summary>
-        /// Try to serialize configuration to a JSON file (located at <see cref="JsonPath"/>).
+        /// Try to asynchronously serialize configuration to a JSON file (located at <see cref="JsonPath"/>).
         /// </summary>
         /// <returns>
         /// Whether or not the serialiazation was successful.
         /// </returns>
-        bool TrySerialize();
+        Task<bool> TrySerialize();
     }
 }

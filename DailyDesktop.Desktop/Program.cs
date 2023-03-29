@@ -2,6 +2,7 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DailyDesktop.Desktop
@@ -12,12 +13,12 @@ namespace DailyDesktop.Desktop
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        private static void Main()
+        private static async Task Main()
         {
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(await MainForm.CreateForm());
         }
     }
 }

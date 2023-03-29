@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace DailyDesktop.Core.Configuration
 {
@@ -40,18 +41,19 @@ namespace DailyDesktop.Core.Configuration
         public event EventHandler? OnSerialize;
 
         /// <summary>
-        /// Deserialize a JSON file (located at <see cref="JsonPath"/>) to a configuration.
+        /// Asynchronously deserialize a JSON file (located at <see cref="JsonPath"/>) to a configuration.
         /// </summary>
-        public void Deserialize()
+        public async Task Deserialize()
         {
             if (string.IsNullOrWhiteSpace(JsonPath))
                 throw new InvalidOperationException($"{JsonPath} is null or whitespace.");
 
-            string jsonString = File.ReadAllText(JsonPath);
             var options = new JsonSerializerOptions();
             ConfigureDeserializer(options);
 
-            var newConfig = JsonSerializer.Deserialize<T>(jsonString, options) ?? throw new NullReferenceException("Deserialized config was null.");
+            T newConfig;
+            using (var jsonStream = File.OpenRead(JsonPath))
+                newConfig = await JsonSerializer.DeserializeAsync<T>(jsonStream, options) ?? throw new NullReferenceException("Deserialized config was null.");
 
             bool temp = IsAutoSerializing;
             IsAutoSerializing = false;
@@ -63,19 +65,23 @@ namespace DailyDesktop.Core.Configuration
         }
 
         /// <summary>
-        /// Try to deserialize a JSON file (located at <see cref="JsonPath"/>) to a configuration.
+        /// Try to asynchronously deserialize a JSON file (located at <see cref="JsonPath"/>) to a configuration.
         /// </summary>
         /// <returns>
         /// Whether or not the deserialiazation was successful.
         /// </returns>
-        public bool TryDeserialize()
+        public async Task<bool> TryDeserialize()
         {
             try
             {
-                Deserialize();
+                await Deserialize();
                 return true;
             }
-            catch (Exception ex) when (ex is IOException || ex is SystemException || ex is InvalidOperationException || ex is NullReferenceException)
+            catch (Exception ex) when (ex is JsonException
+                || ex is IOException
+                || ex is SystemException
+                || ex is InvalidOperationException
+                || ex is NullReferenceException)
             {
                 return false;
             }
@@ -87,11 +93,11 @@ namespace DailyDesktop.Core.Configuration
             OnUpdate?.Invoke(this, new EventArgs());
 
             if (IsAutoSerializing)
-                Serialize();
+                Serialize().Wait();
         }
 
         /// <inheritdoc/>
-        public void Serialize()
+        public async Task Serialize()
         {
             if (!(this is T @this))
                 throw new InvalidCastException($"this is not of type {nameof(T)}: {typeof(T).FullName}.");
@@ -102,21 +108,26 @@ namespace DailyDesktop.Core.Configuration
             var options = new JsonSerializerOptions();
             ConfigureSerializer(options);
 
-            string jsonString = JsonSerializer.Serialize(@this, options);
-            File.WriteAllText(JsonPath, jsonString);
+            using (var jsonStream = File.Create(JsonPath))
+            {
+                await JsonSerializer.SerializeAsync(jsonStream, @this, options);
+            }
 
             OnSerialize?.Invoke(this, EventArgs.Empty);
         }
 
         /// <inheritdoc/>
-        public bool TrySerialize()
+        public async Task<bool> TrySerialize()
         {
             try
             {
-                Serialize();
+                await Serialize();
                 return true;
             }
-            catch (Exception ex) when (ex is IOException || ex is SystemException || ex is InvalidOperationException)
+            catch (Exception ex) when (ex is JsonException
+                || ex is IOException
+                || ex is SystemException
+                || ex is InvalidOperationException)
             {
                 return false;
             }

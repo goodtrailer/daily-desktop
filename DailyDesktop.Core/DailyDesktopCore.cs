@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 using Microsoft.Win32.TaskScheduler;
@@ -11,7 +12,7 @@ using Microsoft.Win32.TaskScheduler;
 namespace DailyDesktop.Core
 {
     /// <summary>
-    /// Core of Daily Desktop that handles the wallpaper update <see cref="Task"/>
+    /// Core of Daily Desktop that handles the wallpaper update <see cref="Microsoft.Win32.TaskScheduler.Task"/>
     /// using Windows Task Scheduler. Also handles <see cref="IProvider"/> DLL
     /// module scanning, though <see cref="ProviderStore"/> is fully functional as
     /// a standalone class.
@@ -20,7 +21,7 @@ namespace DailyDesktop.Core
     {
         private readonly ProviderStore store = new ProviderStore();
 
-        private Task? task;
+        private Microsoft.Win32.TaskScheduler.Task? task;
         private string taskName;
 
         /// <summary>
@@ -85,35 +86,33 @@ namespace DailyDesktop.Core
         /// <param name="pathConfig">The path configuration.</param>
         /// <param name="taskName">The name of the task registered in the Windows Task Scheduler.</param>
         /// <param name="isAutoCreatingTask">Whether or not to automatically create the task when settings are changed or loaded.</param>
-        public DailyDesktopCore(PathConfiguration pathConfig, string taskName, bool isAutoCreatingTask)
+        public static async Task<DailyDesktopCore> CreateCore(PathConfiguration pathConfig, string taskName, bool isAutoCreatingTask)
         {
-            this.pathConfig = pathConfig;
-            this.taskName = taskName;
-            IsAutoCreatingTask = isAutoCreatingTask;
+            var core = new DailyDesktopCore(pathConfig, taskName);
 
-            taskConfig = new TaskConfiguration(pathConfig.TaskConfigJson)
+            core.IsAutoCreatingTask = isAutoCreatingTask;
+
+            core.taskConfig.OnUpdate += core.onTaskConfigUpdate;
+
+            if (!await core.taskConfig.TryDeserialize())
+                core.taskConfig.Update();
+
+            if (File.Exists(core.taskConfig.Dll))
             {
-                IsAutoSerializing = true,
-            };
-            taskConfig.OnUpdate += onTaskConfigUpdate;
-
-            if (!taskConfig.TryDeserialize())
-                taskConfig.Update();
-
-            if (File.Exists(taskConfig.Dll))
-            {
-                var providerType = store.Add(taskConfig.Dll);
+                var providerType = core.store.Add(core.taskConfig.Dll);
 
                 if (providerType != null)
-                    currentProvider = IProvider.Instantiate(providerType);
+                    core.currentProvider = IProvider.Instantiate(providerType);
             }
 
-            if (IsAutoCreatingTask)
-                CreateTask();
+            if (core.IsAutoCreatingTask)
+                core.CreateTask();
+
+            return core;
         }
 
         /// <summary>
-        /// Creates a <see cref="Task"/> under the name <see cref="TaskName"/>. If
+        /// Creates a <see cref="Microsoft.Win32.TaskScheduler.Task"/> under the name <see cref="TaskName"/>. If
         /// one already exists, then it is updated instead.
         /// </summary>
         public void CreateTask()
@@ -158,7 +157,7 @@ namespace DailyDesktop.Core
         }
 
         /// <summary>
-        /// Deletes the wallpaper update <see cref="Task"/>. Doing so invalidates
+        /// Deletes the wallpaper update <see cref="Microsoft.Win32.TaskScheduler.Task"/>. Doing so invalidates
         /// many member properties until <see cref="CreateTask"/> is called
         /// again.
         /// </summary>
@@ -169,7 +168,7 @@ namespace DailyDesktop.Core
         }
 
         /// <summary>
-        /// Manually triggers the wallpaper update <see cref="Task"/>, updating
+        /// Manually triggers the wallpaper update <see cref="Microsoft.Win32.TaskScheduler.Task"/>, updating
         /// the desktop wallpaper using <see cref="CurrentProvider"/>.
         /// </summary>
         public void UpdateWallpaper()
@@ -178,6 +177,17 @@ namespace DailyDesktop.Core
                 throw new InvalidOperationException("Task has not been created yet.");
 
             task.Run();
+        }
+
+        private DailyDesktopCore(PathConfiguration pathConfig, string taskName)
+        {
+            this.pathConfig = pathConfig;
+            this.taskName = taskName;
+
+            taskConfig = new TaskConfiguration(pathConfig.TaskConfigJson)
+            {
+                IsAutoSerializing = true,
+            };
         }
 
         private void onTaskConfigUpdate(object? _ = null, EventArgs? __ = null)

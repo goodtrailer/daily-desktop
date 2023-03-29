@@ -72,7 +72,7 @@ namespace DailyDesktop.Task
 
             var wallpaperConfig = new WallpaperConfiguration(jsonPath);
             await provider.ConfigureWallpaper(wallpaperConfig);
-            wallpaperConfig.TrySerialize();
+            await wallpaperConfig.TrySerialize();
 
             using (var client = provider.CreateHttpClient())
             {

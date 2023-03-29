@@ -9,12 +9,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using DailyDesktop.Core;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
-using Microsoft.Win32.TaskScheduler;
+
+using TaskState = Microsoft.Win32.TaskScheduler.TaskState;
 
 namespace DailyDesktop.Desktop
 {
@@ -42,7 +44,7 @@ namespace DailyDesktop.Desktop
 
         private TaskState previousState;
 
-        public MainForm()
+        public static async Task<MainForm> CreateForm()
         {
             string userId = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             string userName = userId.Split('\\').Last();
@@ -57,12 +59,17 @@ namespace DailyDesktop.Desktop
 
             string serializationDir = Path.Combine(appDataDir, serialization_dir);
 
-            core = new DailyDesktopCore(new PathConfiguration(Path.Combine(assemblyDir, path_config_filename))
+            return new MainForm(await DailyDesktopCore.CreateCore(new PathConfiguration(Path.Combine(assemblyDir, path_config_filename))
             {
                 AssemblyDir = assemblyDir,
                 ProvidersDir = providersDir,
                 SerializationDir = serializationDir,
-            }, taskName, true);
+            }, taskName, true));
+        }
+
+        private MainForm(DailyDesktopCore core)
+        {
+            this.core = core;
             wallpaperConfig = new WallpaperConfiguration(pathConfig.WallpaperJson);
 
             InitializeComponent();
@@ -71,8 +78,8 @@ namespace DailyDesktop.Desktop
             overviewRichTextBox.LinkClicked += overviewRichTextBox_LinkClicked;
             licenseRichTextBox.LinkClicked += licenseRichTextBox_LinkClicked;
 
-            string licenseUri = $"file:///{assemblyDir}/{license_filename}";
-            string eulaUri = $"file:///{assemblyDir}/{eula_filename}";
+            string licenseUri = $"file:///{pathConfig.AssemblyDir}/{license_filename}";
+            string eulaUri = $"file:///{pathConfig.AssemblyDir}/{eula_filename}";
             licenseRichTextBox.Text = string.Format(licenseRichTextBox.Text, licenseUri, eulaUri);
         }
 
@@ -81,7 +88,7 @@ namespace DailyDesktop.Desktop
             if (string.IsNullOrWhiteSpace(uri))
                 return;
 
-            ProcessStartInfo psi = new ProcessStartInfo
+            var psi = new ProcessStartInfo
             {
                 FileName = "explorer.exe",
                 Arguments = $"\"{HttpUtility.UrlDecode(uri)}\"",
@@ -218,31 +225,36 @@ namespace DailyDesktop.Desktop
 
         private void wallpaperAuthorLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(wallpaperConfig.AuthorUri);
 
-        private void updateWallpaperInfo()
+        private async Task updateWallpaperInfo()
         {
-            if (wallpaperConfig.TryDeserialize())
+            bool deserializeResult = await wallpaperConfig.TryDeserialize();
+
+            Invoke(new MethodInvoker(() =>
             {
-                wallpaperUpdatedLabel.Text = $"{fetched_text} {wallpaperConfig.Date.ToString("dddd, MMMM d") ?? null_text}";
-                wallpaperTitleLinkLabel.Text = wallpaperConfig.Title ?? null_text;
-                wallpaperAuthorLinkLabel.Text = wallpaperConfig.Author ?? null_text;
-                wallpaperDescriptionRichTextBox.Text = Regex.Replace(wallpaperConfig.Description ?? null_description, "(?<=[^\r])\n", "\r\n");
+                if (deserializeResult)
+                {
+                    wallpaperUpdatedLabel.Text = $"{fetched_text} {wallpaperConfig.Date.ToString("dddd, MMMM d") ?? null_text}";
+                    wallpaperTitleLinkLabel.Text = wallpaperConfig.Title ?? null_text;
+                    wallpaperAuthorLinkLabel.Text = wallpaperConfig.Author ?? null_text;
+                    wallpaperDescriptionRichTextBox.Text = Regex.Replace(wallpaperConfig.Description ?? null_description, "(?<=[^\r])\n", "\r\n");
 
-                wallpaperTitleLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaperConfig.TitleUri, UriKind.Absolute, out _);
-                wallpaperTitleLinkLabel.TabStop = wallpaperTitleLinkLabel.Links[0].Enabled;
+                    wallpaperTitleLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaperConfig.TitleUri, UriKind.Absolute, out _);
+                    wallpaperTitleLinkLabel.TabStop = wallpaperTitleLinkLabel.Links[0].Enabled;
 
-                wallpaperAuthorLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaperConfig.AuthorUri, UriKind.Absolute, out _);
-                wallpaperAuthorLinkLabel.TabStop = wallpaperAuthorLinkLabel.Links[0].Enabled;
-            }
-            else
-            {
-                wallpaperUpdatedLabel.Text = $"{fetched_text} {null_text}";
-                wallpaperTitleLinkLabel.Text = null_text;
-                wallpaperAuthorLinkLabel.Text = null_text;
-                wallpaperDescriptionRichTextBox.Text = null_description;
+                    wallpaperAuthorLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaperConfig.AuthorUri, UriKind.Absolute, out _);
+                    wallpaperAuthorLinkLabel.TabStop = wallpaperAuthorLinkLabel.Links[0].Enabled;
+                }
+                else
+                {
+                    wallpaperUpdatedLabel.Text = $"{fetched_text} {null_text}";
+                    wallpaperTitleLinkLabel.Text = null_text;
+                    wallpaperAuthorLinkLabel.Text = null_text;
+                    wallpaperDescriptionRichTextBox.Text = null_description;
 
-                wallpaperTitleLinkLabel.Links[0].Enabled = false;
-                wallpaperAuthorLinkLabel.Links[0].Enabled = false;
-            }
+                    wallpaperTitleLinkLabel.Links[0].Enabled = false;
+                    wallpaperAuthorLinkLabel.Links[0].Enabled = false;
+                }
+            }));
         }
 
         private void stateBackgroundWorker_DoWork(object? _, EventArgs e)
@@ -257,13 +269,14 @@ namespace DailyDesktop.Desktop
             }
         }
 
-        private void stateBackgroundWorker_ProgressChanged(object? _, ProgressChangedEventArgs e)
+        private async void stateBackgroundWorker_ProgressChanged(object? _, ProgressChangedEventArgs e)
         {
-            TaskState state = (TaskState)e.ProgressPercentage;
-            stateLabel.Text = state.ToString();
+            var state = (TaskState)e.ProgressPercentage;
+
+            Invoke(new MethodInvoker(() => stateLabel.Text = state.ToString()));
 
             if (state == TaskState.Ready)
-                updateWallpaperInfo();
+                await updateWallpaperInfo();
         }
 
         private void okButton_Click(object? _, EventArgs e)
