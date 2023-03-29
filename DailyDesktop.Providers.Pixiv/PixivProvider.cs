@@ -6,7 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using DailyDesktop.Core;
+using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 
 namespace DailyDesktop.Providers.Pixiv
@@ -30,7 +30,7 @@ namespace DailyDesktop.Providers.Pixiv
             client.DefaultRequestHeaders.Referrer = new Uri("https://www.pixiv.net");
         }
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig)
         {
             // Search for image ID of #1 illustration on daily rankings page
 
@@ -40,31 +40,20 @@ namespace DailyDesktop.Providers.Pixiv
             if (string.IsNullOrWhiteSpace(imageId))
                 throw new ProviderException("Didn't find an image ID.");
 
-            string imagePageUri = "https://www.pixiv.net/en/artworks/" + imageId;
+            wallpaperConfig.TitleUri = "https://www.pixiv.net/en/artworks/" + imageId;
 
             // Search for wallpaper info on image page
 
-            string imagePageHtml = await client.GetStringAsync(imagePageUri);
+            string imagePageHtml = await client.GetStringAsync(wallpaperConfig.TitleUri);
 
-            string imageUri = Regex.Match(imagePageHtml, IMAGE_URI_PATTERN).Value;
-            if (string.IsNullOrWhiteSpace(imageUri))
+            wallpaperConfig.ImageUri = Regex.Match(imagePageHtml, IMAGE_URI_PATTERN).Value;
+            if (string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            string title = Regex.Match(imagePageHtml, TITLE_PATTERN).Value;
-            string author = Regex.Match(imagePageHtml, AUTHOR_PATTERN).Value;
-            string authorUri = "https://www.pixiv.net/users/" + Regex.Match(imagePageHtml, AUTHOR_ID_PATTERN).Value;
-            string description = WebUtility.HtmlDecode(Regex.Match(imagePageHtml, DESCRIPTION_PATTERN).Value);
-
-            return new WallpaperInfo
-            {
-                ImageUri = imageUri,
-                Date = DateTime.Now,
-                Title = title,
-                TitleUri = imagePageUri,
-                Author = author,
-                AuthorUri = authorUri,
-                Description = description,
-            };
+            wallpaperConfig.Title = Regex.Match(imagePageHtml, TITLE_PATTERN).Value;
+            wallpaperConfig.Author = Regex.Match(imagePageHtml, AUTHOR_PATTERN).Value;
+            wallpaperConfig.AuthorUri = "https://www.pixiv.net/users/" + Regex.Match(imagePageHtml, AUTHOR_ID_PATTERN).Value;
+            wallpaperConfig.Description = WebUtility.HtmlDecode(Regex.Match(imagePageHtml, DESCRIPTION_PATTERN).Value);
         }
     }
 }

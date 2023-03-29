@@ -4,59 +4,45 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Text.Json;
+using System.Threading.Tasks;
+using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 using Microsoft.Win32.TaskScheduler;
 
 namespace DailyDesktop.Core
 {
     /// <summary>
-    /// Core of Daily Desktop that handles the wallpaper update <see cref="Task"/>
+    /// Core of Daily Desktop that handles the wallpaper update <see cref="Microsoft.Win32.TaskScheduler.Task"/>
     /// using Windows Task Scheduler. Also handles <see cref="IProvider"/> DLL
     /// module scanning, though <see cref="ProviderStore"/> is fully functional as
     /// a standalone class.
     /// </summary>
-    public class DailyDesktopCore
+    public class DailyDesktopCore : IDisposable
     {
-        //---------------------------------------------------------------VARIABLES
+        private readonly ProviderStore store = new ProviderStore();
 
-        private const string SETTINGS_JSON_FILENAME = "settings.json";
-        private const string WALLPAPER_INFO_JSON_FILENAME = "wallpaper.json";
-        private const string TASK_EXECUTABLE_FILENAME = "DailyDesktop.Task.exe";
-
-        private readonly ProviderStore store;
-
-        private Task? task;
+        private Microsoft.Win32.TaskScheduler.Task? task;
         private string taskName;
-        private string providersDirectory;
-        private string serializeJsonDirectory;
-        private IProvider? currentProvider;
-        private DailyDesktopSettings settings;
-
-        //--------------------------------------------------------------PROPERTIES
 
         /// <summary>
-        /// Gets or sets whether or not to automatically create the task on
-        /// when settings are changed or loaded.
+        /// Read-only interface to the path configuration.
         /// </summary>
-        public bool AutoCreateTask { get; set; }
+        public IReadOnlyPathConfiguration PathConfig => pathConfig;
+        private readonly PathConfiguration pathConfig;
 
         /// <summary>
-        /// Gets the path of the settings JSON file, based on
-        /// <see cref="SerializeJsonDirectory"/>.
+        /// Read-and-write interface to the task configuration.
         /// </summary>
-        public string SettingsJsonPath => Path.Combine(serializeJsonDirectory, SETTINGS_JSON_FILENAME);
+        public IPublicTaskConfiguration TaskConfig => taskConfig;
+        private readonly TaskConfiguration taskConfig;
 
         /// <summary>
-        /// Gets the path of the wallpaper information JSON file, based on
-        /// <see cref="SerializeJsonDirectory"/>.
+        /// Whether or not to automatically create the task on when settings are changed or loaded.
         /// </summary>
-        public string WallpaperInfoJsonPath => Path.Combine(serializeJsonDirectory, WALLPAPER_INFO_JSON_FILENAME);
+        public bool IsAutoCreatingTask { get; set; }
 
         /// <summary>
-        /// Gets or sets name of the task registered in the Windows Task
-        /// Scheduler.
+        /// Name of the task registered in the Windows Task Scheduler.
         /// </summary>
         public string TaskName
         {
@@ -65,191 +51,68 @@ namespace DailyDesktop.Core
             {
                 taskName = value;
                 DeleteTask();
-                if (AutoCreateTask)
+
+                if (IsAutoCreatingTask)
                     CreateTask();
             }
         }
 
         /// <summary>
-        /// Gets or sets the providers directory where <see cref="IProvider"/> DLL
-        /// modules are automatically scanned from.
+        /// The currently selected provider corresponding to <see cref="TaskConfiguration.Dll"/>.
         /// </summary>
-        public string ProvidersDirectory
-        {
-            get => providersDirectory;
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("ProvidersDirectory cannot be null.");
-                Directory.CreateDirectory(value);
-                providersDirectory = value;
-            }
-        }
+        public IProvider? CurrentProvider => currentProvider;
+        private IProvider? currentProvider;
 
         /// <summary>
-        /// Gets or sets the directory where JSON serializations are saved to and
-        /// read from.
-        /// </summary>
-        public string SerializeJsonDirectory
-        {
-            get => serializeJsonDirectory;
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("SerializeJsonDirectory cannot be null.");
-                Directory.CreateDirectory(value);
-                serializeJsonDirectory = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets whether wallpaper update <see cref="Task"/> triggers are
-        /// enabled or disabled.
-        /// </summary>
-        public bool Enabled
-        {
-            get => settings.Enabled;
-            set
-            {
-                settings.Enabled = value;
-                SaveSettings();
-                if (AutoCreateTask)
-                    CreateTask();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets whether or not to apply resize to wallpaper images to screen resolution, if larger.
-        /// </summary>
-        public bool DoResize
-        {
-            get => settings.DoResize;
-            set
-            {
-                settings.DoResize = value;
-                SaveSettings();
-                if (AutoCreateTask)
-                    CreateTask();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets whether or not to apply blurred-fit to wallpaper images.
-        /// </summary>
-        public bool DoBlurredFit
-        {
-            get => settings.DoBlurredFit;
-            set
-            {
-                settings.DoBlurredFit = value;
-                SaveSettings();
-                if (AutoCreateTask)
-                    CreateTask();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the blur strength for wallpaper images. Only applies if
-        /// <see cref="DoBlurredFit"/> is set to <c>true</c>.
-        /// </summary>
-        public int BlurStrength
-        {
-            get => settings.BlurStrength;
-            set
-            {
-                settings.BlurStrength = value;
-                SaveSettings();
-                if (AutoCreateTask)
-                    CreateTask();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the current provider to fetch wallpaper image URIs from
-        /// in a <see cref="ProviderWrapper"/>.
-        /// </summary>
-        public ProviderWrapper? CurrentProvider
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(settings.DllPath) || currentProvider == null)
-                    return null;
-                else
-                    return new ProviderWrapper(settings.DllPath, currentProvider);
-            }
-            set
-            {
-                currentProvider = value?.Provider;
-                settings.DllPath = value?.DllPath;
-                SaveSettings();
-                if (AutoCreateTask)
-                    CreateTask();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the time at which the daily wallpaper update trigger
-        /// executes. Only applies if <see cref="Enabled"/> is set to <c>true</c>.
-        /// </summary>
-        public DateTime UpdateTime
-        {
-            get => settings.UpdateTime;
-            set
-            {
-                settings.UpdateTime = value;
-                SaveSettings();
-                if (AutoCreateTask)
-                    CreateTask();
-            }
-        }
-
-        /// <summary>
-        /// Gets a freshly scanned dictionary of <see cref="IProvider"/>
-        /// <see cref="Type"/> values and DLL module path keys.
+        /// Freshly scanned dictionary of <see cref="IProvider"/> <see cref="Type"/> values and DLL module path keys.
         /// </summary>
         public Dictionary<string, Type> Providers
         {
             get
             {
-                store.Scan(ProvidersDirectory);
+                store.Scan(pathConfig.ProvidersDir);
                 return store.Providers;
             }
         }
 
         /// <summary>
-        /// Gets the state of the desktop wallpaper update task.
+        /// The state of the desktop wallpaper update task.
         /// </summary>
         public TaskState TaskState => task?.State ?? throw new InvalidOperationException("Task has not been created yet.");
 
-        //-----------------------------------------------------------------METHODS
-
         /// <summary>
-        /// Constructs a <see cref="DailyDesktopCore"/> and calls
-        /// <see cref="LoadSettings()"/>.
+        /// Constructs a <see cref="DailyDesktopCore"/> and loads <see cref="TaskConfig"/>.
         /// </summary>
-        /// <param name="providersDirectory">The directory to automatically scan <see cref="IProvider"/> DLL modules from.</param>
-        /// <param name="serializeJsonDirectory">The directory to save JSON serializations in.</param>
+        /// <param name="pathConfig">The path configuration.</param>
         /// <param name="taskName">The name of the task registered in the Windows Task Scheduler.</param>
-        /// <param name="autoCreateTask">Whether or not to automatically create the task when settings are changed or loaded.</param>
-        public DailyDesktopCore(string providersDirectory, string serializeJsonDirectory, string taskName, bool autoCreateTask)
+        /// <param name="isAutoCreatingTask">Whether or not to automatically create the task when settings are changed or loaded.</param>
+        public static async Task<DailyDesktopCore> CreateCore(PathConfiguration pathConfig, string taskName, bool isAutoCreatingTask)
         {
-            this.providersDirectory = null!;
-            ProvidersDirectory = providersDirectory;
+            var core = new DailyDesktopCore(pathConfig, taskName);
 
-            this.serializeJsonDirectory = null!;
-            SerializeJsonDirectory = serializeJsonDirectory;
+            core.IsAutoCreatingTask = isAutoCreatingTask;
 
-            store = new ProviderStore();
+            core.taskConfig.OnUpdate += core.onTaskConfigUpdate;
 
-            LoadSettings();
-            AutoCreateTask = autoCreateTask;
+            if (!await core.taskConfig.TryDeserialize())
+                core.taskConfig.Update();
 
-            this.taskName = null!;
-            TaskName = taskName;
+            if (File.Exists(core.taskConfig.Dll))
+            {
+                var providerType = core.store.Add(core.taskConfig.Dll);
+
+                if (providerType != null)
+                    core.currentProvider = IProvider.Instantiate(providerType);
+            }
+
+            if (core.IsAutoCreatingTask)
+                core.CreateTask();
+
+            return core;
         }
 
         /// <summary>
-        /// Creates a <see cref="Task"/> under the name <see cref="TaskName"/>. If
+        /// Creates a <see cref="Microsoft.Win32.TaskScheduler.Task"/> under the name <see cref="TaskName"/>. If
         /// one already exists, then it is updated instead.
         /// </summary>
         public void CreateTask()
@@ -260,12 +123,12 @@ namespace DailyDesktop.Core
 #if (!DEBUG)
             taskDefinition.Settings.Hidden = true;
 #endif
-            if (settings.Enabled)
+            if (taskConfig.IsEnabled)
             {
                 DailyTrigger dailyTrigger = new DailyTrigger
                 {
                     DaysInterval = 1,
-                    StartBoundary = settings.UpdateTime,
+                    StartBoundary = taskConfig.UpdateTime,
                 };
                 LogonTrigger logonTrigger = new LogonTrigger
                 {
@@ -275,15 +138,17 @@ namespace DailyDesktop.Core
                 taskDefinition.Triggers.Add(logonTrigger);
             }
 
-            string args = $"\"{settings.DllPath}\" --json \"{WallpaperInfoJsonPath}\"";
-            if (settings.DoResize)
+            string args = $"\"{taskConfig.Dll}\" --json \"{PathConfig.WallpaperJson}\"";
+
+            if (taskConfig.DoResize)
                 args += " --resize";
-            if (settings.DoBlurredFit)
-                args += $" --blur {settings.BlurStrength}";
+
+            if (taskConfig.DoBlurredFit)
+                args += $" --blur {taskConfig.BlurStrength}";
 
             ExecAction execAction = new ExecAction
             {
-                Path = getTaskExecutablePath(),
+                Path = PathConfig.TaskExecutable,
                 Arguments = args,
             };
             taskDefinition.Actions.Add(execAction);
@@ -292,7 +157,7 @@ namespace DailyDesktop.Core
         }
 
         /// <summary>
-        /// Deletes the wallpaper update <see cref="Task"/>. Doing so invalidates
+        /// Deletes the wallpaper update <see cref="Microsoft.Win32.TaskScheduler.Task"/>. Doing so invalidates
         /// many member properties until <see cref="CreateTask"/> is called
         /// again.
         /// </summary>
@@ -303,7 +168,7 @@ namespace DailyDesktop.Core
         }
 
         /// <summary>
-        /// Manually triggers the wallpaper update <see cref="Task"/>, updating
+        /// Manually triggers the wallpaper update <see cref="Microsoft.Win32.TaskScheduler.Task"/>, updating
         /// the desktop wallpaper using <see cref="CurrentProvider"/>.
         /// </summary>
         public void UpdateWallpaper()
@@ -314,73 +179,31 @@ namespace DailyDesktop.Core
             task.Run();
         }
 
-        /// <summary>
-        /// Serializes settings to a JSON file at <see cref="SettingsJsonPath"/>.
-        /// </summary>
-        public void SaveSettings()
+        private DailyDesktopCore(PathConfiguration pathConfig, string taskName)
         {
-            JsonSerializerOptions options = new JsonSerializerOptions()
+            this.pathConfig = pathConfig;
+            this.taskName = taskName;
+
+            taskConfig = new TaskConfiguration(pathConfig.TaskConfigJson)
             {
-                WriteIndented = true,
+                IsAutoSerializing = true,
             };
-            string jsonString = JsonSerializer.Serialize(settings, options);
-            File.WriteAllText(SettingsJsonPath, jsonString);
         }
 
-        /// <summary>
-        /// Deserializes settings from a JSON file at
-        /// <see cref="SettingsJsonPath"/> and loads them using
-        /// <see cref="LoadSettings(DailyDesktopSettings)"/>.
-        /// </summary>
-        public void LoadSettings()
+        private void onTaskConfigUpdate(object? _ = null, EventArgs? __ = null)
         {
-            if (File.Exists(SettingsJsonPath))
-            {
-                string jsonString = File.ReadAllText(SettingsJsonPath);
-                JsonSerializerOptions options = new JsonSerializerOptions()
-                {
-                    AllowTrailingCommas = true,
-                };
-                DailyDesktopSettings newSettings = JsonSerializer.Deserialize<DailyDesktopSettings>(jsonString, options);
-                LoadSettings(newSettings);
-            }
-            else
-            {
-                LoadSettings(DailyDesktopSettings.Default);
-            }
-        }
+            currentProvider = Providers.ContainsKey(taskConfig.Dll) ? IProvider.Instantiate(Providers[taskConfig.Dll]) : null;
 
-        /// <summary>
-        /// Loads settings from a <see cref="DailyDesktopSettings"/>.
-        /// </summary>
-        /// <param name="newSettings">The new settings to set.</param>
-        public void LoadSettings(DailyDesktopSettings newSettings)
-        {
-            settings = newSettings;
-            if (File.Exists(settings.DllPath))
-            {
-                var providerType = store.Add(settings.DllPath);
-
-                if (providerType != null)
-                    currentProvider = IProvider.Instantiate(providerType);
-            }
-
-            if (AutoCreateTask)
+            if (IsAutoCreatingTask)
                 CreateTask();
         }
 
-        private string getTaskExecutablePath()
+        /// <summary>
+        /// Disposal method (e.g. event unsubscription).
+        /// </summary>
+        public void Dispose()
         {
-            string baseDirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-                ?? throw new NullReferenceException("Assembly directory could not be found.");
-
-            string baseDir = new Uri(baseDirName).LocalPath;
-
-            string[] paths = Directory.GetFiles(baseDir, TASK_EXECUTABLE_FILENAME, SearchOption.AllDirectories);
-            if (paths.Length < 1)
-                throw new IOException($"Did not find task executable {TASK_EXECUTABLE_FILENAME}.");
-
-            return paths[0];
+            taskConfig.OnUpdate -= onTaskConfigUpdate;
         }
     }
 }

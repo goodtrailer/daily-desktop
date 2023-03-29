@@ -4,11 +4,12 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using DailyDesktop.Core.Configuration;
 
 namespace DailyDesktop.Core.Providers
 {
     /// <summary>
-    /// Interface for providing desktop wallpaper image URIs and some extra
+    /// Interface to providing desktop wallpaper image URIs and some extra
     /// useful information to display to the user. Should be compiled into DLL
     /// modules and loaded by a <see cref="ProviderStore"/>.
     /// </summary>
@@ -32,20 +33,20 @@ namespace DailyDesktop.Core.Providers
 
         /// <summary>
         /// Configures an <see cref="HttpClient"/> to be used for the
-        /// <see cref="WallpaperInfo.ImageUri"/> returned by
-        /// <see cref="GetWallpaperInfo"/>. Used by
+        /// <see cref="WallpaperConfiguration.ImageUri"/> returned by
+        /// <see cref="ConfigureWallpaper"/>. Used by
         /// <see cref="IProviderExtensions.CreateHttpClient(IProvider)"/>.
         /// </summary>
         /// <param name="client">The <see cref="HttpClient"/> to configure.</param>
         void ConfigureHttpClient(HttpClient client) { }
 
         /// <summary>
-        /// Gets an up-to-date <see cref="WallpaperInfo"/> using a given
+        /// Configures a <see cref="IPublicWallpaperConfiguration"/> using a given
         /// pre-configured <see cref="HttpClient"/>.
         /// </summary>
         /// <param name="client">A pre-configured <see cref="HttpClient"/>.</param>
-        /// <returns>The up-to-date <see cref="WallpaperInfo"/>.</returns>
-        Task<WallpaperInfo> GetWallpaperInfo(HttpClient client);
+        /// <param name="wallpaperConfig">The <see cref="IPublicWallpaperConfiguration"/> to configure.</param>
+        Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig);
 
         /// <summary>
         /// Instantiates an <see cref="IProvider"/> given a <see cref="Type"/>.
@@ -89,17 +90,22 @@ namespace DailyDesktop.Core.Providers
         }
 
         /// <summary>
-        /// Gets an up-to-date <see cref="WallpaperInfo"/> using a pre-configured
+        /// Configures a <see cref="WallpaperConfiguration"/> using a pre-configured
         /// <see cref="HttpClient"/> created by <see cref="CreateHttpClient(IProvider)"/>.
         /// </summary>
         /// <param name="provider">
-        /// The <see cref="IProvider"/> getting the up-to-date <see cref="WallpaperInfo"/>.
+        /// The <see cref="IProvider"/> configuring the <see cref="WallpaperConfiguration"/>.
         /// </param>
-        /// <returns>The up-to-date <see cref="WallpaperInfo"/>.</returns>
-        public static async Task<WallpaperInfo> GetWallpaperInfo(this IProvider provider)
+        /// <param name="wallpaperConfig">
+        /// The <see cref="IPublicWallpaperConfiguration"/> to configure.
+        /// </param>
+        /// <returns>The up-to-date <see cref="WallpaperConfiguration"/>.</returns>
+        public static async Task ConfigureWallpaper(this IProvider provider, IPublicWallpaperConfiguration wallpaperConfig)
         {
             using (var client = provider.CreateHttpClient())
-                return await provider.GetWallpaperInfo(client);
+                await provider.ConfigureWallpaper(client, wallpaperConfig);
+
+            wallpaperConfig.NullifyWhitespace();
         }
     }
 }

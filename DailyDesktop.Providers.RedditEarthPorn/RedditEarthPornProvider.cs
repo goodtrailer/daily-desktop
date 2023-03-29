@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
 // See the LICENSE file in the repository root for full licence text.
 
-using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using DailyDesktop.Core;
+using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 
 namespace DailyDesktop.Providers.RedditEarthPorn
@@ -22,29 +21,20 @@ namespace DailyDesktop.Providers.RedditEarthPorn
         public string Description => "Looks at the top post in the last 24 hours in the well-known r/EarthPorn, reddit's premiere landscape photography subreddit.";
         public string SourceUri => "https://www.reddit.com/r/EarthPorn/top/?sort=top&t=day";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig)
         {
+            wallpaperConfig.Title = TITLE;
+
             string subredditHtml = await client.GetStringAsync(SourceUri);
 
-            string imageUri = Regex.Match(subredditHtml, IMAGE_URI_PATTERN).Value;
-            if (string.IsNullOrWhiteSpace(imageUri))
+            wallpaperConfig.ImageUri = Regex.Match(subredditHtml, IMAGE_URI_PATTERN).Value;
+            if (string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            string author = "u/" + Regex.Match(subredditHtml, AUTHOR_PATTERN).Value;
-            string authorUri = "https://www.reddit.com/" + author;
-            string titleUri = "https://www.reddit.com" + Regex.Match(subredditHtml, TITLE_URI_PATTERN).Value;
-            string description = Regex.Match(subredditHtml, DESCRIPTION_PATTERN).Value;
-
-            return new WallpaperInfo
-            {
-                ImageUri = imageUri,
-                Date = DateTime.Now,
-                Author = author,
-                AuthorUri = authorUri,
-                Title = TITLE,
-                TitleUri = titleUri,
-                Description = description,
-            };
+            wallpaperConfig.Author = "u/" + Regex.Match(subredditHtml, AUTHOR_PATTERN).Value;
+            wallpaperConfig.AuthorUri = "https://www.reddit.com/" + wallpaperConfig.Author;
+            wallpaperConfig.TitleUri = "https://www.reddit.com" + Regex.Match(subredditHtml, TITLE_URI_PATTERN).Value;
+            wallpaperConfig.Description = Regex.Match(subredditHtml, DESCRIPTION_PATTERN).Value;
         }
     }
 }

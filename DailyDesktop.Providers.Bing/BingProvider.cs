@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
 // See the LICENSE file in the repository root for full licence text.
 
-using System;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using DailyDesktop.Core;
+using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 
 namespace DailyDesktop.Providers.Bing
@@ -23,7 +22,7 @@ namespace DailyDesktop.Providers.Bing
         public string Description => "Grabs Bing's featured Image of the Day, which can be found on Bing's home page.";
         public string SourceUri => "https://www.bing.com";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig)
         {
             string pageHtml = await client.GetStringAsync(SourceUri);
 
@@ -31,23 +30,12 @@ namespace DailyDesktop.Providers.Bing
             if (string.IsNullOrWhiteSpace(imageRelativeUri))
                 throw new ProviderException("Didn't find a relative image URI.");
 
-            string imageUri = SourceUri + imageRelativeUri;
-            string author = Regex.Match(pageHtml, AUTHOR_PATTERN).Value;
-            string title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
+            wallpaperConfig.ImageUri = SourceUri + imageRelativeUri;
 
-            string titleUri = SourceUri + WebUtility.HtmlDecode(Regex.Unescape(Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value)).Replace("\"", "%22");
-            string description = "TODAY ON BING\r\n" + Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value;
-
-            return new WallpaperInfo
-            {
-                ImageUri = imageUri,
-                Date = DateTime.Now,
-                Author = author,
-                AuthorUri = null,
-                Title = title,
-                TitleUri = titleUri,
-                Description = description,
-            };
+            wallpaperConfig.Author = Regex.Match(pageHtml, AUTHOR_PATTERN).Value;
+            wallpaperConfig.Title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
+            wallpaperConfig.TitleUri = SourceUri + WebUtility.HtmlDecode(Regex.Unescape(Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value)).Replace("\"", "%22");
+            wallpaperConfig.Description = "TODAY ON BING\r\n" + Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value;
         }
     }
 }

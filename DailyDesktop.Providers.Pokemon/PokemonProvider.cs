@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
 // See the LICENSE file in the repository root for full licence text.
 
-using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using DailyDesktop.Core;
+using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 
 namespace DailyDesktop.Providers.Pokemon
@@ -26,23 +25,23 @@ namespace DailyDesktop.Providers.Pokemon
 
         public string SourceUri => "https://tcg.pokemon.com/en-us/wallpapers/";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig)
         {
             // Scrape info from wallpapers page
 
             string pageHtml = await client.GetStringAsync(SourceUri);
 
-            string imageUri = SourceUri + Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN).Value;
-            if (string.IsNullOrWhiteSpace(imageUri))
+            wallpaperConfig.ImageUri = SourceUri + Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN).Value;
+            if (string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri))
                 throw new ProviderException("Didn't find any image URI.");
 
-            string title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
+            wallpaperConfig.Title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
+            wallpaperConfig.TitleUri = wallpaperConfig.ImageUri;
 
             // Check if card exists through Pokemon TCG API
 
-            var response = await client.GetAsync("https://api.pokemontcg.io/v2/cards?q=name:\"" + title + "\"");
+            var response = await client.GetAsync("https://api.pokemontcg.io/v2/cards?q=name:\"" + wallpaperConfig.Title + "\"");
 
-            string? description;
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();
@@ -54,28 +53,17 @@ namespace DailyDesktop.Providers.Pokemon
                 {
                     string id = Regex.Match(content, ID_PATTERN).Value;
                     string similarCardUri = "https://pokemontcg.guru/card/x/" + id;
-                    description = FOUND_DESCRIPTION + similarCardUri;
+                    wallpaperConfig.Description = FOUND_DESCRIPTION + similarCardUri;
                 }
                 else
                 {
-                    description = NOT_FOUND_DESCRIPTION;
+                    wallpaperConfig.Description = NOT_FOUND_DESCRIPTION;
                 }
             }
             else
             {
-                description = response.ReasonPhrase;
+                wallpaperConfig.Description = response.ReasonPhrase;
             }
-
-            return new WallpaperInfo
-            {
-                ImageUri = imageUri,
-                Date = DateTime.Now,
-                Title = title,
-                TitleUri = imageUri,
-                Author = null,
-                AuthorUri = null,
-                Description = description,
-            };
         }
     }
 }

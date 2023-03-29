@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
 // See the LICENSE file in the repository root for full licence text.
 
-using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using DailyDesktop.Core;
+using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 
 namespace DailyDesktop.Providers.CalvinAndHobbes
@@ -21,23 +20,15 @@ namespace DailyDesktop.Providers.CalvinAndHobbes
         public string Description => "Fetches today's Calvin and Hobbes comic, a daily American comic strip created by cartoonist Bill Watterson from 1985 to 1995.";
         public string SourceUri => "https://www.gocomics.com/calvinandhobbes";
 
-        public async Task<WallpaperInfo> GetWallpaperInfo(HttpClient client)
+        public async Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig)
         {
+            wallpaperConfig.Author = AUTHOR;
+            wallpaperConfig.Title = TITLE;
+
             string pageHtml = await client.GetStringAsync(SourceUri);
 
-            string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
-            string titleUri = SourceUri + Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value;
-
-            return new WallpaperInfo
-            {
-                ImageUri = imageUri,
-                Date = DateTime.Now,
-                Author = AUTHOR,
-                AuthorUri = null,
-                Title = TITLE,
-                TitleUri = titleUri,
-                Description = null,
-            };
+            wallpaperConfig.ImageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
+            wallpaperConfig.TitleUri = SourceUri + Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value;
         }
     }
 }

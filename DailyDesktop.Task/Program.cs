@@ -9,10 +9,9 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DailyDesktop.Core;
+using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 using SuperfastBlur;
 
@@ -67,25 +66,17 @@ namespace DailyDesktop.Task
             return SystemParametersInfo(0x14, 0, tiffPath, 0x1 | 0x2);
         }
 
-        private static async Task<string> downloadWallpaper(IProvider provider, string? jsonPath = null)
+        private static async Task<string> downloadWallpaper(IProvider provider, string jsonPath)
         {
             string imagePath = Path.Combine(Path.GetTempPath(), IMAGE_FILENAME);
 
-            WallpaperInfo info = await provider.GetWallpaperInfo();
-
-            if (!string.IsNullOrWhiteSpace(jsonPath))
-            {
-                JsonSerializerOptions options = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                };
-                string jsonString = JsonSerializer.Serialize(info, options);
-                File.WriteAllText(jsonPath, jsonString);
-            }
+            var wallpaperConfig = new WallpaperConfiguration(jsonPath);
+            await provider.ConfigureWallpaper(wallpaperConfig);
+            await wallpaperConfig.TrySerialize();
 
             using (var client = provider.CreateHttpClient())
             {
-                var stream = await client.GetStreamAsync(info.ImageUri);
+                var stream = await client.GetStreamAsync(wallpaperConfig.ImageUri);
                 using (var fstream = new FileStream(imagePath, FileMode.OpenOrCreate))
                     await stream.CopyToAsync(fstream);
             }

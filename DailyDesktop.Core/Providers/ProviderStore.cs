@@ -43,18 +43,25 @@ namespace DailyDesktop.Core.Providers
             if (Providers.ContainsKey(dllPath))
                 return Providers[dllPath];
 
-            var assembly = Assembly.LoadFile(dllPath);
-
-            foreach (Type type in assembly.GetTypes())
+            try
             {
-                bool isPublic = type.IsPublic;
-                bool isProvider = type.GetInterfaces().Contains(typeof(IProvider));
-                if (isPublic && isProvider)
+                var assembly = Assembly.LoadFrom(dllPath);
+
+                foreach (var type in assembly.GetTypes())
                 {
-                    Providers.Add(dllPath, type);
-                    return type;
+                    bool isPublic = type.IsPublic;
+                    bool isProvider = type.GetInterfaces().Contains(typeof(IProvider));
+                    if (isPublic && isProvider)
+                    {
+                        Providers.Add(dllPath, type);
+                        return type;
+                    }
                 }
             }
+            catch (ReflectionTypeLoadException)
+            {
+            }
+
             return null;
         }
 
