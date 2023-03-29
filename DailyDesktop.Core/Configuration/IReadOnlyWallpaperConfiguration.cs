@@ -3,46 +3,46 @@
 
 using System;
 
-namespace DailyDesktop.Core
+namespace DailyDesktop.Core.Configuration
 {
     /// <summary>
-    /// Contains information about a downloaded wallpaper.
+    /// Read-only interface to information about a downloaded wallpaper ("configuration" may be slightly misleading here).
     /// </summary>
-    public struct Wallpaper
+    public interface IReadOnlyWallpaperConfiguration : IReadOnlyConfiguration
     {
         /// <summary>
-        /// The URI of the image file.
+        /// The URI of the image file. Cannot be null because there must be an image is necessary.
         /// </summary>
-        public string? ImageUri { get; set; }
+        string ImageUri { get; }
 
         /// <summary>
         /// The date when the image was downloaded.
         /// </summary>
-        public DateTime Date { get; set; }
+        DateTime Date { get; }
 
         /// <summary>
         /// The author of the work (i.e. the illustrator, photographer, painter, etc.)
         /// </summary>
-        public string? Author { get; set; }
+        string? Author { get; }
 
         /// <summary>
         /// A URI to the <see cref="Author"/>. Usually a URL to the author's website or profile page.
         /// </summary>
-        public string? AuthorUri { get; set; }
+        string? AuthorUri { get; }
 
         /// <summary>
         /// The title of the work.
         /// </summary>
-        public string? Title { get; set; }
+        string? Title { get; }
 
         /// <summary>
         /// A URI to the work. Usually a URL to the image's page on the source website where it was downloaded from.
         /// </summary>
-        public string? TitleUri { get; set; }
+        string? TitleUri { get; }
 
         /// <summary>
         /// A description for the work.
         /// </summary>
-        public string? Description { get; set; }
+        string? Description { get; }
     }
 }

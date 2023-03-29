@@ -28,7 +28,7 @@ namespace DailyDesktop.Core.Configuration
         /// <inheritdoc/>
         [JsonIgnore]
         public virtual string JsonPath { get; set; }
-        
+
         /// <inheritdoc/>
         [JsonIgnore]
         public virtual bool IsAutoSerializing { get; set; }
@@ -39,16 +39,46 @@ namespace DailyDesktop.Core.Configuration
         /// <inheritdoc/>
         public event EventHandler? OnSerialize;
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Deserialize a JSON file (located at <see cref="JsonPath"/>) to a configuration.
+        /// </summary>
         public void Deserialize()
         {
+            if (string.IsNullOrWhiteSpace(JsonPath))
+                throw new InvalidOperationException($"{JsonPath} is null or whitespace.");
+
             string jsonString = File.ReadAllText(JsonPath);
             var options = new JsonSerializerOptions();
             ConfigureDeserializer(options);
 
-            var newConfig = JsonSerializer.Deserialize<T>(jsonString, options);
+            var newConfig = JsonSerializer.Deserialize<T>(jsonString, options) ?? throw new NullReferenceException("Deserialized config was null.");
 
-            Load(newConfig ?? throw new NullReferenceException("Deserialized config was null."));
+            bool temp = IsAutoSerializing;
+            IsAutoSerializing = false;
+
+            Load(newConfig);
+
+            IsAutoSerializing = temp;
+            Update();
+        }
+
+        /// <summary>
+        /// Try to deserialize a JSON file (located at <see cref="JsonPath"/>) to a configuration.
+        /// </summary>
+        /// <returns>
+        /// Whether or not the deserialiazation was successful.
+        /// </returns>
+        public bool TryDeserialize()
+        {
+            try
+            {
+                Deserialize();
+                return true;
+            }
+            catch (Exception ex) when (ex is IOException || ex is SystemException || ex is InvalidOperationException || ex is NullReferenceException)
+            {
+                return false;
+            }
         }
 
         /// <inheritdoc/>
@@ -64,10 +94,10 @@ namespace DailyDesktop.Core.Configuration
         public void Serialize()
         {
             if (!(this is T @this))
-                throw new InvalidOperationException($"this is not of type {nameof(T)}: {typeof(T).FullName}.");
+                throw new InvalidCastException($"this is not of type {nameof(T)}: {typeof(T).FullName}.");
 
             if (string.IsNullOrWhiteSpace(JsonPath))
-                return;
+                throw new InvalidOperationException($"{JsonPath} is null or whitespace.");
 
             var options = new JsonSerializerOptions();
             ConfigureSerializer(options);
@@ -75,9 +105,23 @@ namespace DailyDesktop.Core.Configuration
             string jsonString = JsonSerializer.Serialize(@this, options);
             File.WriteAllText(JsonPath, jsonString);
 
-            OnSerialize?.Invoke(this, new EventArgs());
+            OnSerialize?.Invoke(this, EventArgs.Empty);
         }
-        
+
+        /// <inheritdoc/>
+        public bool TrySerialize()
+        {
+            try
+            {
+                Serialize();
+                return true;
+            }
+            catch (Exception ex) when (ex is IOException || ex is SystemException || ex is InvalidOperationException)
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// Loads options from another configuration instance. Basically like
         /// a copy constructor/method.

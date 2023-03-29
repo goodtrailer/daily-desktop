@@ -30,7 +30,7 @@ namespace DailyDesktop.Core.Providers
         public ProviderWrapper(string dll, IProvider provider)
         {
             Provider = provider;
-            Dll= dll;
+            Dll = dll;
         }
 
         /// <summary>

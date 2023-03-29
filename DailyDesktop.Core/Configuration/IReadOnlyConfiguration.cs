@@ -2,7 +2,6 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
-using System.Text.Json.Serialization;
 
 namespace DailyDesktop.Core.Configuration
 {
@@ -14,13 +13,11 @@ namespace DailyDesktop.Core.Configuration
         /// <summary>
         /// The path to the JSON file (serialization output).
         /// </summary>
-        [JsonIgnore]
         string JsonPath { get; }
 
         /// <summary>
         /// Whether or not serialization should occur automatically (e.g. on update).
         /// </summary>
-        [JsonIgnore]
         bool IsAutoSerializing { get; }
 
         /// <summary>
@@ -42,5 +39,13 @@ namespace DailyDesktop.Core.Configuration
         /// Serialize configuration to a JSON file (located at <see cref="JsonPath"/>).
         /// </summary>
         void Serialize();
+
+        /// <summary>
+        /// Try to serialize configuration to a JSON file (located at <see cref="JsonPath"/>).
+        /// </summary>
+        /// <returns>
+        /// Whether or not the serialiazation was successful.
+        /// </returns>
+        bool TrySerialize();
     }
 }

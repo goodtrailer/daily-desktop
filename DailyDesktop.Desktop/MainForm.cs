@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Windows.Forms;
@@ -35,10 +34,12 @@ namespace DailyDesktop.Desktop
         private const string null_text = "null";
         private const string fetched_text = "fetched on";
 
-        private DailyDesktopCore core;
-        private ITaskConfiguration taskConfig => core.TaskConfig;
+        private readonly DailyDesktopCore core;
+        private readonly WallpaperConfiguration wallpaperConfig;
 
-        private Wallpaper wallpaper;
+        private IReadOnlyPathConfiguration pathConfig => core.PathConfig;
+        private IPublicTaskConfiguration taskConfig => core.TaskConfig;
+
         private TaskState previousState;
 
         public MainForm()
@@ -53,7 +54,7 @@ namespace DailyDesktop.Desktop
 
             string appDataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), app_data_dir);
             string providersDir = Path.Combine(appDataDir, providers_dir);
-            
+
             string serializationDir = Path.Combine(appDataDir, serialization_dir);
 
             core = new DailyDesktopCore(new PathConfiguration(Path.Combine(assemblyDir, path_config_filename))
@@ -62,6 +63,7 @@ namespace DailyDesktop.Desktop
                 ProvidersDir = providersDir,
                 SerializationDir = serializationDir,
             }, taskName, true);
+            wallpaperConfig = new WallpaperConfiguration(pathConfig.WallpaperJson);
 
             InitializeComponent();
 
@@ -212,32 +214,27 @@ namespace DailyDesktop.Desktop
             taskConfig.DoResize = optionsResizeCheckBox.Checked;
         }
 
-        private void wallpaperTitleLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(wallpaper.TitleUri);
+        private void wallpaperTitleLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(wallpaperConfig.TitleUri);
 
-        private void wallpaperAuthorLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(wallpaper.AuthorUri);
+        private void wallpaperAuthorLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(wallpaperConfig.AuthorUri);
 
         private void updateWallpaperInfo()
         {
-            try
+            if (wallpaperConfig.TryDeserialize())
             {
-                string jsonString = File.ReadAllText(core.PathConfig.WallpaperJson);
-                wallpaper = JsonSerializer.Deserialize<Wallpaper>(jsonString);
-                string updateDate = wallpaper.Date.ToString("dddd, MMMM d");
-                wallpaperUpdatedLabel.Text = $"{fetched_text} {updateDate ?? null_text}";
-                wallpaperTitleLinkLabel.Text = wallpaper.Title ?? null_text;
-                wallpaperAuthorLinkLabel.Text = wallpaper.Author ?? null_text;
-                string text = wallpaper.Description ?? null_description;
-                wallpaperDescriptionRichTextBox.Text = Regex.Replace(text, "(?<=[^\r])\n", "\r\n");
+                wallpaperUpdatedLabel.Text = $"{fetched_text} {wallpaperConfig.Date.ToString("dddd, MMMM d") ?? null_text}";
+                wallpaperTitleLinkLabel.Text = wallpaperConfig.Title ?? null_text;
+                wallpaperAuthorLinkLabel.Text = wallpaperConfig.Author ?? null_text;
+                wallpaperDescriptionRichTextBox.Text = Regex.Replace(wallpaperConfig.Description ?? null_description, "(?<=[^\r])\n", "\r\n");
 
-                wallpaperTitleLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.TitleUri, UriKind.Absolute, out _);
+                wallpaperTitleLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaperConfig.TitleUri, UriKind.Absolute, out _);
                 wallpaperTitleLinkLabel.TabStop = wallpaperTitleLinkLabel.Links[0].Enabled;
-                wallpaperAuthorLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaper.AuthorUri, UriKind.Absolute, out _);
+
+                wallpaperAuthorLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaperConfig.AuthorUri, UriKind.Absolute, out _);
                 wallpaperAuthorLinkLabel.TabStop = wallpaperAuthorLinkLabel.Links[0].Enabled;
             }
-            catch (Exception e) when (e is JsonException or FileNotFoundException)
+            else
             {
-                Console.WriteLine(e.StackTrace);
-
                 wallpaperUpdatedLabel.Text = $"{fetched_text} {null_text}";
                 wallpaperTitleLinkLabel.Text = null_text;
                 wallpaperAuthorLinkLabel.Text = null_text;

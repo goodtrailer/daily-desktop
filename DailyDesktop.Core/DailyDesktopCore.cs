@@ -30,11 +30,11 @@ namespace DailyDesktop.Core
         private readonly PathConfiguration pathConfig;
 
         /// <summary>
-        /// Read-and-limited-write interface to the task configuration.
+        /// Read-and-write interface to the task configuration.
         /// </summary>
-        public ITaskConfiguration TaskConfig => taskConfig;
+        public IPublicTaskConfiguration TaskConfig => taskConfig;
         private readonly TaskConfiguration taskConfig;
-        
+
         /// <summary>
         /// Whether or not to automatically create the task on when settings are changed or loaded.
         /// </summary>
@@ -50,7 +50,7 @@ namespace DailyDesktop.Core
             {
                 taskName = value;
                 DeleteTask();
-                
+
                 if (IsAutoCreatingTask)
                     CreateTask();
             }
@@ -97,9 +97,7 @@ namespace DailyDesktop.Core
             };
             taskConfig.OnUpdate += onTaskConfigUpdate;
 
-            if (File.Exists(taskConfig.JsonPath))
-                taskConfig.Deserialize();
-            else
+            if (!taskConfig.TryDeserialize())
                 taskConfig.Update();
 
             if (File.Exists(taskConfig.Dll))
@@ -184,7 +182,7 @@ namespace DailyDesktop.Core
 
         private void onTaskConfigUpdate(object? _ = null, EventArgs? __ = null)
         {
-            currentProvider = string.IsNullOrWhiteSpace(taskConfig.Dll) ? null : IProvider.Instantiate(Providers[taskConfig.Dll]);
+            currentProvider = Providers.ContainsKey(taskConfig.Dll) ? IProvider.Instantiate(Providers[taskConfig.Dll]) : null;
 
             if (IsAutoCreatingTask)
                 CreateTask();

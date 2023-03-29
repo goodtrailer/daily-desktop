@@ -2,6 +2,7 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System.Threading.Tasks;
+using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 using DailyDesktop.Providers.Bing;
 using DailyDesktop.Providers.CalvinAndHobbes;
@@ -24,33 +25,33 @@ namespace DailyDesktop.Tests
         [TestMethod]
         public async Task TestBing()
         {
-            var provider = new BingProvider();
-            var wallpaper = await provider.GetWallpaperInfo();
+            var wallpaperConfig = new WallpaperConfiguration("");
+            await new BingProvider().ConfigureWallpaper(wallpaperConfig);
 
-            TestContext.WriteLine("Author: " + wallpaper.Author);
-            TestContext.WriteLine("Description: " + wallpaper.Description);
-            TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
-            TestContext.WriteLine("Title: " + wallpaper.Title);
-            TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            TestContext.WriteLine("Author: " + wallpaperConfig.Author);
+            TestContext.WriteLine("Description: " + wallpaperConfig.Description);
+            TestContext.WriteLine("Image URI: " + wallpaperConfig.ImageUri);
+            TestContext.WriteLine("Title: " + wallpaperConfig.Title);
+            TestContext.WriteLine("Title Uri: " + wallpaperConfig.TitleUri);
 
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Description), "Null/whitespace description.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Title), "Null/whitespace title.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.TitleUri), "Null/whitespace title URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Author), "Null/whitespace author.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Description), "Null/whitespace description.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI!");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Title), "Null/whitespace title.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.TitleUri), "Null/whitespace title URI.");
         }
 
         [TestMethod]
         public async Task TestCalvinAndHobbes()
         {
-            var provider = new CalvinAndHobbesProvider();
-            var wallpaper = await provider.GetWallpaperInfo();
+            var wallpaperConfig = new WallpaperConfiguration("");
+            await new CalvinAndHobbesProvider().ConfigureWallpaper(wallpaperConfig);
 
-            TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
-            TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            TestContext.WriteLine("Image URI: " + wallpaperConfig.ImageUri);
+            TestContext.WriteLine("Title Uri: " + wallpaperConfig.TitleUri);
 
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.TitleUri), "Null/whitespace title URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI!");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.TitleUri), "Null/whitespace title URI.");
         }
 
         // [TestMethod]
@@ -77,18 +78,18 @@ namespace DailyDesktop.Tests
         [TestMethod]
         public async Task TestFalseKnees()
         {
-            var provider = new FalseKneesProvider();
-            var wallpaper = await provider.GetWallpaperInfo();
+            var wallpaperConfig = new WallpaperConfiguration("");
+            await new FalseKneesProvider().ConfigureWallpaper(wallpaperConfig);
 
-            TestContext.WriteLine("Description: " + wallpaper.Description);
-            TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
-            TestContext.WriteLine("Title: " + wallpaper.Title);
-            TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            TestContext.WriteLine("Description: " + wallpaperConfig.Description);
+            TestContext.WriteLine("Image URI: " + wallpaperConfig.ImageUri);
+            TestContext.WriteLine("Title: " + wallpaperConfig.Title);
+            TestContext.WriteLine("Title Uri: " + wallpaperConfig.TitleUri);
 
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Description), "Null/whitespace description.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Title), "Null/whitespace title.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.TitleUri), "Null/whitespace title URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Description), "Null/whitespace description.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI!");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Title), "Null/whitespace title.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.TitleUri), "Null/whitespace title URI.");
         }
 
         // DEPRECATED: See MTGProvider.cs
@@ -114,115 +115,115 @@ namespace DailyDesktop.Tests
         [TestMethod]
         public async Task TestPixiv()
         {
-            var provider = new PixivProvider();
-            var wallpaper = await provider.GetWallpaperInfo();
+            var wallpaperConfig = new WallpaperConfiguration("");
+            await new PixivProvider().ConfigureWallpaper(wallpaperConfig);
 
-            TestContext.WriteLine("Author: " + wallpaper.Author);
-            TestContext.WriteLine("Author URI: " + wallpaper.AuthorUri);
-            TestContext.WriteLine("Description: " + wallpaper.Description);
-            TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
-            TestContext.WriteLine("Title: " + wallpaper.Title);
-            TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            TestContext.WriteLine("Author: " + wallpaperConfig.Author);
+            TestContext.WriteLine("Author URI: " + wallpaperConfig.AuthorUri);
+            TestContext.WriteLine("Description: " + wallpaperConfig.Description);
+            TestContext.WriteLine("Image URI: " + wallpaperConfig.ImageUri);
+            TestContext.WriteLine("Title: " + wallpaperConfig.Title);
+            TestContext.WriteLine("Title Uri: " + wallpaperConfig.TitleUri);
 
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.AuthorUri), "Null/whitespace author URI.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Description), "Null/whitespace description.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Title), "Null/whitespace title.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.TitleUri), "Null/whitespace title URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Author), "Null/whitespace author.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.AuthorUri), "Null/whitespace author URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Description), "Null/whitespace description.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI!");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Title), "Null/whitespace title.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.TitleUri), "Null/whitespace title URI.");
         }
 
         [TestMethod]
         public async Task TestPokemon()
         {
-            var provider = new PokemonProvider();
-            var wallpaper = await provider.GetWallpaperInfo();
+            var wallpaperConfig = new WallpaperConfiguration("");
+            await new PokemonProvider().ConfigureWallpaper(wallpaperConfig);
 
-            TestContext.WriteLine("Description: " + wallpaper.Description);
-            TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
-            TestContext.WriteLine("Title: " + wallpaper.Title);
-            TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            TestContext.WriteLine("Description: " + wallpaperConfig.Description);
+            TestContext.WriteLine("Image URI: " + wallpaperConfig.ImageUri);
+            TestContext.WriteLine("Title: " + wallpaperConfig.Title);
+            TestContext.WriteLine("Title Uri: " + wallpaperConfig.TitleUri);
 
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Description), "Null/whitespace description.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Title), "Null/whitespace title.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.TitleUri), "Null/whitespace title URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Description), "Null/whitespace description.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI!");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Title), "Null/whitespace title.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.TitleUri), "Null/whitespace title URI.");
         }
 
         [TestMethod]
         public async Task TestRedditEarthPorn()
         {
-            var provider = new RedditEarthPornProvider();
-            var wallpaper = await provider.GetWallpaperInfo();
+            var wallpaperConfig = new WallpaperConfiguration("");
+            await new RedditEarthPornProvider().ConfigureWallpaper(wallpaperConfig);
 
-            TestContext.WriteLine("Author: " + wallpaper.Author);
-            TestContext.WriteLine("Author URI: " + wallpaper.AuthorUri);
-            TestContext.WriteLine("Description: " + wallpaper.Description);
-            TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
-            TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            TestContext.WriteLine("Author: " + wallpaperConfig.Author);
+            TestContext.WriteLine("Author URI: " + wallpaperConfig.AuthorUri);
+            TestContext.WriteLine("Description: " + wallpaperConfig.Description);
+            TestContext.WriteLine("Image URI: " + wallpaperConfig.ImageUri);
+            TestContext.WriteLine("Title Uri: " + wallpaperConfig.TitleUri);
 
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.AuthorUri), "Null/whitespace author URI.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Description), "Null/whitespace description.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.TitleUri), "Null/whitespace title URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Author), "Null/whitespace author.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.AuthorUri), "Null/whitespace author URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Description), "Null/whitespace description.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI!");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.TitleUri), "Null/whitespace title URI.");
         }
 
         [TestMethod]
         public async Task TestUnsplash()
         {
-            var provider = new UnsplashProvider();
-            var wallpaper = await provider.GetWallpaperInfo();
+            var wallpaperConfig = new WallpaperConfiguration("");
+            await new UnsplashProvider().ConfigureWallpaper(wallpaperConfig);
 
-            TestContext.WriteLine("Author: " + wallpaper.Author);
-            TestContext.WriteLine("Author URI: " + wallpaper.AuthorUri);
-            TestContext.WriteLine("Description: " + wallpaper.Description);
-            TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
-            TestContext.WriteLine("Title: " + wallpaper.Title);
-            TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            TestContext.WriteLine("Author: " + wallpaperConfig.Author);
+            TestContext.WriteLine("Author URI: " + wallpaperConfig.AuthorUri);
+            TestContext.WriteLine("Description: " + wallpaperConfig.Description);
+            TestContext.WriteLine("Image URI: " + wallpaperConfig.ImageUri);
+            TestContext.WriteLine("Title: " + wallpaperConfig.Title);
+            TestContext.WriteLine("Title Uri: " + wallpaperConfig.TitleUri);
 
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.AuthorUri), "Null/whitespace author URI.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Description), "Null/whitespace description.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Title), "Null/whitespace title.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.TitleUri), "Null/whitespace title URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Author), "Null/whitespace author.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.AuthorUri), "Null/whitespace author URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Description), "Null/whitespace description.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI!");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Title), "Null/whitespace title.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.TitleUri), "Null/whitespace title URI.");
         }
 
         [TestMethod]
         public async Task TestWikimediaCommons()
         {
-            var provider = new WikimediaCommonsProvider();
-            var wallpaper = await provider.GetWallpaperInfo();
+            var wallpaperConfig = new WallpaperConfiguration("");
+            await new WikimediaCommonsProvider().ConfigureWallpaper(wallpaperConfig);
 
-            TestContext.WriteLine("Author: " + wallpaper.Author);
-            TestContext.WriteLine("Author URI: " + wallpaper.AuthorUri);
-            TestContext.WriteLine("Description: " + wallpaper.Description);
-            TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
-            TestContext.WriteLine("Title: " + wallpaper.Title);
-            TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            TestContext.WriteLine("Author: " + wallpaperConfig.Author);
+            TestContext.WriteLine("Author URI: " + wallpaperConfig.AuthorUri);
+            TestContext.WriteLine("Description: " + wallpaperConfig.Description);
+            TestContext.WriteLine("Image URI: " + wallpaperConfig.ImageUri);
+            TestContext.WriteLine("Title: " + wallpaperConfig.Title);
+            TestContext.WriteLine("Title Uri: " + wallpaperConfig.TitleUri);
 
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Author), "Null/whitespace author.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.AuthorUri), "Null/whitespace author URI.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Description), "Null/whitespace description.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Title), "Null/whitespace title.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.TitleUri), "Null/whitespace title URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Author), "Null/whitespace author.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.AuthorUri), "Null/whitespace author URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Description), "Null/whitespace description.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI!");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Title), "Null/whitespace title.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.TitleUri), "Null/whitespace title URI.");
         }
 
         [TestMethod]
         public async Task TestXkcd()
         {
-            var provider = new XkcdProvider();
-            var wallpaper = await provider.GetWallpaperInfo();
+            var wallpaperConfig = new WallpaperConfiguration("");
+            await new XkcdProvider().ConfigureWallpaper(wallpaperConfig);
 
-            TestContext.WriteLine("Image URI: " + wallpaper.ImageUri);
-            TestContext.WriteLine("Title: " + wallpaper.Title);
-            TestContext.WriteLine("Title Uri: " + wallpaper.TitleUri);
+            TestContext.WriteLine("Image URI: " + wallpaperConfig.ImageUri);
+            TestContext.WriteLine("Title: " + wallpaperConfig.Title);
+            TestContext.WriteLine("Title Uri: " + wallpaperConfig.TitleUri);
 
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.ImageUri), "Null/whitespace image URI!");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.Title), "Null/whitespace title.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaper.TitleUri), "Null/whitespace title URI.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI!");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Title), "Null/whitespace title.");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.TitleUri), "Null/whitespace title URI.");
         }
     }
 }

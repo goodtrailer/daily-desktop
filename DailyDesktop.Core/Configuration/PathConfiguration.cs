@@ -2,29 +2,15 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System.IO;
+using System.Text.Json.Serialization;
 using System.Web;
 
 namespace DailyDesktop.Core.Configuration
 {
     /// <summary>
-    /// Interface to path settings for <see cref="DailyDesktopCore"/>.
-    /// </summary>
-    public interface IPathConfiguration : IReadOnlyPathConfiguration
-    {
-        /// <inheritdoc/>
-        new string AssemblyDir { get; set; }
-
-        /// <inheritdoc/>
-        new string ProvidersDir { get; set; }
-
-        /// <inheritdoc/>
-        new string SerializationDir { get; set; }
-    }
-
-    /// <summary>
     /// Contains path settings for <see cref="DailyDesktopCore"/>.
     /// </summary>
-    public class PathConfiguration : AbstractConfiguration<PathConfiguration>, IPathConfiguration
+    public class PathConfiguration : AbstractConfiguration<PathConfiguration>, IPublicPathConfiguration
     {
         /// <inheritdoc/>
         public PathConfiguration(string jsonPath)
@@ -40,7 +26,7 @@ namespace DailyDesktop.Core.Configuration
             {
                 if (assemblyDir == value)
                     return;
-                
+
                 Directory.CreateDirectory(value);
                 assemblyDir = value;
                 Update();
@@ -78,12 +64,15 @@ namespace DailyDesktop.Core.Configuration
         }
 
         /// <inheritdoc/>
+        [JsonIgnore]
         public string TaskExecutable => HttpUtility.UrlDecode(Path.Combine(assemblyDir, "DailyDesktop.Task.exe"));
 
         /// <inheritdoc/>
+        [JsonIgnore]
         public string TaskConfigJson => HttpUtility.UrlDecode(Path.Combine(serializationDir, "settings.json"));
 
         /// <inheritdoc/>
+        [JsonIgnore]
         public string WallpaperJson => HttpUtility.UrlDecode(Path.Combine(serializationDir, "wallpaper.json"));
 
         /// <inheritdoc/>

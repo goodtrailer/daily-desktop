@@ -6,33 +6,9 @@ using System;
 namespace DailyDesktop.Core.Configuration
 {
     /// <summary>
-    /// Interface to task settings for <see cref="DailyDesktopCore"/> that is meant to be serialized.
-    /// </summary>
-    public interface ITaskConfiguration : IReadOnlyTaskConfiguration
-    {
-        /// <inheritdoc/>
-        new string Dll { get; set; }
-
-        /// <inheritdoc/>
-        new bool IsEnabled { get; set; }
-        
-        /// <inheritdoc/>
-        new DateTime UpdateTime { get; set; }
-        
-        /// <inheritdoc/>
-        new bool DoResize { get; set; }
-        
-        /// <inheritdoc/>
-        new bool DoBlurredFit { get; set; }
-        
-        /// <inheritdoc/>
-        new int BlurStrength { get; set; }
-    }
-
-    /// <summary>
     /// Contains task settings for <see cref="DailyDesktopCore"/> that is meant to be serialized.
     /// </summary>
-    public class TaskConfiguration : AbstractConfiguration<TaskConfiguration>, ITaskConfiguration
+    public class TaskConfiguration : AbstractConfiguration<TaskConfiguration>, IPublicTaskConfiguration
     {
         /// <inheritdoc/>
         public TaskConfiguration(string jsonPath)

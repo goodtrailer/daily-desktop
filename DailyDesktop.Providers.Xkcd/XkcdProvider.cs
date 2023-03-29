@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
 // See the LICENSE file in the repository root for full licence text.
 
-using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using DailyDesktop.Core;
+using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 
 namespace DailyDesktop.Providers.Xkcd
@@ -23,24 +22,16 @@ namespace DailyDesktop.Providers.Xkcd
         public string Description => "\"A webcomic of romance, sarcasm, math, and language.\"";
         public string SourceUri => "https://xkcd.com";
 
-        public async Task<Wallpaper> GetWallpaperInfo(HttpClient client)
+        public async Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig)
         {
             string pageHtml = await client.GetStringAsync(SourceUri);
 
-            string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
-            string title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
-            string titleUri = Regex.Match(pageHtml, TITLE_URI_PATTERN).Value;
+            wallpaperConfig.Author = AUTHOR;
+            wallpaperConfig.AuthorUri = AUTHOR_URI;
 
-            return new Wallpaper
-            {
-                Author = AUTHOR,
-                AuthorUri = AUTHOR_URI,
-                Date = DateTime.Now,
-                Description = null,
-                ImageUri = imageUri,
-                Title = title,
-                TitleUri = titleUri,
-            };
+            wallpaperConfig.ImageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
+            wallpaperConfig.Title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
+            wallpaperConfig.TitleUri = Regex.Match(pageHtml, TITLE_URI_PATTERN).Value;
         }
     }
 }

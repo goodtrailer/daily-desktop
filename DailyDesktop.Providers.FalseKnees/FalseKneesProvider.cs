@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
 // See the LICENSE file in the repository root for full licence text.
 
-using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using DailyDesktop.Core;
+using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 
 namespace DailyDesktop.Providers.FalseKnees
@@ -26,32 +25,24 @@ namespace DailyDesktop.Providers.FalseKnees
 
         public string SourceUri => "https://falseknees.com";
 
-        public async Task<Wallpaper> GetWallpaperInfo(HttpClient client)
+        public async Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig)
         {
+            wallpaperConfig.Author = AUTHOR;
+            wallpaperConfig.AuthorUri = AUTHOR_URI;
+
             // Scrape info from front page
 
             string pageHtml = await client.GetStringAsync(SourceUri);
 
-            string imageUri = SourceUri + "/" + Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN).Value;
-            string titleUri = SourceUri + "/" + Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value;
-            string description = Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value;
+            wallpaperConfig.ImageUri = SourceUri + "/" + Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN).Value;
+            wallpaperConfig.TitleUri = SourceUri + "/" + Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value;
+            wallpaperConfig.Description = Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value;
 
             // Scrape title from archive page
 
             string archiveHtml = await client.GetStringAsync("https://falseknees.com/archive.html");
 
-            string title = Regex.Match(archiveHtml, TITLE_PATTERN).Value;
-
-            return new Wallpaper
-            {
-                ImageUri = imageUri,
-                Date = DateTime.Now,
-                Author = AUTHOR,
-                AuthorUri = AUTHOR_URI,
-                Title = title,
-                TitleUri = titleUri,
-                Description = description,
-            };
+            wallpaperConfig.Title = Regex.Match(archiveHtml, TITLE_PATTERN).Value;
         }
     }
 }
