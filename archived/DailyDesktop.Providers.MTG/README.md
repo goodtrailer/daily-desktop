@@ -1,5 +1,5 @@
 # ~~Magic: The Gathering~~ (Deprecated)
-#### *DailyDesktop.Core.Providers.MTG*
+#### *DailyDesktop.Providers.MTG*
 
 > **Warning** Wizards of the Coast seem to have stopped uploading new wallpaper.
 
