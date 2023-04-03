@@ -6,7 +6,7 @@ using System.Threading;
 namespace DailyDesktop.Core.Util
 {
     /// <summary>
-    /// Utility functions for async logic.
+    /// Utilities for async logic.
     /// </summary>
     public static class AsyncUtils
     {

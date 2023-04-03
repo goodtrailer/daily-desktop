@@ -18,7 +18,7 @@ namespace DailyDesktop.Core.Providers
     public class ProviderStore
     {
         private const string PROVIDERS_SEARCH_PATTERN = "*.dll";
-        
+
         /// <summary>
         /// Dictionary of <see cref="IProvider"/> <see cref="Type"/>s
         /// added through <see cref="Scan"/> and <see cref="Add"/>.
@@ -46,7 +46,7 @@ namespace DailyDesktop.Core.Providers
                 return Providers[dllPath];
 
             var assembly = Assembly.Load(await File.ReadAllBytesAsync(dllPath, cancellationToken));
-            
+
             foreach (var type in assembly.GetTypes())
             {
                 bool isPublic = type.IsPublic;

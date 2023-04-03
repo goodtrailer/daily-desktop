@@ -81,34 +81,34 @@ namespace DailyDesktop.Core.Configuration
         /// <inheritdoc/>
         public async Task SetAssemblyDirAsync(string assemblyDir, CancellationToken cancellationToken)
         {
-                if (this.assemblyDir == assemblyDir)
-                    return;
+            if (this.assemblyDir == assemblyDir)
+                return;
 
-                Directory.CreateDirectory(assemblyDir);
-                this.assemblyDir = assemblyDir;
-                await UpdateAsync(cancellationToken);
+            Directory.CreateDirectory(assemblyDir);
+            this.assemblyDir = assemblyDir;
+            await UpdateAsync(cancellationToken);
         }
 
         /// <inheritdoc/>
         public async Task SetProvidersDirAsync(string providersDir, CancellationToken cancellationToken)
         {
-                if (this.providersDir == providersDir)
-                    return;
+            if (this.providersDir == providersDir)
+                return;
 
-                Directory.CreateDirectory(providersDir);
-                this.providersDir = providersDir;
-                await UpdateAsync(cancellationToken);
+            Directory.CreateDirectory(providersDir);
+            this.providersDir = providersDir;
+            await UpdateAsync(cancellationToken);
         }
 
         /// <inheritdoc/>
         public async Task SetSerializationDirAsync(string serializationDir, CancellationToken cancellationToken)
         {
-                if (this.serializationDir == serializationDir)
-                    return;
+            if (this.serializationDir == serializationDir)
+                return;
 
-                Directory.CreateDirectory(serializationDir);
-                this.serializationDir = serializationDir;
-                await UpdateAsync(cancellationToken);
+            Directory.CreateDirectory(serializationDir);
+            this.serializationDir = serializationDir;
+            await UpdateAsync(cancellationToken);
         }
 
         /// <inheritdoc/>

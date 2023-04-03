@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
 // See the LICENSE file in the repository root for full licence text.
 
-using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Drawing;
@@ -76,12 +75,10 @@ namespace DailyDesktop.Task
             await provider.ConfigureWallpaperAsync(wallpaperConfig, cancellationToken);
             await wallpaperConfig.TrySerializeAsync(cancellationToken);
 
-            using (var client = provider.CreateHttpClient())
-            {
-                var stream = await client.GetStreamAsync(wallpaperConfig.ImageUri, cancellationToken);
-                using (var fstream = new FileStream(imagePath, FileMode.OpenOrCreate))
-                    await stream.CopyToAsync(fstream, cancellationToken);
-            }
+            provider.ConfigureHttpRequestHeaders(HttpUtils.Client.DefaultRequestHeaders);
+            var stream = await HttpUtils.Client.GetStreamAsync(wallpaperConfig.ImageUri, cancellationToken);
+            using (var fstream = new FileStream(imagePath, FileMode.OpenOrCreate))
+                await stream.CopyToAsync(fstream, cancellationToken);
 
             return imagePath;
         }

@@ -3,9 +3,11 @@
 
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using DailyDesktop.Core.Configuration;
+using DailyDesktop.Core.Util;
 
 namespace DailyDesktop.Core.Providers
 {
@@ -36,10 +38,10 @@ namespace DailyDesktop.Core.Providers
         /// Configures an <see cref="HttpClient"/> to be used for the
         /// <see cref="WallpaperConfiguration.ImageUri"/> returned by
         /// <see cref="ConfigureWallpaperAsync"/>. Used by
-        /// <see cref="IProviderExtensions.CreateHttpClient(IProvider)"/>.
+        /// <see cref="IProviderExtensions.ConfigureWallpaperAsync(IProvider, IPublicWallpaperConfiguration, CancellationToken)"/>.
         /// </summary>
-        /// <param name="client">The <see cref="HttpClient"/> to configure.</param>
-        void ConfigureHttpClient(HttpClient client) { }
+        /// <param name="headers">The <see cref="HttpRequestHeaders"/> to configure.</param>
+        void ConfigureHttpRequestHeaders(HttpRequestHeaders headers) { }
 
         /// <summary>
         /// Asynchronously onfigures a <see cref="IPublicWallpaperConfiguration"/> using a given
@@ -73,23 +75,7 @@ namespace DailyDesktop.Core.Providers
     public static class IProviderExtensions
     {
         /// <summary>
-        /// Creates an <see cref="HttpClient"/> with a proper User-Agent header and
-        /// configured by <see cref="IProvider.ConfigureHttpClient(HttpClient)"/>.
-        /// </summary>
-        /// <param name="provider">The <see cref="IProvider"/> configuring the returned <see cref="HttpClient"/>.</param>
-        /// <returns>The pre-configured <see cref="HttpClient"/>.</returns>
-        public static HttpClient CreateHttpClient(this IProvider provider)
-        {
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("User-Agent", "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
-            provider.ConfigureHttpClient(client);
-
-            return client;
-        }
-
-        /// <summary>
-        /// Asynchronously configures a <see cref="WallpaperConfiguration"/> using a pre-configured
-        /// <see cref="HttpClient"/> created by <see cref="CreateHttpClient(IProvider)"/>.
+        /// Asynchronously configures a <see cref="WallpaperConfiguration"/>.
         /// </summary>
         /// <param name="provider">The <see cref="IProvider"/> configuring the <see cref="WallpaperConfiguration"/>.</param>
         /// <param name="wallpaperConfig">The <see cref="IPublicWallpaperConfiguration"/> to configure.</param>
@@ -97,8 +83,9 @@ namespace DailyDesktop.Core.Providers
         /// <returns>The up-to-date <see cref="WallpaperConfiguration"/>.</returns>
         public static async Task ConfigureWallpaperAsync(this IProvider provider, IPublicWallpaperConfiguration wallpaperConfig, CancellationToken cancellationToken)
         {
-            using (var client = provider.CreateHttpClient())
-                await provider.ConfigureWallpaperAsync(client, wallpaperConfig, cancellationToken);
+            HttpUtils.ResetRequestHeaders();
+            provider.ConfigureHttpRequestHeaders(HttpUtils.Client.DefaultRequestHeaders);
+            await provider.ConfigureWallpaperAsync(HttpUtils.Client, wallpaperConfig, cancellationToken);
 
             wallpaperConfig.NullifyWhitespace();
         }

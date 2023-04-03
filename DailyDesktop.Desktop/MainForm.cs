@@ -138,6 +138,8 @@ namespace DailyDesktop.Desktop
         {
             providerDescriptionLabel.Text = core.CurrentProvider?.Description ?? null_description;
             providerSourceLinkLabel.Text = core.CurrentProvider?.SourceUri ?? null_text;
+            providerSourceLinkLabel.Links[0].Enabled = Uri.TryCreate(providerSourceLinkLabel.Text, UriKind.Absolute, out _);
+            providerSourceLinkLabel.TabStop = wallpaperAuthorLinkLabel.Links[0].Enabled;
         }
 
         private async Task repopulateProviderComboBox()
@@ -225,28 +227,28 @@ namespace DailyDesktop.Desktop
         private void updateWallpaperInfo_Impl(bool isDeserializationSuccessful)
         {
             if (isDeserializationSuccessful)
-                {
-                    wallpaperUpdatedLabel.Text = $"{fetched_text} {wallpaperConfig.Date.ToString("dddd, MMMM d") ?? null_text}";
-                    wallpaperTitleLinkLabel.Text = wallpaperConfig.Title ?? null_text;
-                    wallpaperAuthorLinkLabel.Text = wallpaperConfig.Author ?? null_text;
-                    wallpaperDescriptionRichTextBox.Text = Regex.Replace(wallpaperConfig.Description ?? null_description, "(?<=[^\r])\n", "\r\n");
+            {
+                wallpaperUpdatedLabel.Text = $"{fetched_text} {wallpaperConfig.Date.ToString("dddd, MMMM d") ?? null_text}";
+                wallpaperTitleLinkLabel.Text = wallpaperConfig.Title ?? null_text;
+                wallpaperAuthorLinkLabel.Text = wallpaperConfig.Author ?? null_text;
+                wallpaperDescriptionRichTextBox.Text = Regex.Replace(wallpaperConfig.Description ?? null_description, "(?<=[^\r])\n", "\r\n");
 
-                    wallpaperTitleLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaperConfig.TitleUri, UriKind.Absolute, out _);
-                    wallpaperTitleLinkLabel.TabStop = wallpaperTitleLinkLabel.Links[0].Enabled;
+                wallpaperTitleLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaperConfig.TitleUri, UriKind.Absolute, out _);
+                wallpaperTitleLinkLabel.TabStop = wallpaperTitleLinkLabel.Links[0].Enabled;
 
-                    wallpaperAuthorLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaperConfig.AuthorUri, UriKind.Absolute, out _);
-                    wallpaperAuthorLinkLabel.TabStop = wallpaperAuthorLinkLabel.Links[0].Enabled;
-                }
-                else
-                {
-                    wallpaperUpdatedLabel.Text = $"{fetched_text} {null_text}";
-                    wallpaperTitleLinkLabel.Text = null_text;
-                    wallpaperAuthorLinkLabel.Text = null_text;
-                    wallpaperDescriptionRichTextBox.Text = null_description;
+                wallpaperAuthorLinkLabel.Links[0].Enabled = Uri.TryCreate(wallpaperConfig.AuthorUri, UriKind.Absolute, out _);
+                wallpaperAuthorLinkLabel.TabStop = wallpaperAuthorLinkLabel.Links[0].Enabled;
+            }
+            else
+            {
+                wallpaperUpdatedLabel.Text = $"{fetched_text} {null_text}";
+                wallpaperTitleLinkLabel.Text = null_text;
+                wallpaperAuthorLinkLabel.Text = null_text;
+                wallpaperDescriptionRichTextBox.Text = null_description;
 
-                    wallpaperTitleLinkLabel.Links[0].Enabled = false;
-                    wallpaperAuthorLinkLabel.Links[0].Enabled = false;
-                }
+                wallpaperTitleLinkLabel.Links[0].Enabled = false;
+                wallpaperAuthorLinkLabel.Links[0].Enabled = false;
+            }
         }
 
         private void stateBackgroundWorker_DoWork(object? _, EventArgs e)

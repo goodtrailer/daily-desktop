@@ -101,7 +101,7 @@ namespace DailyDesktop.Core.Configuration
                 Update();
             }
         }
-        
+
         /// <inheritdoc/>
         public async Task SetDllAsync(string dll, CancellationToken cancellationToken)
         {
@@ -111,7 +111,7 @@ namespace DailyDesktop.Core.Configuration
             this.dll = dll;
             await UpdateAsync(cancellationToken);
         }
-        
+
         /// <inheritdoc/>
         public async Task SetIsEnabledAsync(bool isEnabled, CancellationToken cancellationToken)
         {
@@ -121,7 +121,7 @@ namespace DailyDesktop.Core.Configuration
             this.isEnabled = isEnabled;
             await UpdateAsync(cancellationToken);
         }
-        
+
         /// <inheritdoc/>
         public async Task SetUpdateTimeAsync(DateTime updateTime, CancellationToken cancellationToken)
         {
@@ -131,7 +131,7 @@ namespace DailyDesktop.Core.Configuration
             this.updateTime = updateTime;
             await UpdateAsync(cancellationToken);
         }
-        
+
         /// <inheritdoc/>
         public async Task SetDoResizeAsync(bool doResize, CancellationToken cancellationToken)
         {
@@ -151,7 +151,7 @@ namespace DailyDesktop.Core.Configuration
             this.doBlurredFit = doBlurredFit;
             await UpdateAsync(cancellationToken);
         }
-        
+
         /// <inheritdoc/>
         public async Task SetBlurStrengthAsync(int blurStrength, CancellationToken cancellationToken)
         {
