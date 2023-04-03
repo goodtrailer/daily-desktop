@@ -4,9 +4,11 @@
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
+using DailyDesktop.Core.Util;
 
 namespace DailyDesktop.Providers.Bing
 {
@@ -22,20 +24,26 @@ namespace DailyDesktop.Providers.Bing
         public string Description => "Grabs Bing's featured Image of the Day, which can be found on Bing's home page.";
         public string SourceUri => "https://www.bing.com";
 
-        public async Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig)
+        public async Task ConfigureWallpaperAsync(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig, CancellationToken cancellationToken)
         {
-            string pageHtml = await client.GetStringAsync(SourceUri);
+            string pageHtml = await client.GetStringAsync(SourceUri, cancellationToken);
 
             string imageRelativeUri = Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageRelativeUri))
                 throw new ProviderException("Didn't find a relative image URI.");
 
-            wallpaperConfig.ImageUri = SourceUri + imageRelativeUri;
+            string imageUri = SourceUri + imageRelativeUri;
 
-            wallpaperConfig.Author = Regex.Match(pageHtml, AUTHOR_PATTERN).Value;
-            wallpaperConfig.Title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
-            wallpaperConfig.TitleUri = SourceUri + WebUtility.HtmlDecode(Regex.Unescape(Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value)).Replace("\"", "%22");
-            wallpaperConfig.Description = "TODAY ON BING\r\n" + Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value;
+            string author = Regex.Match(pageHtml, AUTHOR_PATTERN).Value;
+            string title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
+            string titleUri = SourceUri + WebUtility.HtmlDecode(Regex.Unescape(Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value)).Replace("\"", "%22");
+            string description = "TODAY ON BING\r\n" + Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value;
+
+            await wallpaperConfig.SetImageUriAsync(imageUri, cancellationToken);
+            await wallpaperConfig.SetAuthorAsync(author, cancellationToken);
+            await wallpaperConfig.SetTitleAsync(title, cancellationToken);
+            await wallpaperConfig.SetTitleUriAsync(titleUri, cancellationToken);
+            await wallpaperConfig.SetDescriptionAsync(description, cancellationToken);
         }
     }
 }

@@ -9,10 +9,12 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
+using DailyDesktop.Core.Util;
 using SuperfastBlur;
 
 namespace DailyDesktop.Task
@@ -46,10 +48,10 @@ namespace DailyDesktop.Task
                 throw new ProviderException("Missing IProvider DLL module path");
 
             var store = new ProviderStore();
-            var providerType = store.Add(dllPath) ?? throw new NullReferenceException("Null provider type");
+            var providerType = await store.Add(dllPath, AsyncUtils.TimedCancel());
             var provider = IProvider.Instantiate(providerType);
 
-            string imagePath = await downloadWallpaper(provider, json);
+            string imagePath = await downloadWallpaper(provider, json, AsyncUtils.LongCancel());
 
             SetProcessDPIAware();
 
@@ -66,19 +68,19 @@ namespace DailyDesktop.Task
             return SystemParametersInfo(0x14, 0, tiffPath, 0x1 | 0x2);
         }
 
-        private static async Task<string> downloadWallpaper(IProvider provider, string jsonPath)
+        private static async Task<string> downloadWallpaper(IProvider provider, string jsonPath, CancellationToken cancellationToken = default)
         {
             string imagePath = Path.Combine(Path.GetTempPath(), IMAGE_FILENAME);
 
             var wallpaperConfig = new WallpaperConfiguration(jsonPath);
-            await provider.ConfigureWallpaper(wallpaperConfig);
-            await wallpaperConfig.TrySerialize();
+            await provider.ConfigureWallpaperAsync(wallpaperConfig, cancellationToken);
+            await wallpaperConfig.TrySerializeAsync(cancellationToken);
 
             using (var client = provider.CreateHttpClient())
             {
-                var stream = await client.GetStreamAsync(wallpaperConfig.ImageUri);
+                var stream = await client.GetStreamAsync(wallpaperConfig.ImageUri, cancellationToken);
                 using (var fstream = new FileStream(imagePath, FileMode.OpenOrCreate))
-                    await stream.CopyToAsync(fstream);
+                    await stream.CopyToAsync(fstream, cancellationToken);
             }
 
             return imagePath;

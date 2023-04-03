@@ -3,6 +3,7 @@
 
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using DailyDesktop.Core.Configuration;
@@ -31,29 +32,36 @@ namespace DailyDesktop.Providers.WikimediaCommons
             "a collection of Featured picture candidates.";
         public string SourceUri => "https://commons.wikimedia.org/wiki/Commons:POTD";
 
-        public async Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig)
+        public async Task ConfigureWallpaperAsync(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig, CancellationToken cancellationToken)
         {
             // Scrape info from POTD RSS feed
 
-            string feedXml = HttpUtility.HtmlDecode(await client.GetStringAsync("https://commons.wikimedia.org/w/api.php?action=featuredfeed&feed=potd&feedformat=atom"));
+            string feedXml = HttpUtility.HtmlDecode(await client.GetStringAsync("https://commons.wikimedia.org/w/api.php?action=featuredfeed&feed=potd&feedformat=atom", cancellationToken));
 
-            wallpaperConfig.Title = HttpUtility.UrlDecode(Regex.Matches(feedXml, TITLE_RELATIVE_URI_PATTERN)[^1].Value);
-            wallpaperConfig.TitleUri = "https://commons.wikimedia.org/wiki/" + wallpaperConfig.Title;
-            wallpaperConfig.Description = Regex.Replace(Regex.Matches(feedXml, DESCRIPTION_PATTERN)[^1].Value, "<[^>]*>", "");
+            string title = HttpUtility.UrlDecode(Regex.Matches(feedXml, TITLE_RELATIVE_URI_PATTERN)[^1].Value);
+            string titleUri = "https://commons.wikimedia.org/wiki/" + title;
+            string description = Regex.Replace(Regex.Matches(feedXml, DESCRIPTION_PATTERN)[^1].Value, "<[^>]*>", "");
 
             // Scrape info from API request
 
-            string requestXml = HttpUtility.HtmlDecode(await client.GetStringAsync("https://magnus-toolserver.toolforge.org/commonsapi.php?image=" + wallpaperConfig.Title.Substring("File:".Length)));
+            string requestXml = HttpUtility.HtmlDecode(await client.GetStringAsync("https://magnus-toolserver.toolforge.org/commonsapi.php?image=" + title.Substring("File:".Length), cancellationToken));
 
-            wallpaperConfig.ImageUri = Regex.Match(requestXml, IMAGE_URI_PATTERN).Value;
-            if (string.IsNullOrEmpty(wallpaperConfig.ImageUri))
+            string imageUri = Regex.Match(requestXml, IMAGE_URI_PATTERN).Value;
+            if (string.IsNullOrEmpty(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
             string authorElement = Regex.Match(requestXml, AUTHOR_ELEMENT_PATTERN).Value;
-            wallpaperConfig.Author = Regex.Match(authorElement, AUTHOR_PATTERN).Value;
-            wallpaperConfig.AuthorUri = Regex.Match(authorElement, AUTHOR_URI_PATTERN).Value;
-            if (string.IsNullOrWhiteSpace(wallpaperConfig.Author))
-                wallpaperConfig.Author = Regex.Replace(authorElement, "<[^>]*>", "");
+            string author = Regex.Match(authorElement, AUTHOR_PATTERN).Value;
+            string authorUri = Regex.Match(authorElement, AUTHOR_URI_PATTERN).Value;
+            if (string.IsNullOrWhiteSpace(author))
+                author = Regex.Replace(authorElement, "<[^>]*>", "");
+
+            await wallpaperConfig.SetImageUriAsync(imageUri, cancellationToken);
+            await wallpaperConfig.SetAuthorAsync(author, cancellationToken);
+            await wallpaperConfig.SetAuthorUriAsync(authorUri, cancellationToken);
+            await wallpaperConfig.SetTitleAsync(title, cancellationToken);
+            await wallpaperConfig.SetTitleUriAsync(titleUri, cancellationToken);
+            await wallpaperConfig.SetDescriptionAsync(description, cancellationToken);
         }
     }
 }

@@ -3,6 +3,7 @@
 
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
@@ -25,26 +26,27 @@ namespace DailyDesktop.Providers.Pokemon
 
         public string SourceUri => "https://tcg.pokemon.com/en-us/wallpapers/";
 
-        public async Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig)
+        public async Task ConfigureWallpaperAsync(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig, CancellationToken cancellationToken)
         {
             // Scrape info from wallpapers page
 
-            string pageHtml = await client.GetStringAsync(SourceUri);
+            string pageHtml = await client.GetStringAsync(SourceUri, cancellationToken);
 
-            wallpaperConfig.ImageUri = SourceUri + Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN).Value;
-            if (string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri))
+            string imageUri = SourceUri + Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN).Value;
+            if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find any image URI.");
 
-            wallpaperConfig.Title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
-            wallpaperConfig.TitleUri = wallpaperConfig.ImageUri;
+            string title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
+            string titleUri = imageUri;
 
             // Check if card exists through Pokemon TCG API
 
-            var response = await client.GetAsync("https://api.pokemontcg.io/v2/cards?q=name:\"" + wallpaperConfig.Title + "\"");
+            var response = await client.GetAsync("https://api.pokemontcg.io/v2/cards?q=name:\"" + title + "\"", cancellationToken);
 
+            string? description;
             if (response.IsSuccessStatusCode)
             {
-                string content = await response.Content.ReadAsStringAsync();
+                string content = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 int count;
                 int.TryParse(Regex.Match(content, COUNT_PATTERN).Value, out count);
@@ -53,17 +55,22 @@ namespace DailyDesktop.Providers.Pokemon
                 {
                     string id = Regex.Match(content, ID_PATTERN).Value;
                     string similarCardUri = "https://pokemontcg.guru/card/x/" + id;
-                    wallpaperConfig.Description = FOUND_DESCRIPTION + similarCardUri;
+                    description = FOUND_DESCRIPTION + similarCardUri;
                 }
                 else
                 {
-                    wallpaperConfig.Description = NOT_FOUND_DESCRIPTION;
+                    description = NOT_FOUND_DESCRIPTION;
                 }
             }
             else
             {
-                wallpaperConfig.Description = response.ReasonPhrase;
+                description = response.ReasonPhrase;
             }
+
+            await wallpaperConfig.SetImageUriAsync(imageUri, cancellationToken);
+            await wallpaperConfig.SetTitleAsync(title, cancellationToken);
+            await wallpaperConfig.SetTitleUriAsync(titleUri, cancellationToken);
+            await wallpaperConfig.SetDescriptionAsync(description, cancellationToken);
         }
     }
 }

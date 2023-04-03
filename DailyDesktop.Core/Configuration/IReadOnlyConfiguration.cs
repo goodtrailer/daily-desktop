@@ -2,7 +2,9 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
+using DailyDesktop.Core.Util;
 
 namespace DailyDesktop.Core.Configuration
 {
@@ -27,19 +29,49 @@ namespace DailyDesktop.Core.Configuration
         event EventHandler OnUpdate;
 
         /// <summary>
+        /// Asynchronous event published on calls to <see cref="UpdateAsync"/>.
+        /// </summary>
+        event AsyncEventHandler OnUpdateAsync;
+
+        /// <summary>
         /// Event published on successful calls to <see cref="Serialize"/>.
         /// </summary>
         event EventHandler OnSerialize;
 
         /// <summary>
-        /// Automatically called upon setting properties (can be called manually to synchronously serialize in case <see cref="IsAutoSerializing"/> is true).
+        /// Asynchronous event published on successful calls to <see cref="SerializeAsync"/>.
+        /// </summary>
+        event AsyncEventHandler OnSerializeAsync;
+
+        /// <summary>
+        /// Automatically called upon setting properties. Can be called manually to
+        /// publish to <see cref="OnUpdateAsync"/> and serialize (in case <see cref="IsAutoSerializing"/> is true).
         /// </summary>
         void Update();
 
         /// <summary>
+        /// Automatically called upon setting properties. Can be called manually to asynchronously
+        /// publish to <see cref="OnUpdateAsync"/> and serialize (in case <see cref="IsAutoSerializing"/> is true).
+        /// </summary>
+        Task UpdateAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Serialize configuration to a JSON file (located at <see cref="JsonPath"/>).
+        /// </summary>
+        void Serialize();
+
+        /// <summary>
         /// Asynchronously serialize configuration to a JSON file (located at <see cref="JsonPath"/>).
         /// </summary>
-        Task Serialize();
+        Task SerializeAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Try to serialize configuration to a JSON file (located at <see cref="JsonPath"/>).
+        /// </summary>
+        /// <returns>
+        /// Whether or not the serialiazation was successful.
+        /// </returns>
+        bool TrySerialize();
 
         /// <summary>
         /// Try to asynchronously serialize configuration to a JSON file (located at <see cref="JsonPath"/>).
@@ -47,6 +79,6 @@ namespace DailyDesktop.Core.Configuration
         /// <returns>
         /// Whether or not the serialiazation was successful.
         /// </returns>
-        Task<bool> TrySerialize();
+        Task<bool> TrySerializeAsync(CancellationToken cancellationToken);
     }
 }

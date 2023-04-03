@@ -3,7 +3,10 @@
 
 using System.IO;
 using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
+using DailyDesktop.Core.Util;
 
 namespace DailyDesktop.Core.Configuration
 {
@@ -13,7 +16,7 @@ namespace DailyDesktop.Core.Configuration
     public class PathConfiguration : AbstractConfiguration<PathConfiguration>, IPublicPathConfiguration
     {
         /// <inheritdoc/>
-        public PathConfiguration(string jsonPath)
+        public PathConfiguration(string jsonPath = "")
             : base(jsonPath)
         {
         }
@@ -29,7 +32,7 @@ namespace DailyDesktop.Core.Configuration
 
                 Directory.CreateDirectory(value);
                 assemblyDir = value;
-                Update();
+                UpdateAsync(default).Wait(AsyncUtils.TimedCancel());
             }
         }
 
@@ -44,7 +47,7 @@ namespace DailyDesktop.Core.Configuration
 
                 Directory.CreateDirectory(value);
                 providersDir = value;
-                Update();
+                UpdateAsync(default).Wait(AsyncUtils.TimedCancel());
             }
         }
 
@@ -59,7 +62,7 @@ namespace DailyDesktop.Core.Configuration
 
                 Directory.CreateDirectory(value);
                 serializationDir = value;
-                Update();
+                UpdateAsync(default).Wait(AsyncUtils.TimedCancel());
             }
         }
 
@@ -76,11 +79,44 @@ namespace DailyDesktop.Core.Configuration
         public string WallpaperJson => HttpUtility.UrlDecode(Path.Combine(serializationDir, "wallpaper.json"));
 
         /// <inheritdoc/>
-        public override void Load(PathConfiguration other)
+        public async Task SetAssemblyDirAsync(string assemblyDir, CancellationToken cancellationToken)
         {
-            AssemblyDir = other.AssemblyDir;
-            ProvidersDir = other.ProvidersDir;
-            SerializationDir = other.SerializationDir;
+                if (this.assemblyDir == assemblyDir)
+                    return;
+
+                Directory.CreateDirectory(assemblyDir);
+                this.assemblyDir = assemblyDir;
+                await UpdateAsync(cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public async Task SetProvidersDirAsync(string providersDir, CancellationToken cancellationToken)
+        {
+                if (this.providersDir == providersDir)
+                    return;
+
+                Directory.CreateDirectory(providersDir);
+                this.providersDir = providersDir;
+                await UpdateAsync(cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public async Task SetSerializationDirAsync(string serializationDir, CancellationToken cancellationToken)
+        {
+                if (this.serializationDir == serializationDir)
+                    return;
+
+                Directory.CreateDirectory(serializationDir);
+                this.serializationDir = serializationDir;
+                await UpdateAsync(cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        protected override void LoadImpl(PathConfiguration other)
+        {
+            assemblyDir = other.assemblyDir;
+            providersDir = other.providersDir;
+            serializationDir = other.serializationDir;
         }
 
         private string assemblyDir = "";

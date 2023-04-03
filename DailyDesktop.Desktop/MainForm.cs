@@ -15,7 +15,7 @@ using System.Windows.Forms;
 using DailyDesktop.Core;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
-
+using DailyDesktop.Core.Util;
 using TaskState = Microsoft.Win32.TaskScheduler.TaskState;
 
 namespace DailyDesktop.Desktop
@@ -64,7 +64,7 @@ namespace DailyDesktop.Desktop
                 AssemblyDir = assemblyDir,
                 ProvidersDir = providersDir,
                 SerializationDir = serializationDir,
-            }, taskName, true));
+            }, taskName, true, AsyncUtils.TimedCancel(2500)));
         }
 
         private MainForm(DailyDesktopCore core)
@@ -97,13 +97,15 @@ namespace DailyDesktop.Desktop
             Process.Start(psi);
         }
 
-        private void MainForm_Load(object? _, EventArgs e)
+        private async void MainForm_Load(object? _, EventArgs e)
         {
-            repopulateProviderComboBox();
-            if (core.CurrentProvider != null)
-                providerComboBox.SelectedIndex = providerComboBox.FindString(core.CurrentProvider.DisplayName);
-            updateProviderInfo();
+            await repopulateProviderComboBox();
 
+            Invoke(MainForm_Load_Impl);
+        }
+
+        private void MainForm_Load_Impl()
+        {
             optionsEnabledCheckBox.Checked = taskConfig.IsEnabled;
 
             optionsUpdateTimePicker.Value = taskConfig.UpdateTime;
@@ -124,71 +126,65 @@ namespace DailyDesktop.Desktop
             stateBackgroundWorker.CancelAsync();
         }
 
-        private void providerComboBox_SelectedIndexChanged(object? _, EventArgs e)
+        private async void providerComboBox_SelectedIndexChanged(object? _, EventArgs e)
         {
-            taskConfig.Dll = (providerComboBox.SelectedItem as ProviderWrapper)?.Dll ?? "";
-            updateProviderInfo();
+            if (providerComboBox.SelectedItem is ProviderWrapper provider)
+                await taskConfig.SetDllAsync(provider.Dll, AsyncUtils.TimedCancel());
+
+            Invoke(updateProviderInfo);
         }
 
         private void updateProviderInfo()
         {
-            providerDescriptionLabel.Text = core.CurrentProvider?.Description;
-            providerSourceLinkLabel.Text = core.CurrentProvider?.SourceUri;
+            providerDescriptionLabel.Text = core.CurrentProvider?.Description ?? null_description;
+            providerSourceLinkLabel.Text = core.CurrentProvider?.SourceUri ?? null_text;
         }
 
-        // The most over-engineered vaguely O(n) algorithm of all time that will
-        // almost certainly run slower than a normal O(n^2) algorithm for any
-        // normal use-case where there are less than 5 providers.
-        // 
-        // tbh idek why i did this O(n^2) isn't even that unreasonable...
-        private void repopulateProviderComboBox()
+        private async Task repopulateProviderComboBox()
         {
-            var items = new Dictionary<string, int>();
-            var providers = core.Providers;
+            var providers = await core.GetProviders(AsyncUtils.TimedCancel());
+            Invoke(() => repopulateProviderComboBox_Impl(providers));
+        }
 
-            for (int i = 0; i < providerComboBox.Items.Count; i++)
-            {
-                var provider = providerComboBox.Items[i] as ProviderWrapper;
+        private void repopulateProviderComboBox_Impl(IReadOnlyDictionary<string, Type> providers)
+        {
+            providerComboBox.Items.Clear();
 
-                if (provider != null)
-                    items.Add(provider.Dll, i);
-            }
+            providerComboBox.Items.Add(ProviderWrapper.Null);
 
             foreach (var keyVal in providers)
             {
-                if (!items.ContainsKey(keyVal.Key))
-                    try
-                    {
-                        var provider = IProvider.Instantiate(keyVal.Value);
-                        var item = new ProviderWrapper(keyVal.Key, provider);
-                        providerComboBox.Items.Add(item);
-                    }
-                    catch (ProviderException ex)
-                    {
-                        Console.WriteLine(ex.StackTrace);
-                    }
+                try
+                {
+                    var provider = IProvider.Instantiate(keyVal.Value);
+                    var item = new ProviderWrapper(keyVal.Key, provider);
+                    providerComboBox.Items.Add(item);
+                }
+                catch (ProviderException pe)
+                {
+                    Console.WriteLine(pe.StackTrace);
+                }
             }
 
-            foreach (var keyVal in items)
-            {
-                if (!core.Providers.ContainsKey(keyVal.Key))
-                    providerComboBox.Items.RemoveAt(keyVal.Value);
-            }
+            int index = providerComboBox.FindString(core.CurrentProvider?.DisplayName ?? "");
+
+            if (index >= 0)
+                providerComboBox.SelectedIndex = index;
         }
 
-        private void providerComboBox_DropDown(object? _, EventArgs e) => repopulateProviderComboBox();
+        private async void providerComboBox_DropDown(object? _, EventArgs e) => await repopulateProviderComboBox();
 
         private void providerSourceLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(providerSourceLinkLabel.Text);
 
-        private void optionsUpdateTimePicker_ValueChanged(object? _, EventArgs e)
+        private async void optionsUpdateTimePicker_ValueChanged(object? _, EventArgs e)
         {
-            taskConfig.UpdateTime = optionsUpdateTimePicker.Value;
+            await taskConfig.SetUpdateTimeAsync(optionsUpdateTimePicker.Value, AsyncUtils.TimedCancel());
         }
 
-        private void optionsEnabledCheckBox_CheckedChanged(object? _, EventArgs e)
+        private async void optionsEnabledCheckBox_CheckedChanged(object? _, EventArgs e)
         {
-            taskConfig.IsEnabled = optionsEnabledCheckBox.Checked;
-            optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked;
+            Invoke(() => optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked);
+            await taskConfig.SetIsEnabledAsync(optionsEnabledCheckBox.Checked, AsyncUtils.TimedCancel());
         }
 
         private void optionsUpdateWallpaperButton_Click(object? _, EventArgs e)
@@ -198,10 +194,11 @@ namespace DailyDesktop.Desktop
 
         private void optionsProvidersDirectoryButton_Click(object? _, EventArgs e) => openUri(core.PathConfig.ProvidersDir);
 
-        private void optionsBlurStrengthTrackBar_Scroll(object? _, EventArgs e)
+        private async void optionsBlurStrengthTrackBar_Scroll(object? _, EventArgs e)
         {
-            taskConfig.BlurStrength = optionsBlurStrengthTrackBar.Value;
-            updateBlurStrengthToolTip();
+            Invoke(updateBlurStrengthToolTip);
+
+            await taskConfig.SetBlurStrengthAsync(optionsBlurStrengthTrackBar.Value, AsyncUtils.TimedCancel());
         }
 
         private void updateBlurStrengthToolTip()
@@ -210,28 +207,24 @@ namespace DailyDesktop.Desktop
             mainToolTip.SetToolTip(optionsBlurStrengthTrackBar, strength);
         }
 
-        private void optionsBlurredFitCheckBox_CheckedChanged(object? _, EventArgs e)
+        private async void optionsBlurredFitCheckBox_CheckedChanged(object? _, EventArgs e)
         {
-            taskConfig.DoBlurredFit = optionsBlurredFitCheckBox.Checked;
-            optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked;
+            Invoke(() => optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked);
+            await taskConfig.SetDoBlurredFitAsync(optionsBlurredFitCheckBox.Checked, AsyncUtils.TimedCancel());
         }
 
-        private void optionsResizeCheckBox_CheckedChanged(object? _, EventArgs e)
+        private async void optionsResizeCheckBox_CheckedChanged(object? _, EventArgs e)
         {
-            taskConfig.DoResize = optionsResizeCheckBox.Checked;
+            await taskConfig.SetDoResizeAsync(optionsResizeCheckBox.Checked, AsyncUtils.TimedCancel());
         }
 
         private void wallpaperTitleLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(wallpaperConfig.TitleUri);
 
         private void wallpaperAuthorLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(wallpaperConfig.AuthorUri);
 
-        private async Task updateWallpaperInfo()
+        private void updateWallpaperInfo_Impl(bool isDeserializationSuccessful)
         {
-            bool deserializeResult = await wallpaperConfig.TryDeserialize();
-
-            Invoke(new MethodInvoker(() =>
-            {
-                if (deserializeResult)
+            if (isDeserializationSuccessful)
                 {
                     wallpaperUpdatedLabel.Text = $"{fetched_text} {wallpaperConfig.Date.ToString("dddd, MMMM d") ?? null_text}";
                     wallpaperTitleLinkLabel.Text = wallpaperConfig.Title ?? null_text;
@@ -254,7 +247,6 @@ namespace DailyDesktop.Desktop
                     wallpaperTitleLinkLabel.Links[0].Enabled = false;
                     wallpaperAuthorLinkLabel.Links[0].Enabled = false;
                 }
-            }));
         }
 
         private void stateBackgroundWorker_DoWork(object? _, EventArgs e)
@@ -273,10 +265,13 @@ namespace DailyDesktop.Desktop
         {
             var state = (TaskState)e.ProgressPercentage;
 
-            Invoke(new MethodInvoker(() => stateLabel.Text = state.ToString()));
+            Invoke(() => stateLabel.Text = state.ToString());
 
-            if (state == TaskState.Ready)
-                await updateWallpaperInfo();
+            if (state != TaskState.Ready)
+                return;
+
+            bool isDeserializationSuccessful = await wallpaperConfig.TryDeserializeAsync(AsyncUtils.TimedCancel());
+            Invoke(() => updateWallpaperInfo_Impl(isDeserializationSuccessful));
         }
 
         private void okButton_Click(object? _, EventArgs e)

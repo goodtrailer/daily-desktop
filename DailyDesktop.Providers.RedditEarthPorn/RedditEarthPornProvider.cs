@@ -3,6 +3,7 @@
 
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
@@ -21,20 +22,25 @@ namespace DailyDesktop.Providers.RedditEarthPorn
         public string Description => "Looks at the top post in the last 24 hours in the well-known r/EarthPorn, reddit's premiere landscape photography subreddit.";
         public string SourceUri => "https://www.reddit.com/r/EarthPorn/top/?sort=top&t=day";
 
-        public async Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig)
+        public async Task ConfigureWallpaperAsync(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig, CancellationToken cancellationToken)
         {
-            wallpaperConfig.Title = TITLE;
+            string subredditHtml = await client.GetStringAsync(SourceUri, cancellationToken);
 
-            string subredditHtml = await client.GetStringAsync(SourceUri);
-
-            wallpaperConfig.ImageUri = Regex.Match(subredditHtml, IMAGE_URI_PATTERN).Value;
-            if (string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri))
+            string imageUri = Regex.Match(subredditHtml, IMAGE_URI_PATTERN).Value;
+            if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            wallpaperConfig.Author = "u/" + Regex.Match(subredditHtml, AUTHOR_PATTERN).Value;
-            wallpaperConfig.AuthorUri = "https://www.reddit.com/" + wallpaperConfig.Author;
-            wallpaperConfig.TitleUri = "https://www.reddit.com" + Regex.Match(subredditHtml, TITLE_URI_PATTERN).Value;
-            wallpaperConfig.Description = Regex.Match(subredditHtml, DESCRIPTION_PATTERN).Value;
+            string author = "u/" + Regex.Match(subredditHtml, AUTHOR_PATTERN).Value;
+            string authorUri = "https://www.reddit.com/" + author;
+            string titleUri = "https://www.reddit.com" + Regex.Match(subredditHtml, TITLE_URI_PATTERN).Value;
+            string description = Regex.Match(subredditHtml, DESCRIPTION_PATTERN).Value;
+
+            await wallpaperConfig.SetImageUriAsync(imageUri, cancellationToken);
+            await wallpaperConfig.SetAuthorAsync(author, cancellationToken);
+            await wallpaperConfig.SetAuthorUriAsync(authorUri, cancellationToken);
+            await wallpaperConfig.SetTitleAsync(TITLE, cancellationToken);
+            await wallpaperConfig.SetTitleUriAsync(titleUri, cancellationToken);
+            await wallpaperConfig.SetDescriptionAsync(description, cancellationToken);
         }
     }
 }

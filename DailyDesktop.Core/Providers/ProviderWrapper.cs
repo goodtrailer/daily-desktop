@@ -10,9 +10,14 @@ namespace DailyDesktop.Core.Providers
     public class ProviderWrapper
     {
         /// <summary>
+        /// A wrapper around a null <see cref="IProvider"/>.
+        /// </summary>
+        public static readonly ProviderWrapper Null = new ProviderWrapper("", null);
+
+        /// <summary>
         /// The wrapped <see cref="IProvider"/>.
         /// </summary>
-        public readonly IProvider Provider;
+        public readonly IProvider? Provider;
 
         /// <summary>
         /// The path of the DLL module containing the <see cref="IProvider"/>
@@ -27,7 +32,7 @@ namespace DailyDesktop.Core.Providers
         /// <see cref="IProvider"/> implementation.</param>
         /// <param name="provider">An instance of the <see cref="IProvider"/>
         /// implementation found in the DLL module.</param>
-        public ProviderWrapper(string dll, IProvider provider)
+        public ProviderWrapper(string dll, IProvider? provider)
         {
             Provider = provider;
             Dll = dll;
@@ -39,6 +44,6 @@ namespace DailyDesktop.Core.Providers
         /// </summary>
         /// <returns><see cref="Provider"/>'s <see cref="IProvider.DisplayName"/>
         /// member.</returns>
-        public override string ToString() => Provider.DisplayName;
+        public override string ToString() => Provider?.DisplayName ?? "";
     }
 }
