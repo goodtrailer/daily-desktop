@@ -165,7 +165,7 @@ namespace DailyDesktop.Core.Configuration
             this.imageUri = imageUri;
             await UpdateAsync(cancellationToken);
         }
-        
+
         /// <inheritdoc/>
         public async Task SetAuthorAsync(string? author, CancellationToken cancellationToken)
         {
@@ -175,7 +175,7 @@ namespace DailyDesktop.Core.Configuration
             this.author = author;
             await UpdateAsync(cancellationToken);
         }
-        
+
         /// <inheritdoc/>
         public async Task SetAuthorUriAsync(string? authorUri, CancellationToken cancellationToken)
         {
@@ -185,7 +185,7 @@ namespace DailyDesktop.Core.Configuration
             this.authorUri = authorUri;
             await UpdateAsync(cancellationToken);
         }
-        
+
         /// <inheritdoc/>
         public async Task SetTitleAsync(string? title, CancellationToken cancellationToken)
         {
@@ -195,7 +195,7 @@ namespace DailyDesktop.Core.Configuration
             this.title = title;
             await UpdateAsync(cancellationToken);
         }
-        
+
         /// <inheritdoc/>
         public async Task SetTitleUriAsync(string? titleUri, CancellationToken cancellationToken)
         {
@@ -205,7 +205,7 @@ namespace DailyDesktop.Core.Configuration
             this.titleUri = titleUri;
             await UpdateAsync(cancellationToken);
         }
-        
+
         /// <inheritdoc/>
         public async Task SetDescriptionAsync(string? description, CancellationToken cancellationToken)
         {

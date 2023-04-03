@@ -26,7 +26,7 @@ namespace DailyDesktop.Core.Configuration
         /// The serialization directory (e.g. for the <see cref="TaskConfiguration"/> JSON).
         /// </summary>
         new string SerializationDir { get; set; }
-        
+
         /// <summary>
         /// Asynchronously sets the assembly directory (e.g. for the task executable).
         /// </summary>

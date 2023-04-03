@@ -4,6 +4,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,9 +27,9 @@ namespace DailyDesktop.Providers.Pixiv
             "Using blurred-fit mode is highly recommended due to the large variety of aspect ratios of illustrations found on pixiv.";
         public string SourceUri => "https://www.pixiv.net/ranking.php?content=illust";
 
-        public void ConfigureHttpClient(HttpClient client)
+        public void ConfigureHttpRequestHeaders(HttpRequestHeaders headers)
         {
-            client.DefaultRequestHeaders.Referrer = new Uri("https://www.pixiv.net");
+            headers.Referrer = new Uri("https://www.pixiv.net");
         }
 
         public async Task ConfigureWallpaperAsync(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig, CancellationToken cancellationToken)

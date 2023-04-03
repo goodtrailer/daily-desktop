@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
-using DailyDesktop.Core.Util;
 
 namespace DailyDesktop.Providers.Bing
 {
