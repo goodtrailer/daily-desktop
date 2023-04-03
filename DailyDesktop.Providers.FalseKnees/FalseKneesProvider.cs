@@ -3,6 +3,7 @@
 
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
@@ -25,24 +26,28 @@ namespace DailyDesktop.Providers.FalseKnees
 
         public string SourceUri => "https://falseknees.com";
 
-        public async Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig)
+        public async Task ConfigureWallpaperAsync(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig, CancellationToken cancellationToken)
         {
-            wallpaperConfig.Author = AUTHOR;
-            wallpaperConfig.AuthorUri = AUTHOR_URI;
-
             // Scrape info from front page
 
-            string pageHtml = await client.GetStringAsync(SourceUri);
+            string pageHtml = await client.GetStringAsync(SourceUri, cancellationToken);
 
-            wallpaperConfig.ImageUri = SourceUri + "/" + Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN).Value;
-            wallpaperConfig.TitleUri = SourceUri + "/" + Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value;
-            wallpaperConfig.Description = Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value;
+            string imageUri = SourceUri + "/" + Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN).Value;
+            string titleUri = SourceUri + "/" + Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value;
+            string description = Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value;
 
             // Scrape title from archive page
 
-            string archiveHtml = await client.GetStringAsync("https://falseknees.com/archive.html");
+            string archiveHtml = await client.GetStringAsync("https://falseknees.com/archive.html", cancellationToken);
 
-            wallpaperConfig.Title = Regex.Match(archiveHtml, TITLE_PATTERN).Value;
+            string title = Regex.Match(archiveHtml, TITLE_PATTERN).Value;
+
+            await wallpaperConfig.SetImageUriAsync(imageUri, cancellationToken);
+            await wallpaperConfig.SetAuthorAsync(AUTHOR, cancellationToken);
+            await wallpaperConfig.SetAuthorUriAsync(AUTHOR_URI, cancellationToken);
+            await wallpaperConfig.SetTitleAsync(title, cancellationToken);
+            await wallpaperConfig.SetTitleUriAsync(titleUri, cancellationToken);
+            await wallpaperConfig.SetDescriptionAsync(description, cancellationToken);
         }
     }
 }

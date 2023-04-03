@@ -3,6 +3,7 @@
 
 using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using DailyDesktop.Core.Configuration;
 
@@ -34,26 +35,25 @@ namespace DailyDesktop.Core.Providers
         /// <summary>
         /// Configures an <see cref="HttpClient"/> to be used for the
         /// <see cref="WallpaperConfiguration.ImageUri"/> returned by
-        /// <see cref="ConfigureWallpaper"/>. Used by
+        /// <see cref="ConfigureWallpaperAsync"/>. Used by
         /// <see cref="IProviderExtensions.CreateHttpClient(IProvider)"/>.
         /// </summary>
         /// <param name="client">The <see cref="HttpClient"/> to configure.</param>
         void ConfigureHttpClient(HttpClient client) { }
 
         /// <summary>
-        /// Configures a <see cref="IPublicWallpaperConfiguration"/> using a given
+        /// Asynchronously onfigures a <see cref="IPublicWallpaperConfiguration"/> using a given
         /// pre-configured <see cref="HttpClient"/>.
         /// </summary>
         /// <param name="client">A pre-configured <see cref="HttpClient"/>.</param>
         /// <param name="wallpaperConfig">The <see cref="IPublicWallpaperConfiguration"/> to configure.</param>
-        Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig);
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+        Task ConfigureWallpaperAsync(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig, CancellationToken cancellationToken);
 
         /// <summary>
         /// Instantiates an <see cref="IProvider"/> given a <see cref="Type"/>.
         /// </summary>
-        /// <param name="type">
-        /// The type of the <see cref="IProvider"/> to instantiate.
-        /// </param>
+        /// <param name="type">The type of the <see cref="IProvider"/> to instantiate.</param>
         /// <returns>The instance of the <see cref="IProvider"/>.</returns>
         /// <exception cref="ProviderException" />
         static IProvider Instantiate(Type type)
@@ -76,9 +76,7 @@ namespace DailyDesktop.Core.Providers
         /// Creates an <see cref="HttpClient"/> with a proper User-Agent header and
         /// configured by <see cref="IProvider.ConfigureHttpClient(HttpClient)"/>.
         /// </summary>
-        /// <param name="provider">
-        /// The <see cref="IProvider"/> configuring the returned <see cref="HttpClient"/>.
-        /// </param>
+        /// <param name="provider">The <see cref="IProvider"/> configuring the returned <see cref="HttpClient"/>.</param>
         /// <returns>The pre-configured <see cref="HttpClient"/>.</returns>
         public static HttpClient CreateHttpClient(this IProvider provider)
         {
@@ -90,20 +88,17 @@ namespace DailyDesktop.Core.Providers
         }
 
         /// <summary>
-        /// Configures a <see cref="WallpaperConfiguration"/> using a pre-configured
+        /// Asynchronously configures a <see cref="WallpaperConfiguration"/> using a pre-configured
         /// <see cref="HttpClient"/> created by <see cref="CreateHttpClient(IProvider)"/>.
         /// </summary>
-        /// <param name="provider">
-        /// The <see cref="IProvider"/> configuring the <see cref="WallpaperConfiguration"/>.
-        /// </param>
-        /// <param name="wallpaperConfig">
-        /// The <see cref="IPublicWallpaperConfiguration"/> to configure.
-        /// </param>
+        /// <param name="provider">The <see cref="IProvider"/> configuring the <see cref="WallpaperConfiguration"/>.</param>
+        /// <param name="wallpaperConfig">The <see cref="IPublicWallpaperConfiguration"/> to configure.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
         /// <returns>The up-to-date <see cref="WallpaperConfiguration"/>.</returns>
-        public static async Task ConfigureWallpaper(this IProvider provider, IPublicWallpaperConfiguration wallpaperConfig)
+        public static async Task ConfigureWallpaperAsync(this IProvider provider, IPublicWallpaperConfiguration wallpaperConfig, CancellationToken cancellationToken)
         {
             using (var client = provider.CreateHttpClient())
-                await provider.ConfigureWallpaper(client, wallpaperConfig);
+                await provider.ConfigureWallpaperAsync(client, wallpaperConfig, cancellationToken);
 
             wallpaperConfig.NullifyWhitespace();
         }

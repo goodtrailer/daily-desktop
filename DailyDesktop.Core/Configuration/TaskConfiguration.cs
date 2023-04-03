@@ -2,6 +2,8 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DailyDesktop.Core.Configuration
 {
@@ -11,7 +13,7 @@ namespace DailyDesktop.Core.Configuration
     public class TaskConfiguration : AbstractConfiguration<TaskConfiguration>, IPublicTaskConfiguration
     {
         /// <inheritdoc/>
-        public TaskConfiguration(string jsonPath)
+        public TaskConfiguration(string jsonPath = "")
             : base(jsonPath)
         {
         }
@@ -99,16 +101,76 @@ namespace DailyDesktop.Core.Configuration
                 Update();
             }
         }
+        
+        /// <inheritdoc/>
+        public async Task SetDllAsync(string dll, CancellationToken cancellationToken)
+        {
+            if (this.dll == dll)
+                return;
+
+            this.dll = dll;
+            await UpdateAsync(cancellationToken);
+        }
+        
+        /// <inheritdoc/>
+        public async Task SetIsEnabledAsync(bool isEnabled, CancellationToken cancellationToken)
+        {
+            if (this.isEnabled == isEnabled)
+                return;
+
+            this.isEnabled = isEnabled;
+            await UpdateAsync(cancellationToken);
+        }
+        
+        /// <inheritdoc/>
+        public async Task SetUpdateTimeAsync(DateTime updateTime, CancellationToken cancellationToken)
+        {
+            if (this.updateTime == updateTime)
+                return;
+
+            this.updateTime = updateTime;
+            await UpdateAsync(cancellationToken);
+        }
+        
+        /// <inheritdoc/>
+        public async Task SetDoResizeAsync(bool doResize, CancellationToken cancellationToken)
+        {
+            if (this.doResize == doResize)
+                return;
+
+            this.doResize = doResize;
+            await UpdateAsync(cancellationToken);
+        }
 
         /// <inheritdoc/>
-        public override void Load(TaskConfiguration other)
+        public async Task SetDoBlurredFitAsync(bool doBlurredFit, CancellationToken cancellationToken)
         {
-            Dll = other.Dll;
-            IsEnabled = other.IsEnabled;
-            UpdateTime = other.UpdateTime;
-            DoResize = other.DoResize;
-            DoBlurredFit = other.DoBlurredFit;
-            BlurStrength = other.BlurStrength;
+            if (this.doBlurredFit == doBlurredFit)
+                return;
+
+            this.doBlurredFit = doBlurredFit;
+            await UpdateAsync(cancellationToken);
+        }
+        
+        /// <inheritdoc/>
+        public async Task SetBlurStrengthAsync(int blurStrength, CancellationToken cancellationToken)
+        {
+            if (this.blurStrength == blurStrength)
+                return;
+
+            this.blurStrength = blurStrength;
+            await UpdateAsync(cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        protected override void LoadImpl(TaskConfiguration other)
+        {
+            dll = other.dll;
+            isEnabled = other.isEnabled;
+            updateTime = other.updateTime;
+            doResize = other.doResize;
+            doBlurredFit = other.doBlurredFit;
+            blurStrength = other.blurStrength;
         }
 
         private string dll = "";

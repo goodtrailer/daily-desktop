@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DailyDesktop.Core.Providers
 {
@@ -16,20 +18,19 @@ namespace DailyDesktop.Core.Providers
     public class ProviderStore
     {
         private const string PROVIDERS_SEARCH_PATTERN = "*.dll";
-
+        
         /// <summary>
         /// Dictionary of <see cref="IProvider"/> <see cref="Type"/>s
         /// added through <see cref="Scan"/> and <see cref="Add"/>.
         /// Key is DLL module path.
         /// </summary>
-        public readonly Dictionary<string, Type> Providers = new Dictionary<string, Type>();
+        public IReadOnlyDictionary<string, Type> Providers => providers;
+        private readonly Dictionary<string, Type> providers = new Dictionary<string, Type>();
 
         /// <summary>
-        /// Clears <see cref="Providers"/>. Identical to directly
-        /// calling <see cref="List{T}.Clear"/> on
-        /// <see cref="Providers"/>.
+        /// Clears <see cref="Providers"/>.
         /// </summary>
-        public void Clear() => Providers.Clear();
+        public void Clear() => providers.Clear();
 
         /// <summary>
         /// Adds one DLL module to <see cref="Providers"/>. Will not
@@ -37,32 +38,27 @@ namespace DailyDesktop.Core.Providers
         /// before.
         /// </summary>
         /// <param name="dllPath">The path of the <see cref="IProvider"/> DLL module to add</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
         /// <returns>The <see cref="IProvider"/> implementation <see cref="Type"/>.</returns>
-        public Type? Add(string dllPath)
+        public async Task<Type> Add(string dllPath, CancellationToken cancellationToken)
         {
             if (Providers.ContainsKey(dllPath))
                 return Providers[dllPath];
 
-            try
+            var assembly = Assembly.Load(await File.ReadAllBytesAsync(dllPath, cancellationToken));
+            
+            foreach (var type in assembly.GetTypes())
             {
-                var assembly = Assembly.LoadFrom(dllPath);
-
-                foreach (var type in assembly.GetTypes())
+                bool isPublic = type.IsPublic;
+                bool isProvider = type.GetInterfaces().Contains(typeof(IProvider));
+                if (isPublic && isProvider)
                 {
-                    bool isPublic = type.IsPublic;
-                    bool isProvider = type.GetInterfaces().Contains(typeof(IProvider));
-                    if (isPublic && isProvider)
-                    {
-                        Providers.Add(dllPath, type);
-                        return type;
-                    }
+                    providers.Add(dllPath, type);
+                    return type;
                 }
             }
-            catch (ReflectionTypeLoadException)
-            {
-            }
 
-            return null;
+            throw new TypeLoadException($"No {nameof(IProvider)} implementation found in \"{dllPath}\".");
         }
 
         /// <summary>
@@ -70,18 +66,21 @@ namespace DailyDesktop.Core.Providers
         /// modules and adds their paths to <see cref="Providers"/>.
         /// </summary>
         /// <param name="directory">The directory to scan</param>
-        public void Scan(string directory)
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+        public async Task Scan(string directory, CancellationToken cancellationToken)
         {
             if (Directory.Exists(directory))
             {
-                string[] paths = Directory.GetFiles(directory, PROVIDERS_SEARCH_PATTERN, SearchOption.AllDirectories);
-                foreach (var path in paths)
+                foreach (var path in Directory.GetFiles(directory, PROVIDERS_SEARCH_PATTERN, SearchOption.AllDirectories))
                 {
                     try
                     {
-                        Add(path);
+                        await Add(path, cancellationToken);
                     }
-                    catch (ReflectionTypeLoadException) { }
+                    catch (SystemException se)
+                    {
+                        Console.WriteLine(se.StackTrace);
+                    }
                 }
             }
         }

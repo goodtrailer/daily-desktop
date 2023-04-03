@@ -3,6 +3,7 @@
 
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
@@ -22,16 +23,19 @@ namespace DailyDesktop.Providers.Xkcd
         public string Description => "\"A webcomic of romance, sarcasm, math, and language.\"";
         public string SourceUri => "https://xkcd.com";
 
-        public async Task ConfigureWallpaper(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig)
+        public async Task ConfigureWallpaperAsync(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig, CancellationToken cancellationToken)
         {
-            string pageHtml = await client.GetStringAsync(SourceUri);
+            string pageHtml = await client.GetStringAsync(SourceUri, cancellationToken);
 
-            wallpaperConfig.Author = AUTHOR;
-            wallpaperConfig.AuthorUri = AUTHOR_URI;
+            string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
+            string title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
+            string titleUri = Regex.Match(pageHtml, TITLE_URI_PATTERN).Value;
 
-            wallpaperConfig.ImageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
-            wallpaperConfig.Title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
-            wallpaperConfig.TitleUri = Regex.Match(pageHtml, TITLE_URI_PATTERN).Value;
+            await wallpaperConfig.SetImageUriAsync(imageUri, cancellationToken);
+            await wallpaperConfig.SetAuthorAsync(AUTHOR, cancellationToken);
+            await wallpaperConfig.SetAuthorUriAsync(AUTHOR_URI, cancellationToken);
+            await wallpaperConfig.SetTitleAsync(title, cancellationToken);
+            await wallpaperConfig.SetTitleUriAsync(titleUri, cancellationToken);
         }
     }
 }
