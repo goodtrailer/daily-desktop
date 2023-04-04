@@ -2,9 +2,12 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
+using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +24,9 @@ namespace DailyDesktop.Providers.Pixiv
         private const string AUTHOR_ID_PATTERN = "(?<=(\"authorId\":\"))([0-9]*)";
         private const string TITLE_PATTERN = "(?<=(<meta property=\"twitter:title\" content=\"))([\\S\\s]*?[^\\\\])(?=(\">))";
         private const string DESCRIPTION_PATTERN = "(?<=(<meta property=\"twitter:description\" content=\"))([\\S\\s]*?[^\\\\])(?=(\">))";
+        private const string TAG_PATTERN = "({\"tag\")(.*?)(})";
+        private const string TAG_JP_PATTERN = "(?<=(\"tag\":\"))(.*?)(?=(\"))";
+        private const string TAG_EN_PATTERN = "(?<=(\"en\":\"))(.*?)(?=(\"))";
 
         public string DisplayName => "pixiv";
         public string Description => "Fetches the illustration ranked #1 on the pixiv Overall Daily Rankings for the previous day.\r\n" +
@@ -55,14 +61,37 @@ namespace DailyDesktop.Providers.Pixiv
             string title = Regex.Match(imagePageHtml, TITLE_PATTERN).Value;
             string author = Regex.Match(imagePageHtml, AUTHOR_PATTERN).Value;
             string authorUri = "https://www.pixiv.net/users/" + Regex.Match(imagePageHtml, AUTHOR_ID_PATTERN).Value;
-            string description = WebUtility.HtmlDecode(Regex.Match(imagePageHtml, DESCRIPTION_PATTERN).Value);
+            var descriptionBuilder = new StringBuilder(WebUtility.HtmlDecode(Regex.Match(imagePageHtml, DESCRIPTION_PATTERN).Value));
+
+            var tagMatches = Regex.Matches(imagePageHtml, TAG_PATTERN).ToList();
+            if (tagMatches.Count > 0)
+            {
+                var tagsBuilder = new StringBuilder();
+                foreach (var tagMatch in tagMatches)
+                {
+                    if (!tagMatch.Success)
+                        continue;
+
+                    var tag = tagMatch.Value;
+
+                    string jp = Regex.Match(tag, TAG_JP_PATTERN).Value;
+                    tagsBuilder.AppendFormat("#{0} ", jp);
+
+                    string en = Regex.Match(tag, TAG_EN_PATTERN).Value;
+                    if (!string.IsNullOrWhiteSpace(en))
+                        tagsBuilder.AppendFormat("[{0}] ", en);
+                }
+
+                descriptionBuilder.Append("\n\n");
+                descriptionBuilder.Append(tagsBuilder);
+            }
 
             await wallpaperConfig.SetImageUriAsync(imageUri, cancellationToken);
             await wallpaperConfig.SetAuthorAsync(author, cancellationToken);
             await wallpaperConfig.SetAuthorUriAsync(authorUri, cancellationToken);
             await wallpaperConfig.SetTitleAsync(title, cancellationToken);
             await wallpaperConfig.SetTitleUriAsync(titleUri, cancellationToken);
-            await wallpaperConfig.SetDescriptionAsync(description, cancellationToken);
+            await wallpaperConfig.SetDescriptionAsync(descriptionBuilder.ToString(), cancellationToken);
         }
     }
 }
