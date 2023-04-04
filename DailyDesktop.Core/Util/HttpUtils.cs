@@ -1,7 +1,10 @@
 ﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
 // See the LICENSE file in the repository root for full licence text.
 
+using System.Globalization;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Reflection.PortableExecutable;
 
 namespace DailyDesktop.Core.Util
 {
@@ -22,8 +25,12 @@ namespace DailyDesktop.Core.Util
         /// </summary>
         public static void ResetRequestHeaders()
         {
-            Client.DefaultRequestHeaders.Clear();
-            Client.DefaultRequestHeaders.Add("User-Agent", "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+            var headers = Client.DefaultRequestHeaders;
+            headers.Clear();
+
+            headers.Add("User-Agent", "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+            headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(CultureInfo.InstalledUICulture.Name));
+            headers.AcceptLanguage.Add(new StringWithQualityHeaderValue("en", 0.8));
         }
     }
 }
