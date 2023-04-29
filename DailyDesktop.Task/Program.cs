@@ -47,7 +47,7 @@ namespace DailyDesktop.Task
                 throw new ProviderException("Missing IProvider DLL module path");
 
             var store = new ProviderStore();
-            var providerType = await store.Add(dllPath, AsyncUtils.TimedCancel());
+            var providerType = await store.AddAsync(dllPath, AsyncUtils.TimedCancel());
             var provider = IProvider.Instantiate(providerType);
 
             string imagePath = await downloadWallpaper(provider, json, AsyncUtils.LongCancel());

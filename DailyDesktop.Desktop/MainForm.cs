@@ -2,13 +2,13 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
@@ -44,7 +44,7 @@ namespace DailyDesktop.Desktop
 
         private TaskState previousState;
 
-        public static async Task<MainForm> CreateForm()
+        public static async Task<MainForm> CreateFormAsync()
         {
             string userId = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             string userName = userId.Split('\\').Last();
@@ -59,7 +59,7 @@ namespace DailyDesktop.Desktop
 
             string serializationDir = Path.Combine(appDataDir, serialization_dir);
 
-            return new MainForm(await DailyDesktopCore.CreateCore(new PathConfiguration(Path.Combine(assemblyDir, path_config_filename))
+            return new MainForm(await DailyDesktopCore.CreateCoreAsync(new PathConfiguration(Path.Combine(assemblyDir, path_config_filename))
             {
                 AssemblyDir = assemblyDir,
                 ProvidersDir = providersDir,
@@ -97,15 +97,10 @@ namespace DailyDesktop.Desktop
             Process.Start(psi);
         }
 
-        private async void MainForm_Load(object? _, EventArgs e)
+        private async void MainForm_Load(object? sender, EventArgs e)
         {
             await repopulateProviderComboBox();
 
-            Invoke(MainForm_Load_Impl);
-        }
-
-        private void MainForm_Load_Impl()
-        {
             optionsEnabledCheckBox.Checked = taskConfig.IsEnabled;
 
             optionsUpdateTimePicker.Value = taskConfig.UpdateTime;
@@ -121,21 +116,13 @@ namespace DailyDesktop.Desktop
             stateBackgroundWorker.RunWorkerAsync();
         }
 
-        private void MainForm_FormClosing(object? _, EventArgs e)
-        {
-            stateBackgroundWorker.CancelAsync();
-        }
+        private void MainForm_FormClosing(object? sender, EventArgs e) => stateBackgroundWorker.CancelAsync();
 
-        private async void providerComboBox_SelectedIndexChanged(object? _, EventArgs e)
+        private async void providerComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (providerComboBox.SelectedItem is ProviderWrapper provider)
                 await taskConfig.SetDllAsync(provider.Dll, AsyncUtils.TimedCancel());
 
-            Invoke(updateProviderInfo);
-        }
-
-        private void updateProviderInfo()
-        {
             providerDescriptionLabel.Text = core.CurrentProvider?.Description ?? null_description;
             providerSourceLinkLabel.Text = core.CurrentProvider?.SourceUri ?? null_text;
             providerSourceLinkLabel.Links[0].Enabled = Uri.TryCreate(providerSourceLinkLabel.Text, UriKind.Absolute, out _);
@@ -144,14 +131,9 @@ namespace DailyDesktop.Desktop
 
         private async Task repopulateProviderComboBox()
         {
-            var providers = await core.GetProviders(AsyncUtils.TimedCancel());
-            Invoke(() => repopulateProviderComboBox_Impl(providers));
-        }
+            var providers = await core.GetProvidersAsync(AsyncUtils.TimedCancel());
 
-        private void repopulateProviderComboBox_Impl(IReadOnlyDictionary<string, Type> providers)
-        {
             providerComboBox.Items.Clear();
-
             providerComboBox.Items.Add(ProviderWrapper.Null);
 
             foreach (var keyVal in providers)
@@ -174,33 +156,26 @@ namespace DailyDesktop.Desktop
                 providerComboBox.SelectedIndex = index;
         }
 
-        private async void providerComboBox_DropDown(object? _, EventArgs e) => await repopulateProviderComboBox();
+        private async void providerComboBox_DropDown(object? sender, EventArgs e) => await repopulateProviderComboBox();
 
-        private void providerSourceLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(providerSourceLinkLabel.Text);
+        private void providerSourceLinkLabel_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e) => openUri(providerSourceLinkLabel.Text);
 
-        private async void optionsUpdateTimePicker_ValueChanged(object? _, EventArgs e)
+        private async void optionsUpdateTimePicker_ValueChanged(object? sender, EventArgs e) => await taskConfig.SetUpdateTimeAsync(optionsUpdateTimePicker.Value, AsyncUtils.TimedCancel());
+
+        private async void optionsEnabledCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            await taskConfig.SetUpdateTimeAsync(optionsUpdateTimePicker.Value, AsyncUtils.TimedCancel());
-        }
-
-        private async void optionsEnabledCheckBox_CheckedChanged(object? _, EventArgs e)
-        {
-            Invoke(() => optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked);
             await taskConfig.SetIsEnabledAsync(optionsEnabledCheckBox.Checked, AsyncUtils.TimedCancel());
+            optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked;
         }
 
-        private void optionsUpdateWallpaperButton_Click(object? _, EventArgs e)
+        private void optionsUpdateWallpaperButton_Click(object? sender, EventArgs e) => core.UpdateWallpaper();
+
+        private void optionsProvidersDirectoryButton_Click(object? sender, EventArgs e) => openUri(core.PathConfig.ProvidersDir);
+
+        private async void optionsBlurStrengthTrackBar_Scroll(object? sender, EventArgs e)
         {
-            core.UpdateWallpaper();
-        }
-
-        private void optionsProvidersDirectoryButton_Click(object? _, EventArgs e) => openUri(core.PathConfig.ProvidersDir);
-
-        private async void optionsBlurStrengthTrackBar_Scroll(object? _, EventArgs e)
-        {
-            Invoke(updateBlurStrengthToolTip);
-
             await taskConfig.SetBlurStrengthAsync(optionsBlurStrengthTrackBar.Value, AsyncUtils.TimedCancel());
+            updateBlurStrengthToolTip();
         }
 
         private void updateBlurStrengthToolTip()
@@ -209,22 +184,22 @@ namespace DailyDesktop.Desktop
             mainToolTip.SetToolTip(optionsBlurStrengthTrackBar, strength);
         }
 
-        private async void optionsBlurredFitCheckBox_CheckedChanged(object? _, EventArgs e)
+        private async void optionsBlurredFitCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            Invoke(() => optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked);
             await taskConfig.SetDoBlurredFitAsync(optionsBlurredFitCheckBox.Checked, AsyncUtils.TimedCancel());
+            optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked;
         }
 
-        private async void optionsResizeCheckBox_CheckedChanged(object? _, EventArgs e)
+        private async void optionsResizeCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
             await taskConfig.SetDoResizeAsync(optionsResizeCheckBox.Checked, AsyncUtils.TimedCancel());
         }
 
-        private void wallpaperTitleLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(wallpaperConfig.TitleUri);
+        private void wallpaperTitleLinkLabel_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e) => openUri(wallpaperConfig.TitleUri);
 
-        private void wallpaperAuthorLinkLabel_LinkClicked(object? _, LinkLabelLinkClickedEventArgs e) => openUri(wallpaperConfig.AuthorUri);
+        private void wallpaperAuthorLinkLabel_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e) => openUri(wallpaperConfig.AuthorUri);
 
-        private void updateWallpaperInfo_Impl(bool isDeserializationSuccessful)
+        private void updateWallpaperInfo(bool isDeserializationSuccessful)
         {
             if (isDeserializationSuccessful)
             {
@@ -251,40 +226,37 @@ namespace DailyDesktop.Desktop
             }
         }
 
-        private void stateBackgroundWorker_DoWork(object? _, EventArgs e)
+        private void stateBackgroundWorker_DoWork(object? sender, EventArgs e)
         {
             while (!stateBackgroundWorker.CancellationPending)
             {
-                if (previousState != core.TaskState)
-                {
-                    stateBackgroundWorker.ReportProgress((int)core.TaskState);
-                    previousState = core.TaskState;
-                }
+                if (previousState == core.TaskState)
+                    continue;
+
+                stateBackgroundWorker.ReportProgress((int)core.TaskState);
+                previousState = core.TaskState;
+                Thread.Sleep(100);
             }
         }
 
-        private async void stateBackgroundWorker_ProgressChanged(object? _, ProgressChangedEventArgs e)
+        private async void stateBackgroundWorker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
         {
             var state = (TaskState)e.ProgressPercentage;
-
             Invoke(() => stateLabel.Text = state.ToString());
 
             if (state != TaskState.Ready)
                 return;
 
             bool isDeserializationSuccessful = await wallpaperConfig.TryDeserializeAsync(AsyncUtils.TimedCancel());
-            Invoke(() => updateWallpaperInfo_Impl(isDeserializationSuccessful));
+            Invoke(() => updateWallpaperInfo(isDeserializationSuccessful));
         }
 
-        private void okButton_Click(object? _, EventArgs e)
-        {
-            Application.Exit();
-        }
+        private void okButton_Click(object? sender, EventArgs e) => Application.Exit();
 
-        private void wallpaperDescriptionRichTextBox_LinkClicked(object? _, LinkClickedEventArgs e) => openUri(e.LinkText);
+        private void wallpaperDescriptionRichTextBox_LinkClicked(object? sender, LinkClickedEventArgs e) => openUri(e.LinkText);
 
-        private void overviewRichTextBox_LinkClicked(object? _, LinkClickedEventArgs e) => openUri(e.LinkText);
+        private void overviewRichTextBox_LinkClicked(object? sender, LinkClickedEventArgs e) => openUri(e.LinkText);
 
-        private void licenseRichTextBox_LinkClicked(object? _, LinkClickedEventArgs e) => openUri(e.LinkText);
+        private void licenseRichTextBox_LinkClicked(object? sender, LinkClickedEventArgs e) => openUri(e.LinkText);
     }
 }
