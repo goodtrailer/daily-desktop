@@ -116,7 +116,16 @@ namespace DailyDesktop.Desktop
             stateBackgroundWorker.RunWorkerAsync();
         }
 
-        private void MainForm_FormClosing(object? sender, EventArgs e) => stateBackgroundWorker.CancelAsync();
+        private void MainForm_FormClosing(object? sender, EventArgs e)
+        {
+            stateBackgroundWorker.CancelAsync();
+            core.Dispose();
+
+            // TODO: SUPER SUPER SUPER BAD LOL WTF??
+            // investigate: maybe has something to do with ProviderStore not
+            // properly closing dlls?
+            Task.Delay(10_000).ContinueWith(_ => Process.GetCurrentProcess().Kill());
+        }
 
         private async void providerComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
