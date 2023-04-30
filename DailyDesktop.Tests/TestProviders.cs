@@ -10,7 +10,6 @@ using DailyDesktop.Providers.CalvinAndHobbes;
 using DailyDesktop.Providers.FalseKnees;
 using DailyDesktop.Providers.MTG;
 using DailyDesktop.Providers.Pixiv;
-using DailyDesktop.Providers.Pokemon;
 using DailyDesktop.Providers.RedditEarthPorn;
 using DailyDesktop.Providers.Unsplash;
 using DailyDesktop.Providers.WikimediaCommons;
@@ -128,23 +127,6 @@ namespace DailyDesktop.Tests
 
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Author), "Null/whitespace author.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.AuthorUri), "Null/whitespace author URI.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Description), "Null/whitespace description.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI!");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Title), "Null/whitespace title.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.TitleUri), "Null/whitespace title URI.");
-        }
-
-        [TestMethod]
-        public async Task TestPokemon()
-        {
-            var wallpaperConfig = new WallpaperConfiguration();
-            await new PokemonProvider().ConfigureWallpaperAsync(wallpaperConfig, AsyncUtils.LongCancel());
-
-            TestContext.WriteLine("Description: " + wallpaperConfig.Description);
-            TestContext.WriteLine("Image URI: " + wallpaperConfig.ImageUri);
-            TestContext.WriteLine("Title: " + wallpaperConfig.Title);
-            TestContext.WriteLine("Title URI: " + wallpaperConfig.TitleUri);
-
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Description), "Null/whitespace description.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI!");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Title), "Null/whitespace title.");
