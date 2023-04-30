@@ -25,7 +25,7 @@ Wallpapers are actually downloaded/applied by DailyDesktop.Task. To debug a prov
 * Calvin and Hobbes @ [/DailyDesktop.Providers.CalvinAndHobbes/](/DailyDesktop.Providers.CalvinAndHobbes/)
 * DeviantArt @ [/DailyDesktop.Providers.DeviantArt/](/DailyDesktop.Providers.DeviantArt/)
 * False Knees @ [/DailyDesktop.Providers.FalseKnees/](/DailyDesktop.Providers.FalseKnees/)
-* Magic: The Gathering (Deprecated) @ [/DailyDesktop.Providers.MTG/](/DailyDesktop.Providers.MTG/)
+* Magic: The Gathering @ [/DailyDesktop.Providers.MTG/](/DailyDesktop.Providers.MTG/)
 * Pixiv @ [/DailyDesktop.Providers.Pixiv/](/DailyDesktop.Providers.Pixiv/)
 * ~~Pokémon TCG~~ (Deprecated) @ [/archived/DailyDesktop.Providers.Pokemon/](/archived/DailyDesktop.Providers.Pokemon/)
 * r/EarthPorn (SFW) @ [/DailyDesktop.Providers.RedditEarthPorn/](/DailyDesktop.Providers.RedditEarthPorn/)
