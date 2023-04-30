@@ -2,7 +2,6 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
