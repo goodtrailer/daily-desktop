@@ -77,18 +77,18 @@ namespace DailyDesktop.Core
         /// <param name="taskName">The name of the task registered in the Windows Task Scheduler.</param>
         /// <param name="isAutoCreatingTask">Whether or not to automatically create the task when settings are changed or loaded.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-        public static async Task<DailyDesktopCore> CreateCore(PathConfiguration pathConfig, string taskName, bool isAutoCreatingTask, CancellationToken cancellationToken)
+        public static async Task<DailyDesktopCore> CreateCoreAsync(PathConfiguration pathConfig, string taskName, bool isAutoCreatingTask, CancellationToken cancellationToken)
         {
             var core = new DailyDesktopCore(pathConfig, taskName);
 
             core.IsAutoCreatingTask = isAutoCreatingTask;
 
-            core.taskConfig.OnUpdateAsync += core.onTaskConfigUpdate;
+            core.taskConfig.OnUpdateAsync += core.onTaskConfigUpdateAsync;
 
             if (!await core.taskConfig.TryDeserializeAsync(cancellationToken))
                 await core.taskConfig.UpdateAsync(cancellationToken);
 
-            var providers = await core.GetProviders(cancellationToken);
+            var providers = await core.GetProvidersAsync(cancellationToken);
             if (providers.ContainsKey(core.taskConfig.Dll))
                 core.currentProvider = IProvider.Instantiate(providers[core.taskConfig.Dll]);
 
@@ -103,9 +103,9 @@ namespace DailyDesktop.Core
         /// </summary>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
         /// <returns>The dictionary of DLL path <see cref="string"/>s to <see cref="IProvider"/> <see cref="Type"/>s.</returns>
-        public async Task<IReadOnlyDictionary<string, Type>> GetProviders(CancellationToken cancellationToken)
+        public async Task<IReadOnlyDictionary<string, Type>> GetProvidersAsync(CancellationToken cancellationToken)
         {
-            await store.Scan(pathConfig.ProvidersDir, cancellationToken);
+            await store.ScanAsync(pathConfig.ProvidersDir, cancellationToken);
             return store.Providers;
         }
 
@@ -188,9 +188,9 @@ namespace DailyDesktop.Core
             };
         }
 
-        private async Task onTaskConfigUpdate(object? sender, EventArgs? args, CancellationToken cancellationToken)
+        private async Task onTaskConfigUpdateAsync(object? sender, EventArgs? args, CancellationToken cancellationToken)
         {
-            var providers = await GetProviders(cancellationToken);
+            var providers = await GetProvidersAsync(cancellationToken);
             currentProvider = providers.ContainsKey(taskConfig.Dll) ? IProvider.Instantiate(providers[taskConfig.Dll]) : null;
 
             if (IsAutoCreatingTask)
@@ -202,7 +202,7 @@ namespace DailyDesktop.Core
         /// </summary>
         public void Dispose()
         {
-            taskConfig.OnUpdateAsync -= onTaskConfigUpdate;
+            taskConfig.OnUpdateAsync -= onTaskConfigUpdateAsync;
         }
     }
 }

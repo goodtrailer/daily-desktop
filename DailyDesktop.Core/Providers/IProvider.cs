@@ -58,15 +58,7 @@ namespace DailyDesktop.Core.Providers
         /// <param name="type">The type of the <see cref="IProvider"/> to instantiate.</param>
         /// <returns>The instance of the <see cref="IProvider"/>.</returns>
         /// <exception cref="ProviderException" />
-        static IProvider Instantiate(Type type)
-        {
-            IProvider? provider = Activator.CreateInstance(type) as IProvider;
-
-            if (provider == null)
-                throw new ProviderException("Failed to instantiate an IProvider from the assembly.");
-
-            return provider;
-        }
+        static IProvider Instantiate(Type type) => Activator.CreateInstance(type) as IProvider ?? throw new ProviderException("Failed to instantiate an IProvider from the assembly.");
     }
 
     /// <summary>

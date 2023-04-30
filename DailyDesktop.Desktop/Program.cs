@@ -18,7 +18,7 @@ namespace DailyDesktop.Desktop
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(await MainForm.CreateForm());
+            Application.Run(await MainForm.CreateFormAsync());
         }
     }
 }
