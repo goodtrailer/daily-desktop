@@ -89,7 +89,7 @@ namespace DailyDesktop.Core.Providers
         public void Scan(string directory)
         {
             if (!Directory.Exists(directory))
-                return;
+                throw new DirectoryNotFoundException($"{directory} does not exist");
 
             foreach (var path in Directory.GetFiles(directory, PROVIDERS_SEARCH_PATTERN, SearchOption.AllDirectories))
             {
@@ -113,10 +113,13 @@ namespace DailyDesktop.Core.Providers
         public async Task ScanAsync(string directory, CancellationToken cancellationToken)
         {
             if (!Directory.Exists(directory))
-                return;
+                throw new DirectoryNotFoundException($"{directory} does not exist");
 
             foreach (var path in Directory.GetFiles(directory, PROVIDERS_SEARCH_PATTERN, SearchOption.AllDirectories))
             {
+                if (cancellationToken.IsCancellationRequested)
+                    throw new OperationCanceledException();
+
                 try
                 {
                     await AddAsync(path, cancellationToken);

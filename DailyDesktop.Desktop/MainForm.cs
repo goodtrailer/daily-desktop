@@ -36,6 +36,8 @@ namespace DailyDesktop.Desktop
         private const string null_text = "null";
         private const string fetched_text = "fetched on";
 
+        private const string failed_scan_text = "Could not load all providers. (took too long?)";
+
         private readonly DailyDesktopCore core;
         private readonly WallpaperConfiguration wallpaperConfig;
 
@@ -64,7 +66,7 @@ namespace DailyDesktop.Desktop
                 AssemblyDir = assemblyDir,
                 ProvidersDir = providersDir,
                 SerializationDir = serializationDir,
-            }, taskName, true, AsyncUtils.TimedCancel(2500)));
+            }, taskName, true, AsyncUtils.TimedCancel()));
         }
 
         private MainForm(DailyDesktopCore core)
@@ -129,40 +131,56 @@ namespace DailyDesktop.Desktop
 
         private async void providerComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (providerComboBox.SelectedItem is ProviderWrapper provider)
-                await taskConfig.SetDllAsync(provider.Dll, AsyncUtils.TimedCancel());
+            if (providerComboBox.SelectedItem is not ProviderWrapper p)
+                return;
 
-            providerDescriptionLabel.Text = core.CurrentProvider?.Description ?? null_description;
-            providerSourceLinkLabel.Text = core.CurrentProvider?.SourceUri ?? null_text;
-            providerSourceLinkLabel.Links[0].Enabled = Uri.TryCreate(providerSourceLinkLabel.Text, UriKind.Absolute, out _);
-            providerSourceLinkLabel.TabStop = wallpaperAuthorLinkLabel.Links[0].Enabled;
+            await taskConfig.SetDllAsync(p.Dll, AsyncUtils.TimedCancel());
+
+            Invoke(() =>
+            {            
+                var provider = core.CurrentProvider;
+                providerDescriptionLabel.Text = provider?.Description ?? null_description;
+                providerSourceLinkLabel.Text = provider?.SourceUri ?? null_text;
+                providerSourceLinkLabel.Links[0].Enabled = Uri.TryCreate(providerSourceLinkLabel.Text, UriKind.Absolute, out _);
+                providerSourceLinkLabel.TabStop = wallpaperAuthorLinkLabel.Links[0].Enabled;
+            });
         }
 
         private async Task repopulateProviderComboBox()
         {
-            var providers = await core.GetProvidersAsync(AsyncUtils.TimedCancel());
+            bool isFullyLoaded = true;
 
-            providerComboBox.Items.Clear();
-            providerComboBox.Items.Add(ProviderWrapper.Null);
-
-            foreach (var keyVal in providers)
+            try
             {
-                try
-                {
-                    var provider = IProvider.Instantiate(keyVal.Value);
-                    var item = new ProviderWrapper(keyVal.Key, provider);
-                    providerComboBox.Items.Add(item);
-                }
-                catch (ProviderException pe)
-                {
-                    Console.WriteLine(pe.StackTrace);
-                }
+                await core.ScanProvidersAsync(AsyncUtils.TimedCancel(3000));
+            }
+            catch (OperationCanceledException)
+            {
+                isFullyLoaded = false;
             }
 
-            int index = providerComboBox.FindString(core.CurrentProvider?.DisplayName ?? "");
+            Invoke(() =>
+            {
+                providerComboBox.Items.Clear();
+                providerComboBox.Items.Add(isFullyLoaded ? ProviderWrapper.Null : failed_scan_text);
 
-            if (index >= 0)
-                providerComboBox.SelectedIndex = index;
+                foreach (var keyVal in core.Providers)
+                {
+                    try
+                    {
+                        var provider = IProvider.Instantiate(keyVal.Value);
+                        var item = new ProviderWrapper(keyVal.Key, provider);
+                        providerComboBox.Items.Add(item);
+                    }
+                    catch (ProviderException pe)
+                    {
+                        Console.WriteLine(pe.StackTrace);
+                    }
+                }
+
+                if (core.CurrentProvider != null)
+                    providerComboBox.SelectedIndex = providerComboBox.FindString(core.CurrentProvider.DisplayName);
+            });
         }
 
         private async void providerComboBox_DropDown(object? sender, EventArgs e) => await repopulateProviderComboBox();

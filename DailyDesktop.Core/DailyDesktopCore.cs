@@ -19,12 +19,12 @@ namespace DailyDesktop.Core
     /// module scanning, though <see cref="ProviderStore"/> is fully functional as
     /// a standalone class.
     /// </summary>
-    public class DailyDesktopCore : IDisposable
+    public sealed class DailyDesktopCore : IDisposable
     {
         private Microsoft.Win32.TaskScheduler.Task? task;
         private string taskName;
 
-        private readonly ProviderStore store = new ProviderStore();
+        private readonly ProviderStore store = new();
 
         /// <summary>
         /// Read-only interface to the path configuration.
@@ -62,8 +62,12 @@ namespace DailyDesktop.Core
         /// <summary>
         /// The currently selected provider corresponding to <see cref="TaskConfiguration.Dll"/>.
         /// </summary>
-        public IProvider? CurrentProvider => currentProvider;
-        private IProvider? currentProvider;
+        public IProvider? CurrentProvider => Providers.ContainsKey(taskConfig.Dll) ? IProvider.Instantiate(Providers[taskConfig.Dll]) : null;
+
+        /// <summary>
+        /// The collection of currently loaded <see cref="IProvider"/>s.
+        /// </summary>
+        public IReadOnlyDictionary<string, Type> Providers => store.Providers;
 
         /// <summary>
         /// The state of the desktop wallpaper update task.
@@ -79,35 +83,24 @@ namespace DailyDesktop.Core
         /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
         public static async Task<DailyDesktopCore> CreateCoreAsync(PathConfiguration pathConfig, string taskName, bool isAutoCreatingTask, CancellationToken cancellationToken)
         {
-            var core = new DailyDesktopCore(pathConfig, taskName);
-
-            core.IsAutoCreatingTask = isAutoCreatingTask;
+            var core = new DailyDesktopCore(pathConfig, taskName)
+            {
+                IsAutoCreatingTask = isAutoCreatingTask
+            };
 
             core.taskConfig.OnUpdateAsync += core.onTaskConfigUpdateAsync;
 
             if (!await core.taskConfig.TryDeserializeAsync(cancellationToken))
                 await core.taskConfig.UpdateAsync(cancellationToken);
 
-            var providers = await core.GetProvidersAsync(cancellationToken);
-            if (providers.ContainsKey(core.taskConfig.Dll))
-                core.currentProvider = IProvider.Instantiate(providers[core.taskConfig.Dll]);
-
-            if (core.IsAutoCreatingTask)
-                core.CreateTask();
-
             return core;
         }
 
         /// <summary>
-        /// Get an asynchronously scanned dictionary of <see cref="IProvider"/> <see cref="Type"/> values and DLL module path keys.
+        /// Scans for <see cref="IProvider"/>s and populates <see cref="Providers"/>.
         /// </summary>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-        /// <returns>The dictionary of DLL path <see cref="string"/>s to <see cref="IProvider"/> <see cref="Type"/>s.</returns>
-        public async Task<IReadOnlyDictionary<string, Type>> GetProvidersAsync(CancellationToken cancellationToken)
-        {
-            await store.ScanAsync(pathConfig.ProvidersDir, cancellationToken);
-            return store.Providers;
-        }
+        public async Task ScanProvidersAsync(CancellationToken cancellationToken) => await store.ScanAsync(pathConfig.ProvidersDir, cancellationToken);
 
         /// <summary>
         /// Creates a <see cref="Microsoft.Win32.TaskScheduler.Task"/> under the name <see cref="TaskName"/>. If
@@ -190,11 +183,8 @@ namespace DailyDesktop.Core
 
         private async Task onTaskConfigUpdateAsync(object? sender, EventArgs? args, CancellationToken cancellationToken)
         {
-            var providers = await GetProvidersAsync(cancellationToken);
-            currentProvider = providers.ContainsKey(taskConfig.Dll) ? IProvider.Instantiate(providers[taskConfig.Dll]) : null;
-
             if (IsAutoCreatingTask)
-                CreateTask();
+                await Task.Run(CreateTask, cancellationToken);
         }
 
         /// <summary>
