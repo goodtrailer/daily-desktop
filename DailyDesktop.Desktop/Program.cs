@@ -4,6 +4,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DailyDesktop.Core.Util;
 
 namespace DailyDesktop.Desktop
 {
@@ -18,7 +19,7 @@ namespace DailyDesktop.Desktop
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(await MainForm.CreateFormAsync());
+            Application.Run(await MainForm.CreateFormAsync(AsyncUtils.TimedCancel(3_500)));
         }
     }
 }

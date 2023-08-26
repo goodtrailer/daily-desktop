@@ -33,22 +33,6 @@ namespace DailyDesktop.Core.Providers
         public void Clear() => providers.Clear();
 
         /// <summary>
-        /// Adds one DLL module to <see cref="Providers"/>. Will not
-        /// do anything if the DLL module has already been added
-        /// before.
-        /// </summary>
-        /// <param name="dllPath">The path of the <see cref="IProvider"/> DLL module to add</param>
-        /// <returns>The <see cref="IProvider"/> implementation <see cref="Type"/>.</returns>
-        public Type Add(string dllPath)
-        {
-            if (Providers.ContainsKey(dllPath))
-                return Providers[dllPath];
-
-            var assembly = Assembly.Load(File.ReadAllBytes(dllPath));
-            return addImpl(dllPath, assembly);
-        }
-
-        /// <summary>
         /// Asynchronously adds one DLL module to <see cref="Providers"/>. Will not
         /// do anything if the DLL module has already been added
         /// before.
@@ -62,11 +46,7 @@ namespace DailyDesktop.Core.Providers
                 return Providers[dllPath];
 
             var assembly = Assembly.Load(await File.ReadAllBytesAsync(dllPath, cancellationToken));
-            return addImpl(dllPath, assembly);
-        }
-
-        private Type addImpl(string dllPath, Assembly assembly)
-        {
+            
             foreach (var type in assembly.GetTypes())
             {
                 bool isPublic = type.IsPublic;
@@ -79,29 +59,6 @@ namespace DailyDesktop.Core.Providers
             }
 
             throw new TypeLoadException($"No {nameof(IProvider)} implementation found in \"{dllPath}\".");
-        }
-
-        /// <summary>
-        /// Scans a directory for any <see cref="IProvider"/> DLL
-        /// modules and adds their paths to <see cref="Providers"/>.
-        /// </summary>
-        /// <param name="directory">The directory to scan</param>
-        public void Scan(string directory)
-        {
-            if (!Directory.Exists(directory))
-                throw new DirectoryNotFoundException($"{directory} does not exist");
-
-            foreach (var path in Directory.GetFiles(directory, PROVIDERS_SEARCH_PATTERN, SearchOption.AllDirectories))
-            {
-                try
-                {
-                    Add(path);
-                }
-                catch (SystemException se)
-                {
-                    Console.WriteLine(se.StackTrace);
-                }
-            }
         }
 
         /// <summary>

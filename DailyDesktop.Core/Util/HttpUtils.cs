@@ -15,7 +15,9 @@ namespace DailyDesktop.Core.Util
         /// <summary>
         /// An <see cref="HttpClient"/> singleton for use everywhere.
         /// </summary>
-        public static readonly HttpClient Client = new HttpClient();
+        public static HttpClient Client => client ??= new HttpClient();
+
+        private static HttpClient? client;
 
         /// <summary>
         /// Resets <see cref="Client"/>'s request headers, which includes adding

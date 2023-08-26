@@ -6,7 +6,6 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using DailyDesktop.Core.Util;
 
 namespace DailyDesktop.Core.Configuration
 {
@@ -22,61 +21,25 @@ namespace DailyDesktop.Core.Configuration
         }
 
         /// <inheritdoc/>
-        public string AssemblyDir
-        {
-            get => assemblyDir;
-            set
-            {
-                if (assemblyDir == value)
-                    return;
-
-                Directory.CreateDirectory(value);
-                assemblyDir = value;
-                UpdateAsync(default).Wait(AsyncUtils.TimedCancel());
-            }
-        }
+        public string AssemblyDir { get => assemblyDir; init => assemblyDir = value; }
 
         /// <inheritdoc/>
-        public string ProvidersDir
-        {
-            get => providersDir;
-            set
-            {
-                if (providersDir == value)
-                    return;
-
-                Directory.CreateDirectory(value);
-                providersDir = value;
-                UpdateAsync(default).Wait(AsyncUtils.TimedCancel());
-            }
-        }
+        public string ProvidersDir { get => providersDir; init => providersDir = value; }
 
         /// <inheritdoc/>
-        public string SerializationDir
-        {
-            get => serializationDir;
-            set
-            {
-                if (serializationDir == value)
-                    return;
-
-                Directory.CreateDirectory(value);
-                serializationDir = value;
-                UpdateAsync(default).Wait(AsyncUtils.TimedCancel());
-            }
-        }
+        public string SerializationDir { get => serializationDir; init => serializationDir = value; }
 
         /// <inheritdoc/>
         [JsonIgnore]
-        public string TaskExecutable => HttpUtility.UrlDecode(Path.Combine(assemblyDir, "DailyDesktop.Task.exe"));
+        public string TaskExecutable => HttpUtility.UrlDecode(Path.Combine(AssemblyDir, "DailyDesktop.Task.exe"));
 
         /// <inheritdoc/>
         [JsonIgnore]
-        public string TaskConfigJson => HttpUtility.UrlDecode(Path.Combine(serializationDir, "settings.json"));
+        public string TaskConfigJson => HttpUtility.UrlDecode(Path.Combine(SerializationDir, "settings.json"));
 
         /// <inheritdoc/>
         [JsonIgnore]
-        public string WallpaperJson => HttpUtility.UrlDecode(Path.Combine(serializationDir, "wallpaper.json"));
+        public string WallpaperJson => HttpUtility.UrlDecode(Path.Combine(SerializationDir, "wallpaper.json"));
 
         /// <inheritdoc/>
         public async Task SetAssemblyDirAsync(string assemblyDir, CancellationToken cancellationToken)

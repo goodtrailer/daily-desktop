@@ -12,36 +12,6 @@ namespace DailyDesktop.Core.Configuration
     public interface IPublicWallpaperConfiguration : IReadOnlyWallpaperConfiguration, IPublicNullableConfiguration
     {
         /// <summary>
-        /// The URI of the image file. Cannot be null because there must be an image is necessary.
-        /// </summary>
-        new string ImageUri { get; set; }
-
-        /// <summary>
-        /// The author of the work (i.e. the illustrator, photographer, painter, etc.)
-        /// </summary>
-        new string? Author { get; set; }
-
-        /// <summary>
-        /// A URI to the <see cref="Author"/>. Usually a URL to the author's website or profile page.
-        /// </summary>
-        new string? AuthorUri { get; set; }
-
-        /// <summary>
-        /// The title of the work.
-        /// </summary>
-        new string? Title { get; set; }
-
-        /// <summary>
-        /// A URI to the work. Usually a URL to the image's page on the source website where it was downloaded from.
-        /// </summary>
-        new string? TitleUri { get; set; }
-
-        /// <summary>
-        /// A description for the work.
-        /// </summary>
-        new string? Description { get; set; }
-
-        /// <summary>
         /// Asynchronously sets the URI of the image file. Cannot be null because there must be an image is necessary.
         /// </summary>
         /// <param name="imageUri">The value to set as.</param>
@@ -56,7 +26,7 @@ namespace DailyDesktop.Core.Configuration
         Task SetAuthorAsync(string? author, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Asynchronously sets the URI to the <see cref="Author"/>. Usually a URL to the author's website or profile page.
+        /// Asynchronously sets the URI to the <see cref="IReadOnlyWallpaperConfiguration.Author"/>. Usually a URL to the author's website or profile page.
         /// </summary>
         /// <param name="authorUri">The value to set as.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>

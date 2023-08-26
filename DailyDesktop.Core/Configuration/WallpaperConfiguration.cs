@@ -19,142 +19,25 @@ namespace DailyDesktop.Core.Configuration
         }
 
         /// <inheritdoc/>
-        public string ImageUri
-        {
-            get => imageUri;
-            set
-            {
-                if (imageUri == value)
-                    return;
-
-                imageUri = value;
-                Update();
-            }
-        }
+        public string ImageUri { get => imageUri; init => imageUri = value; }
 
         /// <inheritdoc/>
-        public string? Author
-        {
-            get => author;
-            set
-            {
-                if (author == value)
-                    return;
-
-                author = value;
-                Update();
-            }
-        }
+        public string? Author { get => author; init => author = value; }
 
         /// <inheritdoc/>
-        public string? AuthorUri
-        {
-            get => authorUri;
-            set
-            {
-                if (authorUri == value)
-                    return;
-
-                authorUri = value;
-                Update();
-            }
-        }
+        public string? AuthorUri { get => authorUri; init => authorUri = value; }
 
         /// <inheritdoc/>
-        public string? Title
-        {
-            get => title;
-            set
-            {
-                if (title == value)
-                    return;
-
-                title = value;
-                Update();
-            }
-        }
+        public string? Title { get => title; init => title = value; }
 
         /// <inheritdoc/>
-        public string? TitleUri
-        {
-            get => titleUri;
-            set
-            {
-                if (titleUri == value)
-                    return;
-
-                titleUri = value;
-                Update();
-            }
-        }
+        public string? TitleUri { get => titleUri; init => titleUri = value; }
 
         /// <inheritdoc/>
-        public string? Description
-        {
-            get => description;
-            set
-            {
-                if (description == value)
-                    return;
-
-                description = value;
-                Update();
-            }
-        }
+        public string? Description { get => description; init => description = value; }
 
         /// <inheritdoc/>
-        public DateTime Date
-        {
-            get => date;
-            set
-            {
-                if (date == value)
-                    return;
-
-                date = value;
-                Update();
-            }
-        }
-
-        /// <inheritdoc/>
-        public int NullifyWhitespace()
-        {
-            int count = 0;
-
-            if (string.IsNullOrWhiteSpace(author))
-            {
-                author = null;
-                count++;
-            }
-
-            if (string.IsNullOrWhiteSpace(authorUri))
-            {
-                authorUri = null;
-                count++;
-            }
-
-            if (string.IsNullOrWhiteSpace(title))
-            {
-                title = null;
-                count++;
-            }
-
-            if (string.IsNullOrWhiteSpace(titleUri))
-            {
-                titleUri = null;
-                count++;
-            }
-
-            if (string.IsNullOrWhiteSpace(description))
-            {
-                description = null;
-                count++;
-            }
-
-            Update();
-
-            return count;
-        }
+        public DateTime Date { get => date; init => date = value; }
 
         /// <inheritdoc/>
         public async Task SetImageUriAsync(string imageUri, CancellationToken cancellationToken)
@@ -259,13 +142,13 @@ namespace DailyDesktop.Core.Configuration
         /// <inheritdoc/>
         protected override void LoadImpl(WallpaperConfiguration other)
         {
-            imageUri = other.imageUri;
-            author = other.author;
-            authorUri = other.authorUri;
-            title = other.title;
-            titleUri = other.titleUri;
-            description = other.description;
-            date = other.date;
+            imageUri = other.ImageUri;
+            author = other.Author;
+            authorUri = other.AuthorUri;
+            title = other.Title;
+            titleUri = other.TitleUri;
+            description = other.Description;
+            date = other.Date;
         }
 
         private string imageUri = "";

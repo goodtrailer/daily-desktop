@@ -37,39 +37,10 @@ namespace DailyDesktop.Core.Configuration
         public virtual bool IsAutoSerializing { get; set; }
 
         /// <inheritdoc/>
-        public event EventHandler? OnUpdate;
-
-        /// <inheritdoc/>
-        public event EventHandler? OnSerialize;
-
-        /// <inheritdoc/>
         public event AsyncEventHandler? OnUpdateAsync;
 
         /// <inheritdoc/>
         public event AsyncEventHandler? OnSerializeAsync;
-
-        /// <summary>
-        /// Deserialize a JSON file (located at <see cref="JsonPath"/>) to a configuration.
-        /// </summary>
-        public void Deserialize()
-        {
-            if (string.IsNullOrWhiteSpace(JsonPath))
-                throw new InvalidOperationException($"{JsonPath} is null or whitespace.");
-
-            var options = new JsonSerializerOptions();
-            ConfigureDeserializer(options);
-
-            T newConfig;
-            using (var jsonStream = File.OpenRead(JsonPath))
-                newConfig = JsonSerializer.Deserialize<T>(jsonStream, options) ?? throw new NullReferenceException("Deserialized config was null.");
-
-            bool temp = IsAutoSerializing;
-            IsAutoSerializing = false;
-
-            Load(newConfig);
-
-            IsAutoSerializing = temp;
-        }
 
         /// <summary>
         /// Asynchronously deserialize a JSON file (located at <see cref="JsonPath"/>) to a configuration.
@@ -92,29 +63,6 @@ namespace DailyDesktop.Core.Configuration
             await LoadAsync(newConfig, cancellationToken);
 
             IsAutoSerializing = temp;
-        }
-
-        /// <summary>
-        /// Try to deserialize a JSON file (located at <see cref="JsonPath"/>) to a configuration.
-        /// </summary>
-        /// <returns>
-        /// Whether or not the deserialiazation was successful.
-        /// </returns>
-        public bool TryDeserialize()
-        {
-            try
-            {
-                Deserialize();
-                return true;
-            }
-            catch (Exception ex) when (ex is JsonException
-                || ex is IOException
-                || ex is SystemException
-                || ex is InvalidOperationException
-                || ex is NullReferenceException)
-            {
-                return false;
-            }
         }
 
         /// <summary>
@@ -141,39 +89,12 @@ namespace DailyDesktop.Core.Configuration
         }
 
         /// <inheritdoc/>
-        public void Update()
-        {
-            OnUpdate?.Invoke(this, EventArgs.Empty);
-
-            if (IsAutoSerializing)
-                Serialize();
-        }
-
-        /// <inheritdoc/>
         public async Task UpdateAsync(CancellationToken cancellationToken)
         {
             await OnUpdateAsync.InvokeAsync(this, EventArgs.Empty, cancellationToken);
 
             if (IsAutoSerializing)
                 await SerializeAsync(cancellationToken);
-        }
-
-        /// <inheritdoc/>
-        public void Serialize()
-        {
-            if (!(this is T @this))
-                throw new InvalidCastException($"this is not of type {nameof(T)}: {typeof(T).FullName}.");
-
-            if (string.IsNullOrWhiteSpace(JsonPath))
-                throw new InvalidOperationException($"{JsonPath} is null or whitespace.");
-
-            var options = new JsonSerializerOptions();
-            ConfigureSerializer(options);
-
-            using (var jsonStream = File.Create(JsonPath))
-                JsonSerializer.Serialize(jsonStream, @this, options);
-
-            OnSerialize?.Invoke(this, EventArgs.Empty);
         }
 
         /// <inheritdoc/>
@@ -195,23 +116,6 @@ namespace DailyDesktop.Core.Configuration
         }
 
         /// <inheritdoc/>
-        public bool TrySerialize()
-        {
-            try
-            {
-                Serialize();
-                return true;
-            }
-            catch (Exception ex) when (ex is JsonException
-                || ex is IOException
-                || ex is SystemException
-                || ex is InvalidOperationException)
-            {
-                return false;
-            }
-        }
-
-        /// <inheritdoc/>
         public async Task<bool> TrySerializeAsync(CancellationToken cancellationToken)
         {
             try
@@ -229,17 +133,6 @@ namespace DailyDesktop.Core.Configuration
         }
 
         /// <summary>
-        /// Loads options from another configuration instance. Basically like
-        /// a copy constructor/method.
-        /// </summary>
-        /// <param name="other">The other configuration instance to copy options from.</param>
-        public void Load(T other)
-        {
-            LoadImpl(other);
-            Update();
-        }
-
-        /// <summary>
         /// Asynchronously loads options from another configuration instance. Basically like
         /// a copy constructor/method.
         /// </summary>
@@ -252,8 +145,8 @@ namespace DailyDesktop.Core.Configuration
         }
 
         /// <summary>
-        /// Implementation of <see cref="Load(T)"/>/<see cref="LoadAsync(T, CancellationToken)"/>.
-        /// Should do the actual value copying.
+        /// Implementation of <see cref="LoadAsync(T, CancellationToken)"/>. Should do
+        /// the actual value copying.
         /// </summary>
         /// <param name="other">The other configuration instance to copy options from.</param>
         protected abstract void LoadImpl(T other);

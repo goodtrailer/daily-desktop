@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
 // See the LICENSE file in the repository root for full licence text.
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using DailyDesktop.Core.Util;
@@ -24,30 +23,14 @@ namespace DailyDesktop.Core.Configuration
         bool IsAutoSerializing { get; }
 
         /// <summary>
-        /// Event published on calls to <see cref="Update"/>.
-        /// </summary>
-        event EventHandler OnUpdate;
-
-        /// <summary>
         /// Asynchronous event published on calls to <see cref="UpdateAsync"/>.
         /// </summary>
         event AsyncEventHandler OnUpdateAsync;
 
         /// <summary>
-        /// Event published on successful calls to <see cref="Serialize"/>.
-        /// </summary>
-        event EventHandler OnSerialize;
-
-        /// <summary>
         /// Asynchronous event published on successful calls to <see cref="SerializeAsync"/>.
         /// </summary>
         event AsyncEventHandler OnSerializeAsync;
-
-        /// <summary>
-        /// Automatically called upon setting properties. Can be called manually to
-        /// publish to <see cref="OnUpdateAsync"/> and serialize (in case <see cref="IsAutoSerializing"/> is true).
-        /// </summary>
-        void Update();
 
         /// <summary>
         /// Automatically called upon setting properties. Can be called manually to asynchronously
@@ -56,22 +39,9 @@ namespace DailyDesktop.Core.Configuration
         Task UpdateAsync(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Serialize configuration to a JSON file (located at <see cref="JsonPath"/>).
-        /// </summary>
-        void Serialize();
-
-        /// <summary>
         /// Asynchronously serialize configuration to a JSON file (located at <see cref="JsonPath"/>).
         /// </summary>
         Task SerializeAsync(CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Try to serialize configuration to a JSON file (located at <see cref="JsonPath"/>).
-        /// </summary>
-        /// <returns>
-        /// Whether or not the serialiazation was successful.
-        /// </returns>
-        bool TrySerialize();
 
         /// <summary>
         /// Try to asynchronously serialize configuration to a JSON file (located at <see cref="JsonPath"/>).
