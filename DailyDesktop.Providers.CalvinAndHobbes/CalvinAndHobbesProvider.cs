@@ -23,9 +23,6 @@ namespace DailyDesktop.Providers.CalvinAndHobbes
 
         public async Task ConfigureWallpaperAsync(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig, CancellationToken cancellationToken)
         {
-            wallpaperConfig.Author = AUTHOR;
-            wallpaperConfig.Title = TITLE;
-
             string pageHtml = await client.GetStringAsync(SourceUri, cancellationToken);
 
             string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;

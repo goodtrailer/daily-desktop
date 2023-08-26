@@ -46,7 +46,7 @@ namespace DailyDesktop.Desktop
 
         private TaskState previousState;
 
-        public static async Task<MainForm> CreateFormAsync()
+        public static async Task<MainForm> CreateFormAsync(CancellationToken cancellationToken)
         {
             string userId = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             string userName = userId.Split('\\').Last();
@@ -66,7 +66,7 @@ namespace DailyDesktop.Desktop
                 AssemblyDir = assemblyDir,
                 ProvidersDir = providersDir,
                 SerializationDir = serializationDir,
-            }, taskName, true, AsyncUtils.TimedCancel()));
+            }, taskName, true, cancellationToken));
         }
 
         private MainForm(DailyDesktopCore core)

@@ -79,7 +79,7 @@ namespace DailyDesktop.Core.Providers
             provider.ConfigureHttpRequestHeaders(HttpUtils.Client.DefaultRequestHeaders);
             await provider.ConfigureWallpaperAsync(HttpUtils.Client, wallpaperConfig, cancellationToken);
 
-            wallpaperConfig.NullifyWhitespace();
+            await wallpaperConfig.NullifyWhitespaceAsync(cancellationToken);
         }
     }
 }

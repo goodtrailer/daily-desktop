@@ -19,88 +19,22 @@ namespace DailyDesktop.Core.Configuration
         }
 
         /// <inheritdoc/>
-        public string Dll
-        {
-            get => dll;
-            set
-            {
-                if (dll == value)
-                    return;
-
-                dll = value;
-                Update();
-            }
-        }
+        public string Dll { get => dll; init => dll = value; }
 
         /// <inheritdoc/>
-        public bool IsEnabled
-        {
-            get => isEnabled;
-            set
-            {
-                if (isEnabled == value)
-                    return;
-
-                isEnabled = value;
-                Update();
-            }
-        }
+        public bool IsEnabled { get => isEnabled; init => isEnabled = value; }
 
         /// <inheritdoc/>
-        public DateTime UpdateTime
-        {
-            get => updateTime;
-            set
-            {
-                if (updateTime == value)
-                    return;
-
-                updateTime = value;
-                Update();
-            }
-        }
+        public DateTime UpdateTime { get => updateTime; init => updateTime = value; }
 
         /// <inheritdoc/>
-        public bool DoResize
-        {
-            get => doResize;
-            set
-            {
-                if (doResize == value)
-                    return;
-
-                doResize = value;
-                Update();
-            }
-        }
+        public bool DoResize { get => doResize; init => doResize = value; }
 
         /// <inheritdoc/>
-        public bool DoBlurredFit
-        {
-            get => doBlurredFit;
-            set
-            {
-                if (doBlurredFit == value)
-                    return;
-
-                doBlurredFit = value;
-                Update();
-            }
-        }
+        public bool DoBlurredFit { get => doBlurredFit; init => doBlurredFit = value; }
 
         /// <inheritdoc/>
-        public int BlurStrength
-        {
-            get => blurStrength;
-            set
-            {
-                if (blurStrength == value)
-                    return;
-
-                blurStrength = value;
-                Update();
-            }
-        }
+        public int BlurStrength { get => blurStrength; init => blurStrength = value; }
 
         /// <inheritdoc/>
         public async Task SetDllAsync(string dll, CancellationToken cancellationToken)
@@ -155,7 +89,7 @@ namespace DailyDesktop.Core.Configuration
         /// <inheritdoc/>
         public async Task SetBlurStrengthAsync(int blurStrength, CancellationToken cancellationToken)
         {
-            if (this.blurStrength == blurStrength)
+            if (BlurStrength == blurStrength)
                 return;
 
             this.blurStrength = blurStrength;

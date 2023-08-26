@@ -13,13 +13,6 @@ namespace DailyDesktop.Core.Configuration
     public interface IPublicNullableConfiguration
     {
         /// <summary>
-        /// Nullifies all <see cref="string"/> properties that satisfy
-        /// <see cref="string.IsNullOrWhiteSpace(string?)"/>.
-        /// </summary>
-        /// <returns>The number of properties that were nullified.</returns>
-        int NullifyWhitespace();
-
-        /// <summary>
         /// Asynchronously nullifies all <see cref="string"/> properties that satisfy
         /// <see cref="string.IsNullOrWhiteSpace(string?)"/>.
         /// </summary>
