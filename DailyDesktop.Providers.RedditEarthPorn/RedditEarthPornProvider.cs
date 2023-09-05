@@ -13,10 +13,10 @@ namespace DailyDesktop.Providers.RedditEarthPorn
     public class RedditEarthPornProvider : IProvider
     {
         private const string IMAGE_URI_PATTERN = "(https://i\\.redd\\.it/)([^\\s/]*?)(\\.)([A-Za-z]*)";
-        private const string AUTHOR_PATTERN = "(?<=(\"author\":\"))(.*?)(?=\")";
+        private const string AUTHOR_PATTERN = "(?<=author=\")(.*?)(?=\")";
         private const string TITLE = "Photograph";
-        private const string TITLE_URI_PATTERN = "(?<=(Posted by(.*?)href=\"))(.*?)(?=\")";
-        private const string DESCRIPTION_PATTERN = "(?<=(<h3 class=.*?>))(.*?)(?=</h3>)";
+        private const string TITLE_URI_PATTERN = "/r/EarthPorn/comments/(.*?)/";
+        private const string DESCRIPTION_PATTERN = "(?<=post-title=\")(.*?)(?=\")";
 
         public string DisplayName => "r/EarthPorn";
         public string Description => "Looks at the top post in the last 24 hours in the well-known r/EarthPorn, reddit's premiere landscape photography subreddit.";
