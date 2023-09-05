@@ -408,6 +408,8 @@ namespace DailyDesktop.Desktop
             this.optionsBlurStrengthTrackBar.TabIndex = 5;
             this.optionsBlurStrengthTrackBar.TickFrequency = 10;
             this.optionsBlurStrengthTrackBar.Scroll += new System.EventHandler(this.optionsBlurStrengthTrackBar_Scroll);
+            this.optionsBlurStrengthTrackBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.optionsBlurStrengthTrackBar_MouseUp);
+            this.optionsBlurStrengthTrackBar.KeyUp += new System.Windows.Forms.KeyEventHandler(this.optionsBlurStrengthTrackBar_KeyUp);
             // 
             // optionsBlurStrengthLabel
             // 

@@ -74,8 +74,7 @@ namespace DailyDesktop.Core.Providers
 
             foreach (var path in Directory.GetFiles(directory, PROVIDERS_SEARCH_PATTERN, SearchOption.AllDirectories))
             {
-                if (cancellationToken.IsCancellationRequested)
-                    throw new OperationCanceledException();
+                cancellationToken.ThrowIfCancellationRequested();
 
                 try
                 {

@@ -50,7 +50,10 @@ namespace DailyDesktop.Core.Util
                 return;
 
             foreach (var d in delegates)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
                 await d.Invoke(sender, args, cancellationToken);
+            }
         }
 
         /// <summary>
