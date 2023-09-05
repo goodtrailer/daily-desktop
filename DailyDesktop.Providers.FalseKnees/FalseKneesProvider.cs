@@ -14,7 +14,7 @@ namespace DailyDesktop.Providers.FalseKnees
     {
         private const string AUTHOR = "Joshua Barkman";
         private const string AUTHOR_URI = "https://falseknees.com/about.html";
-        private const string IMAGE_RELATIVE_URI_PATTERN = "imgs/[0-9]*?\\.png";
+        private const string IMAGE_RELATIVE_URI_PATTERN = "imgs/[0-9]*?\\.[a-zA-Z]+";
         private const string TITLE_RELATIVE_URI_PATTERN = "(?<=URL=)[0-9]+\\.[a-zA-Z]+";
         private const string DESCRIPTION_PATTERN = "(?<=<img.*title=\").*?(?=\")";
         private const string TITLE_PATTERN = "(?<=index\\.html.*- ).*?(?=<)";
