@@ -181,10 +181,23 @@ namespace DailyDesktop.Core
             };
         }
 
+        private CancellationTokenSource? previousTokenSource;
+
         private async Task onTaskConfigUpdateAsync(object? sender, EventArgs? args, CancellationToken cancellationToken)
         {
             if (IsAutoCreatingTask)
-                await Task.Run(CreateTask, cancellationToken);
+            {
+                try
+                {
+                    previousTokenSource?.Cancel();
+                    previousTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                    await Task.Run(CreateTask, previousTokenSource.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    Console.WriteLine("Win32 Task update operation cancelled.");
+                }
+            }
         }
 
         /// <summary>

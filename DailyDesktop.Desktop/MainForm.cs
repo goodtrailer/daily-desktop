@@ -45,6 +45,8 @@ namespace DailyDesktop.Desktop
         private IPublicTaskConfiguration taskConfig => core.TaskConfig;
 
         private TaskState previousState;
+        
+        private bool isMovingBlurStrengthTrackBar;
 
         public static async Task<MainForm> CreateFormAsync(CancellationToken cancellationToken)
         {
@@ -103,19 +105,22 @@ namespace DailyDesktop.Desktop
         {
             await repopulateProviderComboBox();
 
-            optionsEnabledCheckBox.Checked = taskConfig.IsEnabled;
+            Invoke(() =>
+            {
+                optionsEnabledCheckBox.Checked = taskConfig.IsEnabled;
 
-            optionsUpdateTimePicker.Value = taskConfig.UpdateTime;
-            optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked;
+                optionsUpdateTimePicker.Value = taskConfig.UpdateTime;
+                optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked;
 
-            optionsResizeCheckBox.Checked = taskConfig.DoResize;
+                optionsResizeCheckBox.Checked = taskConfig.DoResize;
 
-            optionsBlurredFitCheckBox.Checked = taskConfig.DoBlurredFit;
-            optionsBlurStrengthTrackBar.Value = taskConfig.BlurStrength;
-            optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked;
-            updateBlurStrengthToolTip();
+                optionsBlurredFitCheckBox.Checked = taskConfig.DoBlurredFit;
+                optionsBlurStrengthTrackBar.Value = taskConfig.BlurStrength;
+                optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked;
+                updateBlurStrengthToolTip();
 
-            stateBackgroundWorker.RunWorkerAsync();
+                stateBackgroundWorker.RunWorkerAsync();
+            });
         }
 
         private void MainForm_FormClosing(object? sender, EventArgs e)
@@ -192,18 +197,18 @@ namespace DailyDesktop.Desktop
         private async void optionsEnabledCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
             await taskConfig.SetIsEnabledAsync(optionsEnabledCheckBox.Checked, AsyncUtils.TimedCancel());
-            optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked;
+            Invoke(() => optionsUpdateTimePicker.Enabled = optionsEnabledCheckBox.Checked);
         }
 
         private void optionsUpdateWallpaperButton_Click(object? sender, EventArgs e) => core.UpdateWallpaper();
 
         private void optionsProvidersDirectoryButton_Click(object? sender, EventArgs e) => openUri(core.PathConfig.ProvidersDir);
 
-        private async void optionsBlurStrengthTrackBar_Scroll(object? sender, EventArgs e)
-        {
-            await taskConfig.SetBlurStrengthAsync(optionsBlurStrengthTrackBar.Value, AsyncUtils.TimedCancel());
-            updateBlurStrengthToolTip();
-        }
+        private void optionsBlurStrengthTrackBar_Scroll(object? sender, EventArgs e) => updateBlurStrengthToolTip();
+
+        private async void optionsBlurStrengthTrackBar_MouseUp(object? sender, MouseEventArgs e) => await taskConfig.SetBlurStrengthAsync(optionsBlurStrengthTrackBar.Value, AsyncUtils.TimedCancel());
+
+        private async void optionsBlurStrengthTrackBar_KeyUp(object? sender, KeyEventArgs e) => await taskConfig.SetBlurStrengthAsync(optionsBlurStrengthTrackBar.Value, AsyncUtils.TimedCancel());
 
         private void updateBlurStrengthToolTip()
         {
@@ -214,7 +219,7 @@ namespace DailyDesktop.Desktop
         private async void optionsBlurredFitCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
             await taskConfig.SetDoBlurredFitAsync(optionsBlurredFitCheckBox.Checked, AsyncUtils.TimedCancel());
-            optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked;
+            Invoke(() => optionsBlurStrengthTrackBar.Enabled = optionsBlurredFitCheckBox.Checked);
         }
 
         private async void optionsResizeCheckBox_CheckedChanged(object? sender, EventArgs e)
