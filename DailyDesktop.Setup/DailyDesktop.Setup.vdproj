@@ -27,6 +27,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_31C264D5C30640FC8D26DFCFE4263882"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_56DD66F50A404BF5A76C9AE2999AB67A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -45,6 +51,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6F1D1705264044A08DBE9D06B002C0DC"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8A66EA80453342C88A4F0788368A0058"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_90097757526F489DBBE28E625AF2468C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -52,12 +70,6 @@
         "Entry"
         {
         "MsmKey" = "8:_A2C655FD1155447D8EF4790F2A0A6302"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EB880236C2D14FF5A0CD854E77A90AA4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -178,6 +190,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_31C264D5C30640FC8D26DFCFE4263882"
+            {
+            "SourcePath" = "8:..\\thirdparty\\LICENSE-MagickdotNET"
+            "TargetName" = "8:LICENSE-MagickdotNET"
+            "Tag" = "8:"
+            "Folder" = "8:_4D60CD526BD34B269352718E9BD6973B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_56DD66F50A404BF5A76C9AE2999AB67A"
             {
             "SourcePath" = "8:..\\LICENSE"
@@ -218,6 +250,46 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6F1D1705264044A08DBE9D06B002C0DC"
+            {
+            "SourcePath" = "8:..\\thirdparty\\LICENSE-TaskScheduler"
+            "TargetName" = "8:LICENSE-TaskScheduler"
+            "Tag" = "8:"
+            "Folder" = "8:_4D60CD526BD34B269352718E9BD6973B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8A66EA80453342C88A4F0788368A0058"
+            {
+            "SourcePath" = "8:..\\thirdparty\\LICENSE-dotNET"
+            "TargetName" = "8:LICENSE-dotNET"
+            "Tag" = "8:"
+            "Folder" = "8:_4D60CD526BD34B269352718E9BD6973B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_90097757526F489DBBE28E625AF2468C"
             {
             "SourcePath" = "8:FullEULA.rtf"
@@ -244,26 +316,6 @@
             "TargetName" = "8:EULA"
             "Tag" = "8:"
             "Folder" = "8:_E2D39BA242E84E2AAA07ADC1E8F4D63B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EB880236C2D14FF5A0CD854E77A90AA4"
-            {
-            "SourcePath" = "8:..\\thirdparty\\LICENSE-superfastblur"
-            "TargetName" = "8:LICENSE-superfastblur"
-            "Tag" = "8:"
-            "Folder" = "8:_4D60CD526BD34B269352718E9BD6973B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1045,7 +1097,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_0A7A841F48FE41D79F9B32F4459BCA09"
             {
-            "SourcePath" = "8:..\\DailyDesktop.Task\\obj\\Release\\netcoreapp3.1\\apphost.exe"
+            "SourcePath" = "8:..\\DailyDesktop.Task\\obj\\Debug\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E2D39BA242E84E2AAA07ADC1E8F4D63B"
@@ -1073,7 +1125,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6B9E861998E244EB89E56F6A3328821E"
             {
-            "SourcePath" = "8:..\\DailyDesktop.Desktop\\obj\\Release\\netcoreapp3.1\\apphost.exe"
+            "SourcePath" = "8:..\\DailyDesktop.Desktop\\obj\\Debug\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E2D39BA242E84E2AAA07ADC1E8F4D63B"

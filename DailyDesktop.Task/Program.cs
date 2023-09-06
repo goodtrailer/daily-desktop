@@ -4,9 +4,7 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +12,7 @@ using System.Windows.Forms;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 using DailyDesktop.Core.Util;
-using SuperfastBlur;
+using ImageMagick;
 
 namespace DailyDesktop.Task
 {
@@ -51,20 +49,24 @@ namespace DailyDesktop.Task
             var provider = IProvider.Instantiate(providerType);
 
             string imagePath = await downloadWallpaper(provider, json, AsyncUtils.LongCancel());
+            string outputPath = imagePath + ".tif";
 
             SetProcessDPIAware();
 
+            using var image = new MagickImage(imagePath);
+
             if (resize)
-                applyResize(imagePath);
+                applyResize(image);
 
             if (blur != null)
-                applyBlurredFit(imagePath, blur.Value);
+                applyBlurredFit(image, blur.Value);
 
-            string tiffPath = convertToTiff(imagePath);
+            image.Format = MagickFormat.Tif;
+            image.Write(outputPath);
 
             // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa#parameters
             // SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE
-            return SystemParametersInfo(0x14, 0, tiffPath, 0x1 | 0x2);
+            return SystemParametersInfo(0x14, 0, outputPath, 0x1 | 0x2);
         }
 
         private static async Task<string> downloadWallpaper(IProvider provider, string jsonPath, CancellationToken cancellationToken = default)
@@ -83,47 +85,35 @@ namespace DailyDesktop.Task
             return imagePath;
         }
 
-        private static void applyResize(string imagePath)
+        private static void applyResize(MagickImage image)
         {
-            Size screenSize = SystemInformation.PrimaryMonitorSize;
+            var screenSize = SystemInformation.PrimaryMonitorSize;
+
             float screenAspectRatio = (float)screenSize.Width / screenSize.Height;
-
-            Bitmap image = new Bitmap(imagePath);
-
             float imageAspectRatio = (float)image.Width / image.Height;
-            Size targetSize = new Size
+
+            var targetSize = new Size
             {
                 Width = imageAspectRatio > screenAspectRatio ? screenSize.Width : (int)(screenSize.Height * imageAspectRatio),
                 Height = imageAspectRatio > screenAspectRatio ? (int)(screenSize.Width / imageAspectRatio) : screenSize.Height,
             };
 
             if (targetSize.Width < image.Width)
-            {
-                using (Bitmap resized = new Bitmap(image, targetSize))
-                {
-                    image.Dispose();
-                    resized.Save(imagePath);
-                }
-            }
-            else
-            {
-                image.Dispose();
-            }
+                image.Resize(targetSize.Width, targetSize.Height);
         }
 
-        private static void applyBlurredFit(string imagePath, int blurStrength)
+        private static void applyBlurredFit(MagickImage image, int blurStrength)
         {
-            Size screenSize = SystemInformation.PrimaryMonitorSize;
-            float screenAspectRatio = (float)screenSize.Width / screenSize.Height;
+            var screenSize = SystemInformation.PrimaryMonitorSize;
 
-            Bitmap image = new Bitmap(imagePath);
+            float screenAspectRatio = (float)screenSize.Width / screenSize.Height;
             float imageAspectRatio = (float)image.Width / image.Height;
 
-            Rectangle backgroundRect;
+            MagickGeometry backgroundRect;
             Size fillSize;
             if (imageAspectRatio < screenAspectRatio)
             {
-                backgroundRect = new Rectangle
+                backgroundRect = new MagickGeometry
                 {
                     Width = (int)(image.Height * screenAspectRatio),
                     Height = image.Height,
@@ -137,7 +127,7 @@ namespace DailyDesktop.Task
             }
             else
             {
-                backgroundRect = new Rectangle
+                backgroundRect = new MagickGeometry
                 {
                     Width = image.Width,
                     Height = (int)(image.Width / screenAspectRatio),
@@ -150,40 +140,22 @@ namespace DailyDesktop.Task
                 backgroundRect.X = (fillSize.Width - backgroundRect.Width) / 2;
             }
 
-            GaussianBlur gaussianBlur;
-            using (Bitmap fill = new Bitmap(image, fillSize))
-            {
-                using (Bitmap background = fill.Clone(backgroundRect, PixelFormat.Format32bppArgb))
-                    gaussianBlur = new GaussianBlur(background);
-            }
+            if (fillSize.Width == image.Width && fillSize.Height == image.Height)
+                return;
+
+            var fill = new MagickImage(image);
+            fill.Resize(fillSize.Width, fillSize.Height);
+            fill.Crop(backgroundRect);
 
             int largestDim = (imageAspectRatio > 1) ? image.Width : image.Height;
             int radius = (int)(MAX_BLUR_FRACTION * largestDim * blurStrength / 100);
+            fill.Blur(radius, blurStrength);
 
-            using (Bitmap blurred = gaussianBlur.Process(radius))
-            {
-                using (Graphics graphics = Graphics.FromImage(blurred))
-                {
-                    int x = (blurred.Width - image.Width) / 2;
-                    int y = (blurred.Height - image.Height) / 2;
-                    graphics.DrawImage(image, x, y, image.Width, image.Height);
-                }
-
-                image.Dispose();
-                blurred.Save(imagePath);
-            }
-        }
-
-        private static string convertToTiff(string imagePath)
-        {
-            Bitmap image = new Bitmap(imagePath);
-
-            ImageCodecInfo tiffCodecInfo = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == ImageFormat.Tiff.Guid);
-
-            string tifPath = imagePath + ".tif";
-            image.Save(tifPath, tiffCodecInfo, null);
-
-            return tifPath;
+            int x = (fill.Width - image.Width) / 2;
+            int y = (fill.Height - image.Height) / 2;
+            fill.Composite(image, x, y);
+            image.Extent(fill.Width, fill.Height);
+            image.CopyPixels(fill);
         }
     }
 }
