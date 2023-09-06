@@ -46,7 +46,7 @@ namespace DailyDesktop.Core.Providers
                 return Providers[dllPath];
 
             var assembly = Assembly.Load(await File.ReadAllBytesAsync(dllPath, cancellationToken));
-            
+
             foreach (var type in assembly.GetTypes())
             {
                 bool isPublic = type.IsPublic;

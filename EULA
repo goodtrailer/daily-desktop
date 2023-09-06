@@ -1,4 +1,7 @@
 This software is licensed under the MIT License - see LICENSE for full license text.
 
-This software uses superfastblur - see thirdparty\LICENSE-superfastblur for full license text.
+This software uses .NET - see thirdparty\LICENSE-dotNET for full license text.
 
+This software uses Magick.NET - see thirdparty\LICENSE-MagickdotNET for full license text.
+
+This software uses TaskScheduler - see thirdparty\LICENSE-TaskScheduler for full license text.

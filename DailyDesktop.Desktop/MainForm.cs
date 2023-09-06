@@ -45,8 +45,6 @@ namespace DailyDesktop.Desktop
         private IPublicTaskConfiguration taskConfig => core.TaskConfig;
 
         private TaskState previousState;
-        
-        private bool isMovingBlurStrengthTrackBar;
 
         public static async Task<MainForm> CreateFormAsync(CancellationToken cancellationToken)
         {
@@ -142,7 +140,7 @@ namespace DailyDesktop.Desktop
             await taskConfig.SetDllAsync(p.Dll, AsyncUtils.TimedCancel());
 
             Invoke(() =>
-            {            
+            {
                 var provider = core.CurrentProvider;
                 providerDescriptionLabel.Text = provider?.Description ?? null_description;
                 providerSourceLinkLabel.Text = provider?.SourceUri ?? null_text;
