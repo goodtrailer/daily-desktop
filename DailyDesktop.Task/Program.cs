@@ -148,8 +148,8 @@ namespace DailyDesktop.Task
             fill.Crop(backgroundRect);
 
             int largestDim = (imageAspectRatio > 1) ? image.Width : image.Height;
-            int radius = (int)(MAX_BLUR_FRACTION * largestDim * blurStrength / 100);
-            fill.Blur(radius, blurStrength);
+            int sigma = (int)(MAX_BLUR_FRACTION * largestDim * blurStrength / 100);
+            fill.Blur(0, sigma);
 
             int x = (fill.Width - image.Width) / 2;
             int y = (fill.Height - image.Height) / 2;
