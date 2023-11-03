@@ -43,6 +43,3 @@ Daily Desktop has an optional "blurred-fit" mode that fits the entire image with
 | Windows 10 Fill | Windows 10 Fit |
 | --------------- | -------------- |
 | ![temp](assets/comparison-fill.png) | ![Blurred-Fit](assets/comparison-fit.png) |
-
-## Third-Party Libraries
-* **[MIT]** [mdymel/superfastblur](https://github.com/mdymel/superfastblur) used @ [/DailyDesktop.Task/](/DailyDesktop.Task/)
