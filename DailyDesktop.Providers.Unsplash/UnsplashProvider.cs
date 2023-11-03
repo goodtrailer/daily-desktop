@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 
@@ -15,10 +16,11 @@ namespace DailyDesktop.Providers.Unsplash
 {
     public class UnsplashProvider : IProvider
     {
-        private const string IMAGE_URI_PATTERN = "(?<=<source srcSet=\")(.*?)(?=\\?)";
+        private const string IMAGE_URI_PATTERN = "(?<=title=\"Download photo\" href=\")(.*?)(?=\")";
         private const string TITLE_PATTERN = "(?<=(\"description\":\"))(.*?)(?=\")";
-        private const string TITLE_RELATIVE_URI_PATTERN = "(?<=(contentUrl.*?href=\"/)).*?(?=\")";
-        private const string AUTHOR_RELATIVE_URI_PATTERN = "(?<=(contentUrl.*?href.*?href=\"/)).*?(?=\")";
+        private const string TITLE_RELATIVE_URI_PATTERN = "(?<=href=\")/photos/(.*?)(?=\")";
+        private const string AUTHOR_PATTERN = "(?<=Photo by )(.*?)(?= on Unsplash)";
+        private const string AUTHOR_RELATIVE_URI_PATTERN = "(?<=href=\")/@(.*?)(?=\")";
 
         private const string MAKE_PATTERN = "(?<=(\\\\\"make\\\\\":\\\\\"))(.*?)(?=(\\\\\"))";
         private const string MODEL_MATCH = "(?<=(\\\\\"model\\\\\":\\\\\"))(.*?)(?=(\\\\\"))";
@@ -35,27 +37,25 @@ namespace DailyDesktop.Providers.Unsplash
 
         public async Task ConfigureWallpaperAsync(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig, CancellationToken cancellationToken)
         {
-            // Scrape info from home page
+            // Scrape title URI from home page
 
-            string homeHtml = await client.GetStringAsync("https://unsplash.com/", cancellationToken);
+            string homeHtml = await client.GetStringAsync("https://unsplash.com", cancellationToken);
 
-            string imageUri = Regex.Match(homeHtml, IMAGE_URI_PATTERN).Value;
+            string titleUri = "https://unsplash.com" + Regex.Match(homeHtml, TITLE_RELATIVE_URI_PATTERN).Value;
+
+            // Scrape info from image page
+
+            string pageHtml = await client.GetStringAsync(titleUri, cancellationToken);
+            
+            string imageUri = HttpUtility.HtmlDecode(Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value);
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            string titleUri = "https://unsplash.com/" + Regex.Match(homeHtml, TITLE_RELATIVE_URI_PATTERN).Value;
-
-            string authorRelativeUri = Regex.Match(homeHtml, AUTHOR_RELATIVE_URI_PATTERN).Value;
-            string authorPattern = $"(?<={authorRelativeUri}\">).*?(?=<)";
-
-            string author = Regex.Match(homeHtml, authorPattern).Value;
-            string authorUri = "https://unsplash.com/" + authorRelativeUri;
-
-            // Scrape camera specs from image page
-
-            string pageHtml = await client.GetStringAsync(titleUri, cancellationToken);
+            string authorRelativeUri = Regex.Match(pageHtml, AUTHOR_RELATIVE_URI_PATTERN).Value;
+            string authorUri = "https://unsplash.com" + authorRelativeUri;
 
             string title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
+            string author = Regex.Match(pageHtml, AUTHOR_PATTERN).Value;
 
             string make = Regex.Match(pageHtml, MAKE_PATTERN).Value;
             string model = Regex.Match(pageHtml, MODEL_MATCH).Value;
@@ -73,7 +73,7 @@ namespace DailyDesktop.Providers.Unsplash
                 || !string.IsNullOrWhiteSpace(iso))
             {
                 descriptionBuilder.AppendLine($"Camera Make: {make}");
-                descriptionBuilder.AppendLine($"Camera Model: {model}");
+                descriptionBuilder.AppendLine($"Camera Model: {model.Trim()}");
                 descriptionBuilder.AppendLine($"Focal Length: {focalLength}mm");
                 descriptionBuilder.AppendLine($"Aperture: ƒ/{aperture}");
                 descriptionBuilder.AppendLine($"Shutter Speed: {shutterSpeed}s");
