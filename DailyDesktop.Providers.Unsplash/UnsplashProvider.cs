@@ -16,9 +16,9 @@ namespace DailyDesktop.Providers.Unsplash
 {
     public class UnsplashProvider : IProvider
     {
-        private const string IMAGE_URI_PATTERN = "(?<=title=\"Download photo\" href=\")(.*?)(?=\")";
+        private const string IMAGE_URI_PATTERN = "https://unsplash.com/photos/(.*?)/download(.*?)(?=\")";
         private const string TITLE_PATTERN = "(?<=(\"description\":\"))(.*?)(?=\")";
-        private const string TITLE_RELATIVE_URI_PATTERN = "(?<=href=\")/photos/(.*?)(?=\")";
+        private const string TITLE_RELATIVE_URI_PATTERN = "/photos/(.*?)(?=\")";
         private const string AUTHOR_PATTERN = "(?<=Photo by )(.*?)(?= on Unsplash)";
         private const string AUTHOR_RELATIVE_URI_PATTERN = "(?<=href=\")/@(.*?)(?=\")";
 
@@ -37,11 +37,11 @@ namespace DailyDesktop.Providers.Unsplash
 
         public async Task ConfigureWallpaperAsync(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig, CancellationToken cancellationToken)
         {
-            // Scrape title URI from home page
+            // Scrape title URI from archive page
 
-            string homeHtml = await client.GetStringAsync("https://unsplash.com", cancellationToken);
+            string archiveHtml = await client.GetStringAsync(SourceUri, cancellationToken);
 
-            string titleUri = "https://unsplash.com" + Regex.Match(homeHtml, TITLE_RELATIVE_URI_PATTERN).Value;
+            string titleUri = "https://unsplash.com" + Regex.Match(archiveHtml, TITLE_RELATIVE_URI_PATTERN).Value;
 
             // Scrape info from image page
 
