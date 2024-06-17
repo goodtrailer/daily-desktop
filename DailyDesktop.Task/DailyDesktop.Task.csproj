@@ -31,7 +31,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Magick.NET-Q8-x64" Version="13.2.0" />
+    <PackageReference Include="Magick.NET-Q8-x64" Version="13.9.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20071.2" />
   </ItemGroup>
 
