@@ -8,17 +8,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
+using static System.Net.WebRequestMethods;
 
 namespace DailyDesktop.Providers.DeviantArt
 {
     public class DeviantArtProvider : IProvider
     {
-        private const string IMAGE_PAGE_URI_PATTERN = "(?<=(<a(.*?)data-hook=\"deviation_link\" href=\"))(.*?)(?=(\"))";
         private const string IMAGE_URI_PATTERN = "(?<=(<img alt=(.*?)src=\"))(.*?)(?=(\"))";
-        private const string CREDIT_PATTERN = "((?<=(<title data-rh=\"[truefalse]*\">))(.*?)(?=( on DeviantArt</title>)))";
-        private const string AUTHOR_PATTERN = "(?<=(by ))(.(?!(by)))*$";
-        private const string TITLE_PATTERN = "(.*)(?=( by))";
-        private const string DESCRIPTION_PATTERN = "(?<=(</div><div class=\"legacy-journal[^\"]*\">))(.*?)(?=(</div>))";
+        private const string AUTHOR_PATTERN = "(?<=<span property=\"creditText\".*?>).*?(?= on DeviantArt</span>)";
+        private const string TITLE_PATTERN = "(?<=<h1.*?>)(.*?)(?=</h1>)";
+        private const string TITLE_URI_PATTERN = "(?<=href=\")https://www.deviantart.com/([^\"]*?)/art/([^\"]*?)(?=\")";
+        private const string DESCRIPTION_PATTERN = "(?<=(<div><div class=\"legacy-journal[^\"]*\">))(.*?)(?=(</div>))";
 
         public string DisplayName => "DeviantArt";
         public string Description => "Fetches one of DeviantArt's currently " +
@@ -33,24 +33,22 @@ namespace DailyDesktop.Providers.DeviantArt
 
             string dailyDeviationHtml = await client.GetStringAsync(SourceUri, cancellationToken);
 
-            string titleUri = Regex.Match(dailyDeviationHtml, IMAGE_PAGE_URI_PATTERN).Value;
+            string titleUri = Regex.Match(dailyDeviationHtml, TITLE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(titleUri))
                 throw new ProviderException("Didn't find an image page URI.");
 
             // Scrape info from image page
 
-            string imagePageHtml = await client.GetStringAsync(titleUri, cancellationToken);
+            string pageHtml = await client.GetStringAsync(titleUri, cancellationToken);
 
-            string imageUri = Regex.Match(imagePageHtml, IMAGE_URI_PATTERN).Value;
+            string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
-            string credit = Regex.Match(imagePageHtml, CREDIT_PATTERN).Value;
-
-            string author = Regex.Match(credit, AUTHOR_PATTERN).Value;
-            string authorUri = "https://www.deviantart.com/" + WebUtility.UrlEncode(wallpaperConfig.Author);
-            string title = Regex.Match(credit, TITLE_PATTERN).Value;
-            string description = Regex.Replace(WebUtility.HtmlDecode(Regex.Match(imagePageHtml, DESCRIPTION_PATTERN).Value), "<([^<>]*?)>", "");
+            string author = Regex.Match(pageHtml, AUTHOR_PATTERN).Value;
+            string authorUri = Regex.Match(titleUri, "https://www.deviantart.com/.*?/").Value;
+            string title = Regex.Match(pageHtml, TITLE_PATTERN).Value;
+            string description = Regex.Replace(WebUtility.HtmlDecode(Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value), "<([^<>]*?)>", "");
 
             await wallpaperConfig.SetImageUriAsync(imageUri, cancellationToken);
             await wallpaperConfig.SetAuthorAsync(author, cancellationToken);
