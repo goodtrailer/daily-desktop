@@ -17,7 +17,7 @@ namespace DailyDesktop.Providers.FalseKnees
         private const string IMAGE_RELATIVE_URI_PATTERN = "imgs/[0-9]*?\\.[a-zA-Z]+";
         private const string TITLE_RELATIVE_URI_PATTERN = "(?<=URL=)[0-9]+\\.[a-zA-Z]+";
         private const string DESCRIPTION_PATTERN = "(?<=<img.*title=\").*?(?=\")";
-        private const string TITLE_PATTERN = "(?<=index\\.html.*- ).*?(?=<)";
+        private const string TITLE_PATTERN = "(?<=<p class=\"div-overflow\">.*?- ).*?(?=</p>)";
 
         public string DisplayName => "False Knees";
 
@@ -32,7 +32,7 @@ namespace DailyDesktop.Providers.FalseKnees
 
             string pageHtml = await client.GetStringAsync(SourceUri, cancellationToken);
 
-            string imageUri = SourceUri + "/" + Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN).Value;
+            string imageUri = SourceUri + "/comics/" + Regex.Match(pageHtml, IMAGE_RELATIVE_URI_PATTERN).Value;
             string titleUri = SourceUri + "/" + Regex.Match(pageHtml, TITLE_RELATIVE_URI_PATTERN).Value;
             string description = Regex.Match(pageHtml, DESCRIPTION_PATTERN).Value;
 
