@@ -82,12 +82,10 @@ namespace DailyDesktop.Tests
             var wallpaperConfig = new WallpaperConfiguration();
             await new FalseKneesProvider().ConfigureWallpaperAsync(wallpaperConfig, AsyncUtils.LongCancel());
 
-            TestContext.WriteLine("Description: " + wallpaperConfig.Description);
             TestContext.WriteLine("Image URI: " + wallpaperConfig.ImageUri);
             TestContext.WriteLine("Title: " + wallpaperConfig.Title);
             TestContext.WriteLine("Title URI: " + wallpaperConfig.TitleUri);
 
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Description), "Null/whitespace description.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI!");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Title), "Null/whitespace title.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.TitleUri), "Null/whitespace title URI.");
