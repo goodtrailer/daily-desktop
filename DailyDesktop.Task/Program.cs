@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Alden Wu <aldenwu0@gmail.com>. Licensed under the MIT Licence.
 // See the LICENSE file in the repository root for full licence text.
 
+using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Drawing;
@@ -30,16 +31,33 @@ namespace DailyDesktop.Task
         private static int Main(string[] args)
         {
             RootCommand rootCommand = new RootCommand("Daily Desktop task target executable");
-            rootCommand.AddArgument(new Argument<string>("dllPath"));
+            rootCommand.AddArgument(new Argument<string>("dllPath", () => ""));
             rootCommand.AddOption(new Option<string>("--json", "", "Where to output the wallpaper info JSON file"));
             rootCommand.AddOption(new Option<bool>("--resize", false, "Resize to screen resolution if larger"));
             rootCommand.AddOption(new Option<int?>("--blur", () => null, "Use blurred-fit mode with the passed value for background blur strength"));
-            rootCommand.Handler = CommandHandler.Create<string, string, bool, int?>(handleArguments);
+            rootCommand.Handler = CommandHandler.Create(tryHandleArguments);
 
             return rootCommand.Invoke(args);
         }
 
-        private static async Task<int> handleArguments(string dllPath, string json, bool resize, int? blur)
+        private static async Task<int> tryHandleArguments(string dllPath, string json, bool resize, int? blur)
+        {
+            try
+            {
+                return await handleArguments(dllPath, json, resize, blur);
+            }
+            catch (Exception e)
+            {
+                var wallpaperConfig = new WallpaperConfiguration(json);
+                await wallpaperConfig.SetTitleAsync("Exception encountered", AsyncUtils.LongCancel());
+                await wallpaperConfig.SetAuthorAsync("provider", AsyncUtils.LongCancel());
+                await wallpaperConfig.SetDescriptionAsync(e.Message + "\n\n" + e.StackTrace, AsyncUtils.LongCancel());
+                await wallpaperConfig.TrySerializeAsync(AsyncUtils.LongCancel());
+                return 1;
+            }
+        }
+
+        private static async Task<int> handleArguments(string dllPath, string jsonPath, bool resize, int? blur)
         {
             if (string.IsNullOrWhiteSpace(dllPath))
                 throw new ProviderException("Missing IProvider DLL module path");
@@ -48,7 +66,7 @@ namespace DailyDesktop.Task
             var providerType = await store.AddAsync(dllPath, AsyncUtils.TimedCancel());
             var provider = IProvider.Instantiate(providerType);
 
-            string imagePath = await downloadWallpaper(provider, json, AsyncUtils.LongCancel());
+            string imagePath = await downloadWallpaper(provider, jsonPath, AsyncUtils.LongCancel());
             string outputPath = imagePath + ".tif";
 
             SetProcessDPIAware();
