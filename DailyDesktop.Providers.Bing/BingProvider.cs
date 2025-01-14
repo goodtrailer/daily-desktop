@@ -38,12 +38,21 @@ namespace DailyDesktop.Providers.Bing
 
         public async Task ConfigureWallpaperAsync(HttpClient client, IPublicWallpaperConfiguration wallpaperConfig, CancellationToken cancellationToken)
         {
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            string json = await client.GetStringAsync("https://global.bing.com/HPImageArchive.aspx?format=js&idx=0&n=9&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160");
+            Response response;
 
-            var response = await client.GetFromJsonAsync<Response>("https://global.bing.com/HPImageArchive.aspx?format=js&idx=0&n=9&pid=hp&FORM=BEHPTB&uhd=1&uhdwidth=3840&uhdheight=2160", options, cancellationToken);
+            try
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+                response = JsonSerializer.Deserialize<Response>(json, options);
+            }
+            catch (JsonException)
+            {
+                throw new ProviderException("Bing API response could not be parsed as JSON. Here it is:\n\"\"\"\n" + json + "\n\"\"\"");
+            }
 
             if (response.Images.Count == 0)
                 throw new ProviderException("Bing API response did not contain any images.");
