@@ -12,7 +12,7 @@ namespace DailyDesktop.Providers.CalvinAndHobbes
 {
     public class CalvinAndHobbesProvider : IProvider
     {
-        private const string IMAGE_URI_PATTERN = "https://assets.amuniversal.com/.*?(?=[ \"])";
+        private const string IMAGE_URI_PATTERN = "https://featureassets.amuniversal.com/.*?(?=[ \"])";
         private const string AUTHOR = "Bill Watterson";
         private const string TITLE = "Comic strip";
         private const string TITLE_RELATIVE_URI_PATTERN = "(?<=/calvinandhobbes)[/0-9]+?(?=\")";
