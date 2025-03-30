@@ -56,7 +56,7 @@ namespace DailyDesktop.Providers.Pixiv
 
             string imageUri = "https://i.pximg.net/img-original" + Regex.Match(imagePageHtml, imageUriPattern).Value;
             int excludeBegin = imageUri.IndexOf("_p0") + "_p0".Length;
-            int excludeEnd = imageUri.IndexOf(".", excludeBegin);
+            int excludeEnd = imageUri.IndexOf('.', excludeBegin);
             imageUri = imageUri.Substring(0, excludeBegin) + imageUri.Substring(excludeEnd);
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
