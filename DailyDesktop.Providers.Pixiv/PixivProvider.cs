@@ -18,7 +18,6 @@ namespace DailyDesktop.Providers.Pixiv
     public class PixivProvider : IProvider
     {
         private const string IMAGE_ID_PATTERN = "(?<=data-id=\")(.*?)(?=\")";
-        private const string IMAGE_URI_PATTERN = "(?<=\"original\":\")(.*?)(?=\")";
         private const string AUTHOR_PATTERN = "(?<=((\"authorId\":\")(.*?)(\"userName\":\")))(.*?[^\\\\])(?=(\"))";
         private const string AUTHOR_ID_PATTERN = "(?<=(\"authorId\":\"))([0-9]*)";
         private const string TITLE_PATTERN = "(?<=(<meta property=\"twitter:title\" content=\"))([\\S\\s]*?[^\\\\])(?=(\">))";
@@ -53,7 +52,12 @@ namespace DailyDesktop.Providers.Pixiv
 
             string imagePageHtml = await client.GetStringAsync(titleUri, cancellationToken);
 
-            string imageUri = Regex.Match(imagePageHtml, IMAGE_URI_PATTERN).Value;
+            string imageUriPattern = "/img/[0-9]+/[0-9]+/[0-9]+/[0-9]+/[0-9]+/[0-9]+/" + imageId + "(.*?)(?=\")";
+
+            string imageUri = "https://i.pximg.net/img-original" + Regex.Match(imagePageHtml, imageUriPattern).Value;
+            int excludeBegin = imageUri.IndexOf("_p0") + "_p0".Length;
+            int excludeEnd = imageUri.IndexOf(".", excludeBegin);
+            imageUri = imageUri.Substring(0, excludeBegin) + imageUri.Substring(excludeEnd);
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
