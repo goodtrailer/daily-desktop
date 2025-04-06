@@ -9,29 +9,6 @@ This program is based on [a previous C# program I wrote](https://github.com/good
 ## Video Showcase (YouTube)
 [![Preview Image](assets/preview.jpg)](https://www.youtube.com/watch?v=psSWl0QuzaA)
 
-## Developing a Provider Module
-To develop your own Daily Desktop provider modules, use the [NuGet package](https://www.nuget.org/packages/goodtrailer.DailyDesktop.Core/):
-* PackageManager: `Install-Package goodtrailer.DailyDesktop.Core`
-* dotnet: `dotnet add package goodtrailer.DailyDesktop.Core`
-
-Then, implement the [IProvider](/DailyDesktop.Core/Providers/IProvider.cs) interface in a *public* class. For examples, check these [providers I already implemented](#implemented).
-
-#### Debugging
-Wallpapers are actually downloaded/applied by DailyDesktop.Task. To debug a provider module, build and run DailyDesktop.Task in `Debug` mode and pass it the arguments `"path\to\provider.dll" --json "path\to\info-output.json" --blur 40`. The `--blur 40` is optional and the value can be changed between 0 to 100. Arguments can be passed through `DailyDesktop.Task > Properties > Debug` in Visual Studio.
-
-## Providers
-#### Implemented
-* Bing @ [/DailyDesktop.Providers.Bing/](/DailyDesktop.Providers.Bing/)
-* Calvin and Hobbes @ [/DailyDesktop.Providers.CalvinAndHobbes/](/DailyDesktop.Providers.CalvinAndHobbes/)
-* DeviantArt @ [/DailyDesktop.Providers.DeviantArt/](/DailyDesktop.Providers.DeviantArt/)
-* False Knees @ [/DailyDesktop.Providers.FalseKnees/](/DailyDesktop.Providers.FalseKnees/)
-* Magic: The Gathering @ [/DailyDesktop.Providers.MTG/](/DailyDesktop.Providers.MTG/)
-* Pixiv @ [/DailyDesktop.Providers.Pixiv/](/DailyDesktop.Providers.Pixiv/)
-* ~~Pokémon TCG~~ (Deprecated) @ [/archived/DailyDesktop.Providers.Pokemon/](/archived/DailyDesktop.Providers.Pokemon/)
-* r/EarthPorn (SFW) @ [/DailyDesktop.Providers.RedditEarthPorn/](/DailyDesktop.Providers.RedditEarthPorn/)
-* Unsplash @ [/DailyDesktop.Providers.Unsplash/](/DailyDesktop.Providers.Unsplash/)
-* Wikimedia Commons @ [/DailyDesktop.Providers.WikimediaCommons/](/DailyDesktop.Providers.WikimediaCommons/)
-
 ## Blurred-fit Mode
 Daily Desktop has an optional "blurred-fit" mode that fits the entire image within the wallpaper, then fills in the background with a blurred and enlarged version of the image itself, instead of using a solid color like Windows does. This is useful if a provider's source contains images that are of a vastly different aspect ratio to your primary display.
 
@@ -43,3 +20,31 @@ Daily Desktop has an optional "blurred-fit" mode that fits the entire image with
 | Windows 10 Fill | Windows 10 Fit |
 | --------------- | -------------- |
 | ![temp](assets/comparison-fill.png) | ![Blurred-Fit](assets/comparison-fit.png) |
+
+## Providers
+### Implemented
+* Bing @ [/DailyDesktop.Providers.Bing/](/DailyDesktop.Providers.Bing/)
+* Calvin and Hobbes @ [/DailyDesktop.Providers.CalvinAndHobbes/](/DailyDesktop.Providers.CalvinAndHobbes/)
+* DeviantArt @ [/DailyDesktop.Providers.DeviantArt/](/DailyDesktop.Providers.DeviantArt/)
+* False Knees @ [/DailyDesktop.Providers.FalseKnees/](/DailyDesktop.Providers.FalseKnees/)
+* Magic: The Gathering @ [/DailyDesktop.Providers.MTG/](/DailyDesktop.Providers.MTG/)
+* Pixiv @ [/DailyDesktop.Providers.Pixiv/](/DailyDesktop.Providers.Pixiv/)
+* ~~Pokémon TCG~~ (Deprecated) @ [/archived/DailyDesktop.Providers.Pokemon/](/archived/DailyDesktop.Providers.Pokemon/)
+* r/EarthPorn (SFW) @ [/DailyDesktop.Providers.RedditEarthPorn/](/DailyDesktop.Providers.RedditEarthPorn/)
+* Unsplash @ [/DailyDesktop.Providers.Unsplash/](/DailyDesktop.Providers.Unsplash/)
+* Wikimedia Commons @ [/DailyDesktop.Providers.WikimediaCommons/](/DailyDesktop.Providers.WikimediaCommons/)
+### To-Do
+* NASA Astronomy @ [#33](/issues/#33)](https://github.com/goodtrailer/daily-desktop/issues/33)
+* NASA Earth Observatory @ [#34](https://github.com/goodtrailer/daily-desktop/issues/34)
+* The New York Times @ [#35](https://github.com/goodtrailer/daily-desktop/issues/35)
+* National Geographic TV @ [#37](https://github.com/goodtrailer/daily-desktop/issues/37)
+
+## Developing a Provider Module
+To develop your own Daily Desktop provider modules, use the [NuGet package](https://www.nuget.org/packages/goodtrailer.DailyDesktop.Core/):
+* PackageManager: `Install-Package goodtrailer.DailyDesktop.Core`
+* dotnet: `dotnet add package goodtrailer.DailyDesktop.Core`
+
+Then, implement the [IProvider](/DailyDesktop.Core/Providers/IProvider.cs) interface in a *public* class. For examples, check these [providers I already implemented](#implemented).
+
+### Debugging
+Wallpapers are actually downloaded/applied by DailyDesktop.Task. To debug a provider module, build and run DailyDesktop.Task in `Debug` mode and pass it the arguments `"path\to\provider.dll" --json "path\to\info-output.json" --blur 40`. The `--blur 40` is optional and the value can be changed between 0 to 100. If you're using Visual Studio, arguments can be passed through `DailyDesktop.Task > Properties > Debug` in Visual Studio. An even easier solution is to use the `Test > Test Explorer` window: right click any specific test and click `Debug`.
