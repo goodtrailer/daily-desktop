@@ -34,7 +34,7 @@ Daily Desktop has an optional "blurred-fit" mode that fits the entire image with
 * Unsplash @ [/DailyDesktop.Providers.Unsplash/](/DailyDesktop.Providers.Unsplash/)
 * Wikimedia Commons @ [/DailyDesktop.Providers.WikimediaCommons/](/DailyDesktop.Providers.WikimediaCommons/)
 ### To-Do
-* NASA Astronomy @ [#33](/issues/#33)](https://github.com/goodtrailer/daily-desktop/issues/33)
+* NASA Astronomy @ [#33](https://github.com/goodtrailer/daily-desktop/issues/33)
 * NASA Earth Observatory @ [#34](https://github.com/goodtrailer/daily-desktop/issues/34)
 * The New York Times @ [#35](https://github.com/goodtrailer/daily-desktop/issues/35)
 * National Geographic TV @ [#37](https://github.com/goodtrailer/daily-desktop/issues/37)
