@@ -50,6 +50,7 @@ namespace DailyDesktop.Tests
             var wallpaperConfig = new WallpaperConfiguration();
             await new CalvinAndHobbesProvider().ConfigureWallpaperAsync(wallpaperConfig, AsyncUtils.LongCancel());
 
+            TestContext.WriteLine("Description: " + wallpaperConfig.Description);
             TestContext.WriteLine("Image URI: " + wallpaperConfig.ImageUri);
             TestContext.WriteLine("Title URI: " + wallpaperConfig.TitleUri);
 
