@@ -52,12 +52,9 @@ namespace DailyDesktop.Providers.Pixiv
 
             string imagePageHtml = await client.GetStringAsync(titleUri, cancellationToken);
 
-            string imageUriPattern = "/img/[0-9]+/[0-9]+/[0-9]+/[0-9]+/[0-9]+/[0-9]+/" + imageId + "(.*?)(?=\")";
+            string imageUriPattern = "(?<=\"original\":\")(.*?)" + imageId + "(.*?)(?=\")";
 
-            string imageUri = "https://i.pximg.net/img-original" + Regex.Match(imagePageHtml, imageUriPattern).Value;
-            int excludeBegin = imageUri.IndexOf("_p0") + "_p0".Length;
-            int excludeEnd = imageUri.IndexOf('.', excludeBegin);
-            imageUri = imageUri.Substring(0, excludeBegin) + imageUri.Substring(excludeEnd);
+            string imageUri = Regex.Match(imagePageHtml, imageUriPattern).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI.");
 
