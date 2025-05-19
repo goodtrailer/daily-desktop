@@ -46,7 +46,7 @@ namespace DailyDesktop.Providers.Unsplash
             // Scrape info from image page
 
             string pageHtml = await client.GetStringAsync(titleUri, cancellationToken);
-            
+
             string imageUri = HttpUtility.HtmlDecode(Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value);
             if (string.IsNullOrWhiteSpace(imageUri))
                 throw new ProviderException("Didn't find an image URI, HTML was:\"\"\"\n" + pageHtml + "\n\"\"\"");
