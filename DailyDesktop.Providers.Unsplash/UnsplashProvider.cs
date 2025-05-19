@@ -46,10 +46,10 @@ namespace DailyDesktop.Providers.Unsplash
             // Scrape info from image page
 
             string pageHtml = await client.GetStringAsync(titleUri, cancellationToken);
-            
+
             string imageUri = HttpUtility.HtmlDecode(Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value);
             if (string.IsNullOrWhiteSpace(imageUri))
-                throw new ProviderException("Didn't find an image URI.");
+                throw new ProviderException("Didn't find an image URI, HTML was:\"\"\"\n" + pageHtml + "\n\"\"\"");
 
             string authorRelativeUri = Regex.Match(pageHtml, AUTHOR_RELATIVE_URI_PATTERN).Value;
             string authorUri = "https://unsplash.com" + authorRelativeUri;
