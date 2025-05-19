@@ -2,12 +2,10 @@
 // See the LICENSE file in the repository root for full licence text.
 
 using System;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,7 +39,7 @@ namespace DailyDesktop.Providers.Pixiv
             // Search for image ID of #1 illustration on daily rankings page
 
             string rankingHtml = await client.GetStringAsync(SourceUri, cancellationToken);
-            
+
             string imagePath = Regex.Match(rankingHtml, IMAGE_PATH_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imagePath))
                 throw new ProviderException("Didn't find an image path, HTML was:\"\"\"\n" + rankingHtml + "\n\"\"\"");
