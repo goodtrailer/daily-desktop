@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
-using static System.Net.WebRequestMethods;
 
 namespace DailyDesktop.Providers.DeviantArt
 {
