@@ -28,7 +28,7 @@ namespace DailyDesktop.Providers.RedditEarthPorn
 
             string imageUri = Regex.Match(subredditHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
-                throw new ProviderException("Didn't find an image URI.");
+                throw new ProviderException("Didn't find an image URI, HTML was:\"\"\"\n" + subredditHtml + "\n\"\"\"");
 
             string author = "u/" + Regex.Match(subredditHtml, AUTHOR_PATTERN).Value;
             string authorUri = "https://www.reddit.com/" + author;

@@ -35,7 +35,7 @@ namespace DailyDesktop.Providers.DeviantArt
 
             string titleUri = Regex.Match(dailyDeviationHtml, TITLE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(titleUri))
-                throw new ProviderException("Didn't find an image page URI.");
+                throw new ProviderException("Didn't find an image page URI, HTML was:\"\"\"\n" + titleUri + "\n\"\"\"");
 
             // Scrape info from image page
 
@@ -43,7 +43,7 @@ namespace DailyDesktop.Providers.DeviantArt
 
             string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
-                throw new ProviderException("Didn't find an image URI.");
+                throw new ProviderException("Didn't find an image URI, HTML was:\"\"\"\n" + pageHtml + "\n\"\"\"");
 
             string author = Regex.Match(pageHtml, AUTHOR_PATTERN).Value;
             string authorUri = Regex.Match(titleUri, "https://www.deviantart.com/.*?/").Value;

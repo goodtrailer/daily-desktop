@@ -29,7 +29,7 @@ namespace DailyDesktop.Providers.MTG
 
             string imageUri = "https://" + Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrWhiteSpace(imageUri))
-                throw new ProviderException("Didn't find an image URI.");
+                throw new ProviderException("Didn't find an image URI, HTML was:\"\"\"\n" + pageHtml + "\n\"\"\"");
 
             string relevantHtml = pageHtml.Substring(Regex.Match(pageHtml, RELEVANT_SOURCE_PATTERN).Index);
             string author = Regex.Match(relevantHtml, AUTHOR_PATTERN).Value.Trim();

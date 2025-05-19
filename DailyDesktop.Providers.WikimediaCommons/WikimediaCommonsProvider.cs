@@ -48,7 +48,7 @@ namespace DailyDesktop.Providers.WikimediaCommons
 
             string imageUri = Regex.Match(requestXml, IMAGE_URI_PATTERN).Value;
             if (string.IsNullOrEmpty(imageUri))
-                throw new ProviderException("Didn't find an image URI.");
+                throw new ProviderException("Didn't find an image URI, XML was:\"\"\"\n" + requestXml + "\n\"\"\"");
 
             string authorElement = Regex.Match(requestXml, AUTHOR_ELEMENT_PATTERN).Value;
             string author = Regex.Match(authorElement, AUTHOR_PATTERN).Value;

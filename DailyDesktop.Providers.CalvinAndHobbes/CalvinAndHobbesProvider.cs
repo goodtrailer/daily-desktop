@@ -27,6 +27,8 @@ namespace DailyDesktop.Providers.CalvinAndHobbes
             string pageHtml = await client.GetStringAsync(SourceUri, cancellationToken);
 
             string imageUri = Regex.Match(pageHtml, IMAGE_URI_PATTERN).Value;
+            if (string.IsNullOrWhiteSpace(imageUri))
+                throw new ProviderException("Didn't find an image URI, HTML was:\"\"\"\n" + pageHtml + "\n\"\"\"");
 
             DateOnly date = DateOnly.FromDateTime(DateTime.Now);
             string? description = null;
