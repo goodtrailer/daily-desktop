@@ -26,7 +26,7 @@ Daily Desktop has an optional "blurred-fit" mode that fits the entire image with
 * Bing @ [/DailyDesktop.Providers.Bing/](/DailyDesktop.Providers.Bing/)
 * Calvin and Hobbes @ [/DailyDesktop.Providers.CalvinAndHobbes/](/DailyDesktop.Providers.CalvinAndHobbes/)
 * DeviantArt @ [/DailyDesktop.Providers.DeviantArt/](/DailyDesktop.Providers.DeviantArt/)
-* False Knees @ [/DailyDesktop.Providers.FalseKnees/](/DailyDesktop.Providers.FalseKnees/)
+* ~~False Knees~~ (Deprecated) @ [/archived/DailyDesktop.Providers.FalseKnees/](/archived/DailyDesktop.Providers.FalseKnees/)
 * Magic: The Gathering @ [/DailyDesktop.Providers.MTG/](/DailyDesktop.Providers.MTG/)
 * Pixiv @ [/DailyDesktop.Providers.Pixiv/](/DailyDesktop.Providers.Pixiv/)
 * ~~Pokémon TCG~~ (Deprecated) @ [/archived/DailyDesktop.Providers.Pokemon/](/archived/DailyDesktop.Providers.Pokemon/)
