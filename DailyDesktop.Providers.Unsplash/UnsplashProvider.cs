@@ -16,7 +16,7 @@ namespace DailyDesktop.Providers.Unsplash
 {
     public class UnsplashProvider : IProvider
     {
-        private const string IMAGE_URI_PATTERN = "https://unsplash.com/photos/(.*?)/download(.*?)(?=\")";
+        private const string IMAGE_URI_PATTERN = "https://unsplash\\.com/photos/[0-9a-zA-Z]+?/download(.*?)ixid=[0-9a-zA-Z]+";
         private const string TITLE_PATTERN = "(?<=(\"description\":\"))(.*?)(?=\")";
         private const string TITLE_RELATIVE_URI_PATTERN = "/photos/(.*?)(?=\")";
         private const string AUTHOR_PATTERN = "(?<=Photo by )(.*?)(?= on Unsplash)";
