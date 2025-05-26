@@ -9,7 +9,6 @@ using DailyDesktop.Core.Util;
 using DailyDesktop.Providers.Bing;
 using DailyDesktop.Providers.CalvinAndHobbes;
 using DailyDesktop.Providers.DeviantArt;
-using DailyDesktop.Providers.FalseKnees;
 using DailyDesktop.Providers.MTG;
 using DailyDesktop.Providers.Pixiv;
 using DailyDesktop.Providers.RedditEarthPorn;
@@ -76,21 +75,6 @@ namespace DailyDesktop.Tests
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI!");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Author), "Null/whitespace author.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.AuthorUri), "Null/whitespace author URI.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Title), "Null/whitespace title.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.TitleUri), "Null/whitespace title URI.");
-        }
-
-        [TestMethod]
-        public async Task TestFalseKnees()
-        {
-            var wallpaperConfig = new WallpaperConfiguration();
-            await new FalseKneesProvider().ConfigureWallpaperAsync(wallpaperConfig, AsyncUtils.LongCancel());
-
-            TestContext.WriteLine("Image URI: " + wallpaperConfig.ImageUri);
-            TestContext.WriteLine("Title: " + wallpaperConfig.Title);
-            TestContext.WriteLine("Title URI: " + wallpaperConfig.TitleUri);
-
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI!");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Title), "Null/whitespace title.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.TitleUri), "Null/whitespace title URI.");
         }
