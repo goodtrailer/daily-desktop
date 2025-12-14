@@ -3,9 +3,9 @@
 
 using System;
 using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,16 +28,46 @@ namespace DailyDesktop.Task
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
 
-        private static int Main(string[] args)
+        private static async Task<int> Main(string[] args)
         {
-            RootCommand rootCommand = new RootCommand("Daily Desktop task target executable");
-            rootCommand.AddArgument(new Argument<string>("dllPath", () => ""));
-            rootCommand.AddOption(new Option<string>("--json", "", "Where to output the wallpaper info JSON file"));
-            rootCommand.AddOption(new Option<bool>("--resize", false, "Resize to screen resolution if larger"));
-            rootCommand.AddOption(new Option<int?>("--blur", () => null, "Use blurred-fit mode with the passed value for background blur strength"));
-            rootCommand.Handler = CommandHandler.Create(tryHandleArguments);
+            var dllPathArg = new Argument<string>("dllPath")
+            {
+                Description = "Path to DLL module containing the IProvider implementation",
+            };
 
-            return rootCommand.Invoke(args);
+            var jsonOption = new Option<string>("--json")
+            {
+                DefaultValueFactory = _ => "",
+                Description = "Where to output the wallpaper info JSON file",
+            };
+
+            var resizeOption = new Option<bool>("--resize")
+            {
+                DefaultValueFactory = _ => false,
+                Description = "Resize to screen resolution if larger",
+            };
+
+            var blurOption = new Option<int?>("--blur")
+            {
+                DefaultValueFactory = _ => null,
+                Description = "Use blurred-fit mode with the passed value for background blur strength",
+            };
+
+            var rootCommand = new RootCommand("Daily Desktop task target executable")
+            {
+                dllPathArg,
+                jsonOption,
+                resizeOption,
+                blurOption
+            };
+
+            ParseResult parseResult = rootCommand.Parse(args);
+            return await tryHandleArguments(
+                parseResult.GetRequiredValue(dllPathArg),
+                parseResult.GetRequiredValue(jsonOption),
+                parseResult.GetRequiredValue(resizeOption),
+                parseResult.GetRequiredValue(blurOption)
+            );
         }
 
         private static async Task<int> tryHandleArguments(string dllPath, string json, bool resize, int? blur)
@@ -117,7 +147,7 @@ namespace DailyDesktop.Task
             };
 
             if (targetSize.Width < image.Width)
-                image.Resize(targetSize.Width, targetSize.Height);
+                image.Resize((uint)targetSize.Width, (uint)targetSize.Height);
         }
 
         private static void applyBlurredFit(MagickImage image, int blurStrength)
@@ -133,44 +163,46 @@ namespace DailyDesktop.Task
             {
                 backgroundRect = new MagickGeometry
                 {
-                    Width = (int)(image.Height * screenAspectRatio),
+                    Width = (uint)(image.Height * screenAspectRatio),
                     Height = image.Height,
                 };
                 fillSize = new Size
                 {
-                    Width = backgroundRect.Width,
+                    Width = (int)backgroundRect.Width,
                     Height = (int)(backgroundRect.Width / imageAspectRatio),
                 };
-                backgroundRect.Y = (fillSize.Height - backgroundRect.Height) / 2;
+                backgroundRect.X = 0;
+                backgroundRect.Y = (fillSize.Height - (int)backgroundRect.Height) / 2;
             }
             else
             {
-                backgroundRect = new MagickGeometry
+                backgroundRect = new MagickGeometry(0, 0, 0, 0)
                 {
                     Width = image.Width,
-                    Height = (int)(image.Width / screenAspectRatio),
+                    Height = (uint)(image.Width / screenAspectRatio),
                 };
                 fillSize = new Size
                 {
                     Width = (int)(backgroundRect.Height * imageAspectRatio),
-                    Height = backgroundRect.Height,
+                    Height = (int)backgroundRect.Height,
                 };
-                backgroundRect.X = (fillSize.Width - backgroundRect.Width) / 2;
+                backgroundRect.X = (fillSize.Width - (int)backgroundRect.Width) / 2;
+                backgroundRect.Y = 0;
             }
 
             if (fillSize.Width == image.Width && fillSize.Height == image.Height)
                 return;
 
             var fill = new MagickImage(image);
-            fill.Resize(fillSize.Width, fillSize.Height);
+            fill.Resize((uint)fillSize.Width, (uint)fillSize.Height);
             fill.Crop(backgroundRect);
 
-            int largestDim = (imageAspectRatio > 1) ? image.Width : image.Height;
+            uint largestDim = (imageAspectRatio > 1) ? image.Width : image.Height;
             int sigma = (int)(MAX_BLUR_FRACTION * largestDim * blurStrength / 100);
             fill.Blur(0, sigma);
 
-            int x = (fill.Width - image.Width) / 2;
-            int y = (fill.Height - image.Height) / 2;
+            int x = ((int)fill.Width - (int)image.Width) / 2;
+            int y = ((int)fill.Height - (int)image.Height) / 2;
             fill.Composite(image, x, y);
             image.Extent(fill.Width, fill.Height);
             image.CopyPixels(fill);
