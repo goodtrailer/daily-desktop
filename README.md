@@ -31,7 +31,7 @@ Daily Desktop has an optional "blurred-fit" mode that fits the entire image with
 * Pixiv @ [/DailyDesktop.Providers.Pixiv/](/DailyDesktop.Providers.Pixiv/)
 * ~~Pokémon TCG~~ (Deprecated) @ [/archived/DailyDesktop.Providers.Pokemon/](/archived/DailyDesktop.Providers.Pokemon/)
 * r/EarthPorn (SFW) @ [/DailyDesktop.Providers.RedditEarthPorn/](/DailyDesktop.Providers.RedditEarthPorn/)
-* Unsplash @ [/DailyDesktop.Providers.Unsplash/](/DailyDesktop.Providers.Unsplash/)
+* ~~Unsplash~~ @ [/DailyDesktop.Providers.Unsplash/](/DailyDesktop.Providers.Unsplash/)
 * Wikimedia Commons @ [/DailyDesktop.Providers.WikimediaCommons/](/DailyDesktop.Providers.WikimediaCommons/)
 ### To-Do
 * NASA Astronomy @ [#33](https://github.com/goodtrailer/daily-desktop/issues/33)
