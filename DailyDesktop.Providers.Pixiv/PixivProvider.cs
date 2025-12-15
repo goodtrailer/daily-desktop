@@ -118,7 +118,7 @@ namespace DailyDesktop.Providers.Pixiv
 
             string description = WebUtility.HtmlDecode(Regex.Matches(imagePageHtml, DESCRIPTION_PATTERN).LastOrDefault()?.Value) ?? "";
             description = description.Replace("\\r", "\r").Replace("\\n", "\n");
-            if (metadata.Tags.Any())
+            if (metadata.Tags.Count > 0)
                 description += "\n\n" + string.Join(" ", metadata.Tags.Select(t => "#" + t));
 
             await wallpaperConfig.SetImageUriAsync(imageUri, cancellationToken);
