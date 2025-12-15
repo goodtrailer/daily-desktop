@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.4.33110.190
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11304.174 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core", "DailyDesktop.Core\DailyDesktop.Core.csproj", "{C1D6DB17-EFAA-4D03-BBA9-E77488CE6CB5}"
 EndProject
@@ -12,8 +12,6 @@ EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DailyDesktop.Setup", "DailyDesktop.Setup\DailyDesktop.Setup.vdproj", "{AF21D390-94D6-403D-ACF9-CC243F8355B0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Providers.Pixiv", "DailyDesktop.Providers.Pixiv\DailyDesktop.Providers.Pixiv.csproj", "{3E827370-7B8B-4F1E-82CF-B374CCEA6744}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Providers.Unsplash", "DailyDesktop.Providers.Unsplash\DailyDesktop.Providers.Unsplash.csproj", "{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Providers.WikimediaCommons", "DailyDesktop.Providers.WikimediaCommons\DailyDesktop.Providers.WikimediaCommons.csproj", "{170B34DD-A803-4CED-B1A6-7487AB61F473}"
 EndProject
@@ -80,14 +78,6 @@ Global
 		{3E827370-7B8B-4F1E-82CF-B374CCEA6744}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E827370-7B8B-4F1E-82CF-B374CCEA6744}.Release|x64.ActiveCfg = Release|x64
 		{3E827370-7B8B-4F1E-82CF-B374CCEA6744}.Release|x64.Build.0 = Release|x64
-		{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}.Debug|x64.ActiveCfg = Debug|x64
-		{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}.Debug|x64.Build.0 = Debug|x64
-		{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}.Release|x64.ActiveCfg = Release|x64
-		{F7F11EA4-0E1F-4989-9D70-BD9CD3AD7FE0}.Release|x64.Build.0 = Release|x64
 		{170B34DD-A803-4CED-B1A6-7487AB61F473}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{170B34DD-A803-4CED-B1A6-7487AB61F473}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{170B34DD-A803-4CED-B1A6-7487AB61F473}.Debug|x64.ActiveCfg = Debug|x64
