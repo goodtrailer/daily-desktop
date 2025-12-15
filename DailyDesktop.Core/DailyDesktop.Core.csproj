@@ -12,16 +12,16 @@
     <Product>DailyDesktop.Core</Product>
     <PackageId>goodtrailer.DailyDesktop.Core</PackageId>
     <RepositoryUrl>https://github.com/goodtrailer/daily-desktop</RepositoryUrl>
-    <Copyright>Copyright (c) 2021 Alden Wu</Copyright>
+    <Copyright>Copyright (c) 2025 Alden Wu</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/goodtrailer/daily-desktop</PackageProjectUrl>
     <PackageTags>daily desktop wallpaper background</PackageTags>
-    <Version>2023.319.0</Version>
+    <Version>2025.1214.0</Version>
     <PackageIcon>icon.png</PackageIcon>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyVersion>2023.319.0.0</AssemblyVersion>
-    <FileVersion>2021.319.0.0</FileVersion>
+    <AssemblyVersion>2025.1214.0</AssemblyVersion>
+    <FileVersion>2025.1214.0</FileVersion>
     <Description>Modular Windows desktop wallpaper updater that works daily at a set time. Wallpapers are provided by IProvider classes that are implemented in DLL modules.</Description>
   </PropertyGroup>
 
