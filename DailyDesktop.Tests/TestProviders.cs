@@ -174,11 +174,12 @@ namespace DailyDesktop.Tests
             TestContext.WriteLine("Image URI: " + wallpaperConfig.ImageUri);
             TestContext.WriteLine("Title: " + wallpaperConfig.Title);
             TestContext.WriteLine("Title URI: " + wallpaperConfig.TitleUri);
-
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Author), "Null/whitespace author.");
-            // The author URI is highly unreliable, since many photo authors aren't Wikimedia users
+            
+            // The description can also be unreliable. Since we're really just testing that the API works,
+            // we only really need title+image (the bare necessities).
+            // Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Author), "Null/whitespace author.");
             // Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.AuthorUri), "Null/whitespace author URI.");
-            Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Description), "Null/whitespace description.");
+            // Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Description), "Null/whitespace description.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.ImageUri), "Null/whitespace image URI.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.Title), "Null/whitespace title.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(wallpaperConfig.TitleUri), "Null/whitespace title URI.");
