@@ -26,5 +26,15 @@ namespace DailyDesktop.Core.Providers
             : base(msg)
         {
         }
+
+        /// <summary>
+        /// Constructs a <see cref="ProviderException"/> with a message and an inner exception.
+        /// </summary>
+        /// <param name="msg">The exception message.</param>
+        /// <param name="inner">The inner exception.</param>
+        public ProviderException(string msg, Exception inner)
+            : base(msg, inner)
+        {
+        }
     }
 }
