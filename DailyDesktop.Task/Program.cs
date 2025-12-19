@@ -3,29 +3,76 @@
 
 using System;
 using System.CommandLine;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using DailyDesktop.Core.Configuration;
 using DailyDesktop.Core.Providers;
 using DailyDesktop.Core.Util;
 using ImageMagick;
+using Silk.NET.GLFW;
 
 namespace DailyDesktop.Task
 {
-    internal static class Program
+    using Task = System.Threading.Tasks.Task;
+
+    internal static partial class Program
     {
         private const string IMAGE_FILENAME = "Daily Desktop Wallpaper";
         private const double MAX_BLUR_FRACTION = 0.025;
 
-        [DllImport("user32.dll")]
-        private static extern bool SetProcessDPIAware();
+        [LibraryImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static partial bool SetProcessDPIAware();
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+        [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16)]
+        private static partial int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+
+        private static Size? screenSizeCache = null;
+        private static Size screenSize
+        {
+            get
+            {
+                if (screenSizeCache is Size cache)
+                    return cache;
+
+                Size value = new Size();
+                var glfw = Glfw.GetApi() ?? throw new InvalidOperationException("Could not get GLFW API");
+                if (!glfw.Init())
+                    throw new InvalidOperationException("GLFW did not initialize correctly");
+                try
+                {
+                    unsafe
+                    {
+                        var monitor = glfw.GetPrimaryMonitor();
+                        if (monitor == null)
+                            throw new InvalidOperationException("GLFW could not find primary monitor");
+
+                        var mode = glfw.GetVideoMode(monitor);
+                        if (mode == null)
+                            throw new InvalidOperationException("GLFW could not find video mode for primary monitor");
+
+                        value.Width = mode->Width;
+                        value.Height = mode->Height;
+                    }
+
+                    if (value.Width <= 0)
+                        throw new InvalidOperationException("Invalid screen width retrieved: " + value.Width);
+                    if (value.Height <= 0)
+                        throw new InvalidOperationException("Invalid screen height retrieved: " + value.Height);
+                }
+                finally
+                {
+                    glfw.Terminate();
+                }
+
+                screenSizeCache = value;
+                return value;
+            }
+        }
 
         private static async Task<int> Main(string[] args)
         {
@@ -34,7 +81,7 @@ namespace DailyDesktop.Task
                 Description = "Path to DLL module containing the IProvider implementation",
             };
 
-            var jsonOption = new Option<string>("--json")
+            var jsonPathOption = new Option<string>("--json")
             {
                 DefaultValueFactory = _ => "",
                 Description = "Where to output the wallpaper info JSON file",
@@ -55,65 +102,104 @@ namespace DailyDesktop.Task
             var rootCommand = new RootCommand("Daily Desktop task target executable")
             {
                 dllPathArg,
-                jsonOption,
+                jsonPathOption,
                 resizeOption,
                 blurOption
             };
 
-            ParseResult parseResult = rootCommand.Parse(args);
-            return await tryHandleArguments(
-                parseResult.GetRequiredValue(dllPathArg),
-                parseResult.GetRequiredValue(jsonOption),
-                parseResult.GetRequiredValue(resizeOption),
-                parseResult.GetRequiredValue(blurOption)
-            );
+            rootCommand.SetAction(async parseResult =>
+            {
+                try
+                {
+                    await handleArguments(
+                        parseResult.GetRequiredValue(dllPathArg),
+                        parseResult.GetRequiredValue(jsonPathOption),
+                        parseResult.GetRequiredValue(resizeOption),
+                        parseResult.GetRequiredValue(blurOption)
+                    );
+                    return 0;
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine(e);
+                    return 1;
+                }
+            });
+
+            return await rootCommand.Parse(args).InvokeAsync();
         }
 
-        private static async Task<int> tryHandleArguments(string dllPath, string json, bool resize, int? blur)
+        private static async Task handleArguments(string dllPath, string jsonPath, bool resize, int? blur)
         {
             try
             {
-                return await handleArguments(dllPath, json, resize, blur);
+                if (string.IsNullOrWhiteSpace(dllPath))
+                    throw new ArgumentException("Missing IProvider DLL module path");
+
+                var store = new ProviderStore();
+                var providerType = await store.AddAsync(dllPath, AsyncUtils.TimedCancel());
+                var provider = IProvider.Instantiate(providerType);
+
+                string imagePath = await downloadWallpaper(provider, jsonPath, AsyncUtils.LongCancel());
+                using var image = new MagickImage(imagePath);
+
+                if (resize)
+                    applyResize(image);
+
+                if (blur != null)
+                    applyBlurredFit(image, blur.Value);
+
+                await setWallpaper(image, imagePath);
             }
             catch (Exception e)
             {
-                var wallpaperConfig = new WallpaperConfiguration(json);
+                var wallpaperConfig = new WallpaperConfiguration(jsonPath);
                 await wallpaperConfig.SetTitleAsync("Exception encountered", AsyncUtils.LongCancel());
                 await wallpaperConfig.SetAuthorAsync("provider", AsyncUtils.LongCancel());
                 await wallpaperConfig.SetDescriptionAsync(e.Message + "\n\n" + e.StackTrace, AsyncUtils.LongCancel());
                 await wallpaperConfig.TrySerializeAsync(AsyncUtils.LongCancel());
-                return 1;
+                throw;
             }
         }
 
-        private static async Task<int> handleArguments(string dllPath, string jsonPath, bool resize, int? blur)
+        private static async Task setWallpaper(MagickImage image, string imagePath)
         {
-            if (string.IsNullOrWhiteSpace(dllPath))
-                throw new ProviderException("Missing IProvider DLL module path");
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                string outputPath = imagePath + ".tif";
+                image.Format = MagickFormat.Tif;
+                image.Write(outputPath);
 
-            var store = new ProviderStore();
-            var providerType = await store.AddAsync(dllPath, AsyncUtils.TimedCancel());
-            var provider = IProvider.Instantiate(providerType);
+                // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa#parameters
+                // SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE
+                int exitCode = SystemParametersInfo(0x14, 0, outputPath, 0x1 | 0x2);
+                if (exitCode != 0)
+                    throw new InvalidOperationException("SystemParamtersInfo(...) returned code: " + exitCode);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                // TODO: Add a selector for desktop environment, and pass this
+                // as an argument. Only show selector in DailyDesktop.Desktop
+                // if on Linux. Currently this only works for KDE 6
 
-            string imagePath = await downloadWallpaper(provider, jsonPath, AsyncUtils.LongCancel());
-            string outputPath = imagePath + ".tif";
+                string outputPath = imagePath + ".png";
+                image.Format = MagickFormat.Png;
+                image.Write(outputPath);
 
-            SetProcessDPIAware();
+                using var process = new Process();
+                process.StartInfo.FileName = "/usr/bin/plasma-apply-wallpaperimage";
+                process.StartInfo.ArgumentList.Add(outputPath);
+                process.StartInfo.CreateNoWindow = true;
 
-            using var image = new MagickImage(imagePath);
-
-            if (resize)
-                applyResize(image);
-
-            if (blur != null)
-                applyBlurredFit(image, blur.Value);
-
-            image.Format = MagickFormat.Tif;
-            image.Write(outputPath);
-
-            // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa#parameters
-            // SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE
-            return SystemParametersInfo(0x14, 0, outputPath, 0x1 | 0x2);
+                process.Start();
+                await process.WaitForExitAsync();
+                if (process.ExitCode != 0)
+                    throw new InvalidOperationException("plasma-apply-wallpaperimage exited with code: " + process.ExitCode);
+            }
+            else
+            {
+                throw new PlatformNotSupportedException("Platform is not Windows/Linux");
+            }
         }
 
         private static async Task<string> downloadWallpaper(IProvider provider, string jsonPath, CancellationToken cancellationToken = default)
@@ -134,8 +220,6 @@ namespace DailyDesktop.Task
 
         private static void applyResize(MagickImage image)
         {
-            var screenSize = SystemInformation.PrimaryMonitorSize;
-
             float screenAspectRatio = (float)screenSize.Width / screenSize.Height;
             float imageAspectRatio = (float)image.Width / image.Height;
 
@@ -151,8 +235,6 @@ namespace DailyDesktop.Task
 
         private static void applyBlurredFit(MagickImage image, int blurStrength)
         {
-            var screenSize = SystemInformation.PrimaryMonitorSize;
-
             float screenAspectRatio = (float)screenSize.Width / screenSize.Height;
             float imageAspectRatio = (float)image.Width / image.Height;
 

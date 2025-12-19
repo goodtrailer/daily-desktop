@@ -1,15 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.1.11304.174 d18.0
+VisualStudioVersion = 18.1.11304.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Core", "DailyDesktop.Core\DailyDesktop.Core.csproj", "{C1D6DB17-EFAA-4D03-BBA9-E77488CE6CB5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Task", "DailyDesktop.Task\DailyDesktop.Task.csproj", "{7CB913BA-772C-4610-89FE-311AACE62717}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Desktop", "DailyDesktop.Desktop\DailyDesktop.Desktop.csproj", "{768F9329-40C4-4F48-A508-3E28D668B452}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DailyDesktop.Setup", "DailyDesktop.Setup\DailyDesktop.Setup.vdproj", "{AF21D390-94D6-403D-ACF9-CC243F8355B0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDesktop.Providers.Pixiv", "DailyDesktop.Providers.Pixiv\DailyDesktop.Providers.Pixiv.csproj", "{3E827370-7B8B-4F1E-82CF-B374CCEA6744}"
 EndProject
@@ -58,18 +54,6 @@ Global
 		{7CB913BA-772C-4610-89FE-311AACE62717}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7CB913BA-772C-4610-89FE-311AACE62717}.Release|x64.ActiveCfg = Release|x64
 		{7CB913BA-772C-4610-89FE-311AACE62717}.Release|x64.Build.0 = Release|x64
-		{768F9329-40C4-4F48-A508-3E28D668B452}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{768F9329-40C4-4F48-A508-3E28D668B452}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{768F9329-40C4-4F48-A508-3E28D668B452}.Debug|x64.ActiveCfg = Debug|x64
-		{768F9329-40C4-4F48-A508-3E28D668B452}.Debug|x64.Build.0 = Debug|x64
-		{768F9329-40C4-4F48-A508-3E28D668B452}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{768F9329-40C4-4F48-A508-3E28D668B452}.Release|Any CPU.Build.0 = Release|Any CPU
-		{768F9329-40C4-4F48-A508-3E28D668B452}.Release|x64.ActiveCfg = Release|x64
-		{768F9329-40C4-4F48-A508-3E28D668B452}.Release|x64.Build.0 = Release|x64
-		{AF21D390-94D6-403D-ACF9-CC243F8355B0}.Debug|Any CPU.ActiveCfg = Debug
-		{AF21D390-94D6-403D-ACF9-CC243F8355B0}.Debug|x64.ActiveCfg = Debug
-		{AF21D390-94D6-403D-ACF9-CC243F8355B0}.Release|Any CPU.ActiveCfg = Release
-		{AF21D390-94D6-403D-ACF9-CC243F8355B0}.Release|x64.ActiveCfg = Release
 		{3E827370-7B8B-4F1E-82CF-B374CCEA6744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E827370-7B8B-4F1E-82CF-B374CCEA6744}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E827370-7B8B-4F1E-82CF-B374CCEA6744}.Debug|x64.ActiveCfg = Debug|x64

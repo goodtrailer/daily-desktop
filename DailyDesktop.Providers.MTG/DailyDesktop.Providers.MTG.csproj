@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
@@ -9,8 +9,11 @@
     <ProjectReference Include="..\DailyDesktop.Core\DailyDesktop.Core.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if not &quot;$(SolutionDir)&quot; == &quot;*Undefined*&quot; mkdir &quot;$(SolutionDir)bin\&quot; &amp; copy &quot;$(TargetPath)&quot; &quot;$(SolutionDir)bin\$(TargetFileName)&quot; &#xD;&#xA;" />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(SolutionDir)' != '*Undefined*'">
+    <Exec Command="mkdir '$(SolutionDir)bin'" Condition="!Exists('$(SolutionDir)bin')" />
+
+    <Exec Command="copy '$(TargetPath)' '$(SolutionDir)bin\$(TargetFileName)'" Condition="'$(OS)' == 'Windows_NT'" />
+    <Exec Command="cp '$(TargetPath)' '$(SolutionDir)bin/$(TargetFileName)'" Condition="'$(OS)' != 'Windows_NT'" />
   </Target>
 
 </Project>

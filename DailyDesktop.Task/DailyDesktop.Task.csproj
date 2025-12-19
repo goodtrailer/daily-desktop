@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
@@ -33,13 +33,14 @@
   <ItemGroup>
     <PackageReference Include="Magick.NET-Q8-x64" Version="14.10.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.1" />
+    <PackageReference Include="Silk.NET.GLFW" Version="2.22.0" />
   </ItemGroup>
 
   <ItemGroup Label="Project References">
     <ProjectReference Include="..\DailyDesktop.Core\DailyDesktop.Core.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' == 'Windows_NT'">
     <Exec Command="if not &quot;$(SolutionDir)&quot; == &quot;*Undefined*&quot; mkdir &quot;$(SolutionDir)DailyDesktop.Desktop\bin&quot; &amp; copy &quot;$(ProjectDir)$(OutDir)$(TargetName).exe&quot; &quot;$(SolutionDir)DailyDesktop.Desktop\$(OutDir)\$(TargetName).exe&quot; &#xD;&#xA;" />
   </Target>
   
