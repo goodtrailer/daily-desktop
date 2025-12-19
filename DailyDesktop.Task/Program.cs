@@ -81,19 +81,25 @@ namespace DailyDesktop.Task
                 Description = "Path to DLL module containing the IProvider implementation",
             };
 
-            var jsonPathOption = new Option<string>("--json")
+            var jsonPathOption = new Option<string>("--json", "-j")
             {
                 DefaultValueFactory = _ => "",
                 Description = "Where to output the wallpaper info JSON file",
             };
 
-            var resizeOption = new Option<bool>("--resize")
+            var outputPathOption = new Option<string?>("--out", "--output", "-o")
+            {
+                DefaultValueFactory = _ => null,
+                Description = "Where to output the wallpaper image file (excluding filename extension)",
+            };
+
+            var resizeOption = new Option<bool>("--resize", "-r")
             {
                 DefaultValueFactory = _ => false,
                 Description = "Resize to screen resolution if larger",
             };
 
-            var blurOption = new Option<int?>("--blur")
+            var blurOption = new Option<int?>("--blur", "-b")
             {
                 DefaultValueFactory = _ => null,
                 Description = "Use blurred-fit mode with the passed value for background blur strength",
@@ -103,6 +109,7 @@ namespace DailyDesktop.Task
             {
                 dllPathArg,
                 jsonPathOption,
+                outputPathOption,
                 resizeOption,
                 blurOption
             };
@@ -114,6 +121,7 @@ namespace DailyDesktop.Task
                     await handleArguments(
                         parseResult.GetRequiredValue(dllPathArg),
                         parseResult.GetRequiredValue(jsonPathOption),
+                        parseResult.GetRequiredValue(outputPathOption),
                         parseResult.GetRequiredValue(resizeOption),
                         parseResult.GetRequiredValue(blurOption)
                     );
@@ -129,7 +137,7 @@ namespace DailyDesktop.Task
             return await rootCommand.Parse(args).InvokeAsync();
         }
 
-        private static async Task handleArguments(string dllPath, string jsonPath, bool resize, int? blur)
+        private static async Task handleArguments(string dllPath, string jsonPath, string? outputPath, bool resize, int? blur)
         {
             try
             {
@@ -149,7 +157,7 @@ namespace DailyDesktop.Task
                 if (blur != null)
                     applyBlurredFit(image, blur.Value);
 
-                await setWallpaper(image, imagePath);
+                await setWallpaper(image, outputPath ?? imagePath);
             }
             catch (Exception e)
             {
@@ -162,19 +170,20 @@ namespace DailyDesktop.Task
             }
         }
 
-        private static async Task setWallpaper(MagickImage image, string imagePath)
+        private static async Task setWallpaper(MagickImage image, string outputPath)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                string outputPath = imagePath + ".tif";
+                string outputPathWithExt = outputPath + ".tif";
                 image.Format = MagickFormat.Tif;
-                image.Write(outputPath);
+                image.Write(outputPathWithExt);
 
                 // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa#parameters
                 // SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE
-                int exitCode = SystemParametersInfo(0x14, 0, outputPath, 0x1 | 0x2);
+                int exitCode = SystemParametersInfo(0x14, 0, outputPathWithExt, 0x1 | 0x2);
                 if (exitCode != 0)
                     throw new InvalidOperationException("SystemParamtersInfo(...) returned code: " + exitCode);
+                Console.WriteLine("Finished executing SystemParametersInfo(...)");
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
@@ -182,19 +191,20 @@ namespace DailyDesktop.Task
                 // as an argument. Only show selector in DailyDesktop.Desktop
                 // if on Linux. Currently this only works for KDE 6
 
-                string outputPath = imagePath + ".png";
+                string outputPathWithExt = outputPath + ".png";
                 image.Format = MagickFormat.Png;
-                image.Write(outputPath);
+                image.Write(outputPathWithExt);
 
                 using var process = new Process();
                 process.StartInfo.FileName = "/usr/bin/plasma-apply-wallpaperimage";
-                process.StartInfo.ArgumentList.Add(outputPath);
+                process.StartInfo.ArgumentList.Add(outputPathWithExt);
                 process.StartInfo.CreateNoWindow = true;
 
                 process.Start();
                 await process.WaitForExitAsync();
                 if (process.ExitCode != 0)
                     throw new InvalidOperationException("plasma-apply-wallpaperimage exited with code: " + process.ExitCode);
+                Console.WriteLine("Finished executing plasma-apply-wallpaperimage");
             }
             else
             {
