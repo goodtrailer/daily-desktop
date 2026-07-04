@@ -28,7 +28,7 @@ namespace DailyDesktop.Core.Util
             var headers = Client.DefaultRequestHeaders;
             headers.Clear();
 
-            headers.Add("User-Agent", "daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
+            headers.Add("User-Agent", "Mozilla/5.0 daily-desktop/0.0 (https://github.com/goodtrailer/daily-desktop)");
             headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(CultureInfo.InstalledUICulture.Name));
             headers.AcceptLanguage.Add(new StringWithQualityHeaderValue("en", 0.8));
         }
